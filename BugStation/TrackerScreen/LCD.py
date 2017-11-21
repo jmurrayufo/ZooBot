@@ -1,6 +1,8 @@
 
 
 class LCD:
+    """CFA533
+    """
     def __init__(self, address=0x2A):
         self.address = address
         pass
@@ -100,7 +102,7 @@ class LCD:
 
 
     def poll_keypad(self):
-        """TPoll the keypad.
+        """Poll the keypad.
         """
         cmd = CMD(0x18, [])
         print(f"Result Command: {cmd}")
@@ -120,6 +122,17 @@ class LCD:
             data[1] = bitmask showing the keys that have been pressed since the last poll
             data[2] = bitmask showing the keys that have been released since the last poll
         """
+
+
+    def write_lcd(self, col, row, data):
+        """Write to the LCD.
+        """
+        assert col in range(16),"Must be in range 0-15"
+        assert row in range(2),"Must be in range 0-1"
+        assert len(data) in range(1,16),"Must be in range 1-16"
+        cmd = CMD(0x1F, [col,row,*data])
+        print(f"Result Command: {cmd}")
+        # Read back 4 bytes
 
 
 
@@ -144,11 +157,11 @@ class LCD:
     21 (0x15): Set Up Live Temperature Display 
     22 (0x16): Send Command Directly to the LCD Controller 
     23 (0x17): Enable Key Ready Flag 
-    24 (0x18): Read Keypad, Polled Mode 
+    # 24 (0x18): Read Keypad, Polled Mode 
     28 (0x1C): Set ATX Switch Functionality 
     29 (0x1D): Enable/Feed Host Watchdog Reset 
     30 (0x1E): Read Reporting/ATX/Watchdog (debug) 
-    31 (0x1F): Send Data to LCD 
+    # 31 (0x1F): Send Data to LCD 
     33 (0x21): Set I2C Address 
     34 (0x22): Set/Configure GPIO 
     """
