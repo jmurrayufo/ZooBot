@@ -7,52 +7,53 @@ class LCD:
         self.address = address
         pass
 
+    # Low Level Commands
 
-    def ping(self):
+    def _ping(self):
         cmd = CMD(0x00, [])
         print(f"Result Command: {cmd}")
         # Read back 4 bytes of data
 
 
-    def get_version(self):
+    def _get_version(self):
         cmd = CMD(0x01, [])
         print(f"Result Command: {cmd}")
         # Read back 20 bytes
 
 
-    def write_flash(self, data):
+    def _write_flash(self, data):
         assert type(data) in [list,tuple]
         cmd = CMD(0x02, data)
         print(f"Result Command: {cmd}")
         # Read back 4 bytes
 
 
-    def read_flash(self):
+    def _read_flash(self):
         cmd = CMD(0x03, [])
         print(f"Result Command: {cmd}")
         # Read back 20 bytes
 
 
-    def store_to_boot(self):
+    def _store_to_boot(self):
         cmd = CMD(0x04, [])
         print(f"Result Command: {cmd}")
         # Read back 20 bytes
 
 
-    def clear_lcd(self):
+    def _clear_lcd(self):
         cmd = CMD(0x06, [])
         print(f"Result Command: {cmd}")
         # Read back 4 bytes
 
 
-    def set_lcd_line(self, data):
+    def _set_lcd_line(self, data):
         raise NotImplemented("Don't use this command")
         cmd = CMD(0x07, data)
         print(f"Result Command: {cmd}")
         # Read back 4 bytes
 
 
-    def set_special_character(self, char, data):
+    def _set_special_character(self, char, data):
         assert type(data) in [list,tuple]
         assert char in range(8),"Must be in range 0-7"
         cmd = CMD(0x09, [char,*data])
@@ -60,7 +61,7 @@ class LCD:
         # Read back 4 bytes
 
 
-    def set_lcd_curosr_position(self, col, row):
+    def _set_lcd_curosr_position(self, col, row):
         assert col in range(16),"Must be in range 0-15"
         assert row in range(2),"Must be in range 0-1"
         cmd = CMD(0x0B, [col,row])
@@ -68,14 +69,14 @@ class LCD:
         # Read back 4 bytes
 
 
-    def set_lcd_curosr_style(self, style):
+    def _set_lcd_curosr_style(self, style):
         assert style in range(4),"Must be in range 0-3"
         cmd = CMD(0x0C, [col,row])
         print(f"Result Command: {cmd}")
         # Read back 4 bytes
 
 
-    def set_lcd_contrast(self, level):
+    def _set_lcd_contrast(self, level):
         """This command sets the contrast or vertical viewing angle of the display.
         level:
                0-99 = lighter
@@ -88,7 +89,7 @@ class LCD:
         # Read back 4 bytes
 
 
-    def set_lcd_backlight(self, level):
+    def _set_lcd_backlight(self, level):
         """This command sets the brightness of the LCD and keypad backlights.
         level:
                0 = off
@@ -101,7 +102,7 @@ class LCD:
         # Read back 4 bytes
 
 
-    def poll_keypad(self):
+    def _poll_keypad(self):
         """Poll the keypad.
         """
         cmd = CMD(0x18, [])
@@ -124,7 +125,7 @@ class LCD:
         """
 
 
-    def write_lcd(self, col, row, data):
+    def _write_lcd(self, col, row, data):
         """Write to the LCD.
         """
         assert col in range(16),"Must be in range 0-15"
