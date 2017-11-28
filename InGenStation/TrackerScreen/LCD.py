@@ -3,6 +3,15 @@
 class LCD:
     """CFA533
     """
+
+    # Keypad defines
+    KP_UP = 0x01
+    KP_ENTER = 0x02
+    KP_CANCEL = 0x04
+    KP_LEFT = 0x08
+    KP_RIGHT = 0x10
+    KP_DOWN = 0x20
+
     def __init__(self, address=0x2A):
         self.address = address
         pass
