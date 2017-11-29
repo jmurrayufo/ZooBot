@@ -6,8 +6,9 @@ import logging
 import logstash
 import socket
 
-class DragonHab:
+from Menu import Screen
 
+class DragonHab:
     report_dict = {
        "metric": True,
        "app.name":"DragonHab",
@@ -19,6 +20,7 @@ class DragonHab:
        }
     host = '192.168.1.2'
 
+
     """
         sent_bytes = conv_bytes(match_dict['sent'], match_dict['sent_units'])
         sent_dict = report_dict.copy()
@@ -28,19 +30,26 @@ class DragonHab:
 
 
     def __init__(self):
+        # Setup Log
         self.log = logging.getLogger('DragonHab')
-        self.log.setLevel(logging.DEBUG)
-        self.log.addHandler(logstash.LogstashHandler(self.host, 5002, version=1))
-        #self.log.addHandler(logstash.TCPLogstashHandler(host, 5959, version=1))
-        formatter = logging.Formatter('%(asctime)s %(process)d %(levelname)s %(filename)s %(message)s')
-        ch = logging.StreamHandler()
-        ch.setFormatter(formatter)
-        self.log.addHandler(ch)
 
         self.log.info(f'DragonHab booted on {socket.gethostname()}')
         self.last_updates = {}
         self.last_updates['LCD'] = datetime.datetime.now()
-
+        # Construct menus for use
+        self.screen = Screen(self)
+        self.log.debug(self.screen)
+        self.screen.enter()
+        self.log.debug(self.screen)
+        self.screen.up()
+        self.log.debug(self.screen)
+        self.screen.up()
+        self.log.debug(self.screen)
+        self.screen.enter()
+        self.log.debug(self.screen)
+        self.screen.cancel()
+        self.log.debug(self.screen)
+        
 
     def run(self):
         self.log.info(f'Begin main loop')
@@ -59,5 +68,16 @@ class DragonHab:
 
 
 if __name__ == '__main__':
-    x = DragonHab()
-    x.run()
+
+    log = logging.getLogger('DragonHab')
+    log.setLevel(logging.DEBUG)
+    log.addHandler(logstash.LogstashHandler(DragonHab.host, 5002, version=1))
+    formatter = logging.Formatter('%(asctime)s %(process)d %(levelname)s %(filename)s %(message)s')
+    ch = logging.StreamHandler()
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+    try:
+        x = DragonHab()
+        x.run()
+    except:
+        log.exception("Something died")
