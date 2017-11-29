@@ -6,6 +6,9 @@ import logging
 import logstash
 import socket
 
+# Only here for test code.
+import random
+
 from Menu import Screen
 
 class DragonHab:
@@ -49,7 +52,7 @@ class DragonHab:
         self.log.debug(self.screen)
         self.screen.cancel()
         self.log.debug(self.screen)
-        
+
 
     def run(self):
         self.log.info(f'Begin main loop')
@@ -61,10 +64,23 @@ class DragonHab:
                 # Read LCD keys, and act as needed
                 break
             self.log.debug("Check timers")
-            self.log.debug("Check temperature")
-            self.log.debug("Check humidity")
+            self.update_readings()
             break
         self.log.info(f'Main loop ended, shutdown complete')
+
+
+    def get_reading(self, name):
+        pass
+
+
+    def update_readings(self):
+            self.log.debug("Check temperature")
+            self.log.debug("Check humidity")
+
+
+
+
+
 
 
 if __name__ == '__main__':

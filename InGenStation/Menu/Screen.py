@@ -13,16 +13,20 @@ class Screen:
         self.log = logging.getLogger('DragonHab')
         self.log.debug("Init the screen")
         self.objs = {}
+        
         # To make this easier, we define things form the bottom up
         t1 = Reading(title="t1")
         t2 = Reading(title="t2")
         t3 = Reading(title="t3")
+
         temperature_menu = Menu(
             title="Temperature",
             options=[t1,t2,t3])
+
         self.main_menu = Menu(
             title="Main Menu",
             options=[temperature_menu])
+
         self.active_object = self.main_menu
         self.active_menu = self.main_menu
   
@@ -87,6 +91,10 @@ class Screen:
 
 
     def _menu_correct(self):
+        """Restore menus after odd actions. 
+        If active object is None, just return to the last menu we had
+        If active object is a menu, make sure the active menu agrees
+        """
         if self.active_object == None:
             self.active_object = self.active_menu
         elif type(self.active_object) == Menu:

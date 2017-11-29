@@ -34,6 +34,9 @@ class Menu:
             ret_val += f"\n{self.index+1} "
             if type(self.options[self.index]) == Menu:
                 ret_val += self.options[self.index].title
+            elif hasattr(self.options[self.index],'title'):
+                ret_val += self.options[self.index].title
+                
         return ret_val
 
 
