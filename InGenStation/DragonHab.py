@@ -39,23 +39,43 @@ class DragonHab:
         self.log.info(f'DragonHab booted on {socket.gethostname()}')
         self.last_updates = {}
         self.last_updates['LCD'] = datetime.datetime.now()
+        
+        self.readings = {}
+        self.readings['t0'] = -1
+        self.readings['t1'] = -1
+        self.readings['t2'] = -1
+
         # Construct menus for use
-        self.screen = Screen(self)
-        self.log.debug(self.screen)
-        self.screen.enter()
-        self.log.debug(self.screen)
-        self.screen.up()
-        self.log.debug(self.screen)
-        self.screen.up()
-        self.log.debug(self.screen)
-        self.screen.enter()
-        self.log.debug(self.screen)
-        self.screen.cancel()
-        self.log.debug(self.screen)
+        self.screen = Screen(self,"Menu/dragonhub.json")
 
 
     def run(self):
         self.log.info(f'Begin main loop')
+
+        self.log.debug(f"Running debug loop for testing")
+        while True:
+            print()
+            self.log.debug(self.screen)
+            self.log.debug("What key do you want to simulate?")
+            key = input("> ")
+            if key == "u":
+                self.screen.up()
+            elif key == "d":
+                self.screen.down()
+            elif key == "l":
+                self.screen.left()
+            elif key == "r":
+                self.screen.right()
+            elif key == "e":
+                self.screen.enter()
+            elif key == "c":
+                self.screen.cancel()
+            elif key == "h":
+                self.screen.home()
+            elif key == "q":
+                break
+            self.update_readings()
+        return
         while True:
             self.log.debug("Check LCD")
             self.log.debug(f"Last update was {datetime.datetime.now() - self.last_updates['LCD']} ago")
@@ -69,18 +89,12 @@ class DragonHab:
         self.log.info(f'Main loop ended, shutdown complete')
 
 
-    def get_reading(self, name):
-        pass
-
-
     def update_readings(self):
             self.log.debug("Check temperature")
+            self.readings['t0'] = random.random()*20
+            self.readings['t1'] = random.random()*20
+            self.readings['t2'] = random.random()*20
             self.log.debug("Check humidity")
-
-
-
-
-
 
 
 if __name__ == '__main__':

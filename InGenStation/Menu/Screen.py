@@ -1,4 +1,5 @@
 
+import json
 import logging
 
 from . import Menu, Action, Reading
@@ -7,28 +8,59 @@ class Screen:
     """Main GUI object. Takes input from user, and displays information from
     the system. 
     """
-    pass
-    def __init__(self, hab_obj):
+
+
+    def __init__(self, hab_obj, json_file):
         # Define our menus
         self.log = logging.getLogger('DragonHab')
         self.log.debug("Init the screen")
         self.objs = {}
-        
+        # self.actions = {}
+        # self.alerts = {}
+        # self.menus = {}
+        # self.readings = {}
+        # self.timers = {}
+
+        with open(json_file,'r') as fp:
+            data = json.load(fp)
+
+        self.log.debug("Load actions")
+        for item in data['actions']:
+            pass
+
+        self.log.debug("Load alerts")
+        for item in data['alerts']:
+            pass
+
+        self.log.debug("Load menus")
+        for item in data['menus']:
+            self.objs[item['id']] = Menu(
+                self,
+                id = item['id'],
+                title = item['title'],
+                parent = item['parent'],
+                options = item['options']
+                )
+
+        self.log.debug("Load readings")
+        for item in data['readings']:
+            self.objs[item['id']] = Reading(
+                self,
+                id = item['id'],
+                title = item['title'],
+                reading = item['reading'],
+                source = hab_obj
+                )
+
+        self.log.debug("Load timers")
+        for item in data['timers']:
+            pass
+
+        # assert 0
+
+
         # To make this easier, we define things form the bottom up
-        t1 = Reading(title="t1")
-        t2 = Reading(title="t2")
-        t3 = Reading(title="t3")
-
-        temperature_menu = Menu(
-            title="Temperature",
-            options=[t1,t2,t3])
-
-        self.main_menu = Menu(
-            title="Main Menu",
-            options=[temperature_menu])
-
-        self.active_object = self.main_menu
-        self.active_menu = self.main_menu
+        self.home()
   
         
     def __str__(self):
@@ -38,7 +70,7 @@ class Screen:
     def home(self):
         """Reset screen to home position
         """
-        self.active_menu = self.main_menu
+        self.active_menu = self.objs[0]
         self.active_object = self.active_menu
 
 

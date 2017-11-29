@@ -1,13 +1,18 @@
 
 class Reading:
 
-
-    def __init__(self, **kwargs):
+    def __init__(self, screen, **kwargs):
+        self.screen = screen
         self.title = kwargs.get("title","NO TITLE")
+        self.reading = kwargs["reading"] # We must have a value to read!
+        self.source = kwargs["source"] # We must have a parent object to call
 
 
     def __str__(self):
-        return self.title
+        ret_val = f"R: {self.title}"
+        value = self.source.readings.get(self.reading,None)
+        ret_val = f"\n {value}"
+        return ret_val
 
 
     def up(self):
