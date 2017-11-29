@@ -10,7 +10,8 @@ name = "pypi"
 "smbus2" = "*"
 "crc16" = "*"
 crcmod = "*"
-logstash = "*"
+sanic = "*"
+python-logstash = "*"
 
 
 [dev-packages]
