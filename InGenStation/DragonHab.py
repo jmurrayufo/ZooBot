@@ -5,11 +5,17 @@ import platform
 import logging
 import logstash
 import socket
+import asyncio
 
 # Only here for test code.
 import random
+import sanic
+from sanic.response import text
 
 from Menu import Screen
+
+if __name__ == '__main__':
+    app = sanic.Sanic(__name__)
 
 class DragonHab:
     report_dict = {
@@ -23,14 +29,12 @@ class DragonHab:
        }
     host = '192.168.1.2'
 
-
     """
         sent_bytes = conv_bytes(match_dict['sent'], match_dict['sent_units'])
         sent_dict = report_dict.copy()
         sent_dict.update({"name":"bytes_sent","bytes":sent_bytes,"unit":"bytes"})
         test_logger.info(json.dumps(sent_dict))
     """
-
 
     def __init__(self):
         # Setup Log
@@ -49,12 +53,11 @@ class DragonHab:
         self.screen = Screen(self,"Menu/dragonhub.json")
 
 
-    def run(self):
+    async def run(self):
         self.log.info(f'Begin main loop')
-
         self.log.debug(f"Running debug loop for testing")
         while True:
-            print()
+            await asyncio.sleep(1/10.)
             self.log.debug(self.screen)
             self.log.debug("What key do you want to simulate?")
             key = input("> ")
@@ -76,6 +79,7 @@ class DragonHab:
                 break
             self.update_readings()
         return
+
         while True:
             self.log.debug("Check LCD")
             self.log.debug(f"Last update was {datetime.datetime.now() - self.last_updates['LCD']} ago")
@@ -97,6 +101,14 @@ class DragonHab:
             self.log.debug("Check humidity")
 
 
+@app.route("/")
+async def test(request):
+    # self.log.info("Root")
+    global hab
+    hab.log.info("root!")
+    return text("hello world")
+
+
 if __name__ == '__main__':
 
     log = logging.getLogger('DragonHab')
@@ -106,8 +118,14 @@ if __name__ == '__main__':
     ch = logging.StreamHandler()
     ch.setFormatter(formatter)
     log.addHandler(ch)
-    try:
-        x = DragonHab()
-        x.run()
-    except:
-        log.exception("Something died")
+
+    hab = DragonHab()
+
+    app.add_task(hab.run)
+
+    app.run(port=8000)
+    # try:
+    #     x = DragonHab()
+    #     x.run()
+    # except:
+    #     log.exception("Something died")

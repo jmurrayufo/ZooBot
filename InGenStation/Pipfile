@@ -12,6 +12,7 @@ name = "pypi"
 crcmod = "*"
 sanic = "*"
 python-logstash = "*"
+logstash-formatter = "*"
 
 
 [dev-packages]
