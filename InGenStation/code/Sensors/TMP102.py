@@ -28,8 +28,9 @@ class TMP102:
 
     @property
     def data(self):
-        return {"last_update":self.last_update, "temperature":self.temperature, 
-                "address":self.address}
+        return {"last_update":str(self.last_update), 
+                "temperature":self.temperature, "address":self.address,
+                "update_age": str(datetime.datetime.now() - self.last_update)}
 
 
     @property 
@@ -47,6 +48,7 @@ class TMP102:
         self.log.debug(f"Updating TMP102 sensor 0x{self.address:02x}")
         self._temperature = random.randint(0,0xff)
         self.last_update = datetime.datetime.now()
+
         self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
         
         return
