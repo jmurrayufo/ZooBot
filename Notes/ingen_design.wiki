@@ -10,11 +10,11 @@ Web API. Simple interface to access data, send commands, etc.
 
     Root endpoint provides a JSON reply of the current status of the system as a whole. Is somewhat verbose.
     
-=== /temperature/<id> ===
+=== /temperature/[id] ===
     
     Get the current temperature of sensor with given ID. This forces the system to poll the current value, and return it. If a sensor is not found, then a null will be placed into the resulting json. 
     
-=== /humidity/<id> ===
+=== /humidity/[id] ===
 
     Get the current humidity of sensor with given ID. This forces the system to poll the current value, and return it. If a sensor is not found, then a null will be placed into the resulting json. 
     
