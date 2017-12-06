@@ -2,7 +2,9 @@ import sanic
 # from sanic.response import text, html
 from sanic.exceptions import NotFound, ServerError, RequestTimeout,\
                              InvalidUsage
+import sanic_auth
 import logging
+import base64
 
 class SanicMgr:
     from sanic.config import Config
@@ -21,13 +23,19 @@ class SanicMgr:
             log = logging.getLogger('DevHab')
 
 
+
     @app.route("/test", methods=["GET","POST",])
     async def test(request):
         log.info(f"Got request {request} on endpoint '/test'")
-        if request.method == 'GET':
-            ret_val = sanic.response.json(request.args)
-        elif request.method == 'POST':
-            ret_val = sanic.response.json(request.form)
+        if 'authorization' in request.headers:
+            authString = base64.urlsafe_b64decode(request.headers['authorization'].split()[1]).decode()
+            # authString = str(authString)
+            username,password = authString.split(":")
+            if username == 'john' and password == 'murray':
+                return sanic.response.text(f"Authoed!\n{username}\n{password}")
+        ret_val = sanic.response.json( {'message': 'Please Login!'},
+                                        headers={'WWW-Authenticate': 'Basic realm="User Visible Realm"'},
+                                        status=401 )
 
         # ret_val = sanic.response.text("Test complete !")
         return ret_val
@@ -59,14 +67,14 @@ class SanicMgr:
     async def get_post_menu(request):
 
         html = f"""<p>Main Menu</p></p>
-        <form action="sensors" method="get">
+        <form action="menu/sensors" method="get">
           <button type="submit" formmethod="get">Sensors</button>
         </form>"""
         ret_val =  sanic.response.html(html)
         return ret_val
 
 
-    @app.route("/sensors", methods=["GET","POST",])
+    @app.route("/menu/sensors", methods=["GET","POST",])
     async def get_post_sensors(request):
 
         html = f"""<p>Sensors Menu</p></p>
@@ -96,9 +104,30 @@ class SanicMgr:
         log.info("Server Shutdown Completed")
 
 
+    ##################
+    ### MIDDLEWARE ###
+    ##################
+
+
     @app.middleware('request')
     async def print_on_request(request):
         log.info(f"{request.method} {request.url}")
+        if request.path.startswith("/control"):
+            if 'authorization' in request.headers:
+                authString = base64.urlsafe_b64decode(request.headers['authorization'].split()[1]).decode()
+                # authString = str(authString)
+                username,password = authString.split(":")
+                if username == 'this' and password == 'murray':
+                    return
+            ret_val = sanic.response.json( {'message': 'Please Login!'},
+                                            headers={'WWW-Authenticate': 'Basic realm="User Visible Realm"'},
+                                            status=401 )
+
+            # ret_val = sanic.response.text("Test complete !")
+            return ret_val
+        else:
+            self.debug("No auth needed, continue!")
+
 
 
     @app.middleware('response')

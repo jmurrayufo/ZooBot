@@ -13,6 +13,7 @@ crcmod = "*"
 sanic = "*"
 python-logstash = "*"
 logstash-formatter = "*"
+sanic-auth = "*"
 
 
 [dev-packages]
