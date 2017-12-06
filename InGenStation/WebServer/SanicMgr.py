@@ -22,7 +22,7 @@ class SanicMgr:
 
 
     @app.route("/test", methods=["GET","POST",])
-    def test(request):
+    async def test(request):
         log.info(f"Got request {request} on endpoint '/test'")
         if request.method == 'GET':
             ret_val = sanic.response.json(request.args)
@@ -34,15 +34,15 @@ class SanicMgr:
 
 
     @app.route("/")
-    def test(request):
+    async def test(request):
         log.info(f"Got request {request} on endpoint '/'")
         html = """<p>Welcome to the ZooBot station!</p>"""
         ret_val =  sanic.response.html(html)
         return ret_val
 
 
-    @app.route("/menu", methods=["GET","POST",])
-    def post_test(request):
+    @app.route("/menu_sample", methods=["GET","POST",])
+    async def get_post_menu_sample(request):
 
         html = f"""<p>This is a test</p></p>
         <form action="test" method="get">
@@ -51,6 +51,26 @@ class SanicMgr:
           <button type="submit">Submit</button>
           <button type="submit" formmethod="post">Submit using POST</button>
         </form>"""
+        ret_val =  sanic.response.html(html)
+        return ret_val
+
+
+    @app.route("/menu", methods=["GET","POST",])
+    async def get_post_menu(request):
+
+        html = f"""<p>Main Menu</p></p>
+        <form action="sensors" method="get">
+          <button type="submit" formmethod="get">Sensors</button>
+        </form>"""
+        ret_val =  sanic.response.html(html)
+        return ret_val
+
+
+    @app.route("/sensors", methods=["GET","POST",])
+    async def get_post_sensors(request):
+
+        html = f"""<p>Sensors Menu</p></p>
+        WIP!"""
         ret_val =  sanic.response.html(html)
         return ret_val
 
@@ -87,7 +107,7 @@ class SanicMgr:
 
 
     @app.exception(NotFound)
-    def handle_404(request, exception):
+    async def handle_404(request, exception):
         log.error(f"File not found: {request.url}")
         ret_val =  sanic.response.text(f"Woops! I couldn't find {request.url}", status=exception.status_code)
         log.info(f"{exception.status_code} {request.url} {ret_val.status}")
@@ -95,7 +115,7 @@ class SanicMgr:
 
 
     @app.exception(ServerError)
-    def handle_error(request, exception):
+    async def handle_error(request, exception):
         log.error(f"Server Error on: {request.url}")
         ret_val =  sanic.response.text(f"Woops! I couldn't find {request.url}", status=exception.status_code)
         log.info(f"{exception.status_code} {request.url} {ret_val.status}")
@@ -103,7 +123,7 @@ class SanicMgr:
 
 
     @app.exception(RequestTimeout)
-    def handle_timeout(request, exception):
+    async def handle_timeout(request, exception):
         log.error(f"Request timed out! Oh well?")
         log.error(exception)
         log.error(dir(exception))
@@ -114,7 +134,7 @@ class SanicMgr:
 
 
     @app.exception(InvalidUsage)
-    def handle_usage(request, exception):
+    async def handle_usage(request, exception):
         log.debug(exception.status_code)
         ret_val = sanic.response.text(f"Method {request.method} not allowed on URL {request.path}", status=exception.status_code)
         log.exception(ret_val)
