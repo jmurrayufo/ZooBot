@@ -126,7 +126,7 @@ class SanicMgr:
             # ret_val = sanic.response.text("Test complete !")
             return ret_val
         else:
-            self.debug("No auth needed, continue!")
+            log.debug("No auth needed, continue!")
 
 
 
