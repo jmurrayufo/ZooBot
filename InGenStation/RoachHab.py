@@ -26,6 +26,7 @@ class RoachHab:
             data[key] = self.sensors[key].data
         return sanic.response.json(data)
 
+
     async def run(self):
         while True:
             self.log.debug("Update")

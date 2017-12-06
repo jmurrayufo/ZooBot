@@ -7,12 +7,15 @@ import logging
 import logstash
 import platform
 import socket
+from logstash_formatter import LogstashFormatterV1
+
 
 # Only here for test code.
 import random
 import sanic
 from sanic.response import text
 from sanic.views import CompositionView
+from CustomLogging import VerboseLogstashFormatter
 
 from Menu import Screen
 from RoachHab import RoachHab
@@ -50,16 +53,17 @@ elif  args.purpose == 'test':
 
 log.setLevel(logging.DEBUG)
 
-log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
+# log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
 
-# sh = logstash.LogstashHandler('192.168.1.2', 5002)
-# sh = logging.handlers.SocketHandler('192.168.1.2',5002)
-# sh.setFormatter(LogstashFormatterV1())
-# log.addHandler(sh)
+sh = logstash.TCPLogstashHandler('192.168.1.2', 5003)
+sh.setFormatter(VerboseLogstashFormatter())
+log.addHandler(sh)
+
 
 formatter = logging.Formatter('{asctime} {levelname} {filename}:{lineno} {message}', style='{')
 ch = logging.StreamHandler()
 ch.setFormatter(formatter)
+# ch.setFormatter(LogstashFormatterV1())
 
 # TODO: File handler
 
@@ -67,25 +71,26 @@ log.addHandler(ch)
 
 log.info(f"Finished boot as {args.purpose}")
 
-x = SanicMgr(args)
+sanic_mgr = SanicMgr(args)
 log.debug("Booted with Manager")
 if  args.purpose == 'test':
     view = CompositionView()
     view.add(['GET'], hab.all_temperature_handler)
-    x.app.add_route(view,'/temp/')
+    sanic_mgr.app.add_route(view,'/temp/')
 
     view = CompositionView()
     view.add(['GET'], hab.temperature_handler)
-    x.app.add_route(view,'/temp/<sensor_id>')
+    sanic_mgr.app.add_route(view,'/temp/<sensor_id>')
 
 
-    x.app.add_task(hab.run)
+    sanic_mgr.app.add_task(hab.run)
 
 # hab = DragonHab()
 
-x.app.run(debug=False, log_config=None, port=args.port, host=args.host)
+# Run forever
+sanic_mgr.app.run(debug=False, log_config=None, port=args.port, host=args.host)
 # try:
-#     x = DragonHab()
-#     x.run()
+#     sanic_mgr = DragonHab()
+#     sanic_mgr.run()
 # except:
 #     log.exception("Something died")

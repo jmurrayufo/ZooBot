@@ -61,11 +61,11 @@ class TMP106:
     async def update(self):
         t_start = time.time()
         import random
-        self.log.info(f"Updating sensor 0x{self.address:02x}")
+        self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
         self._temperature = random.randint(0,0xffff)
         self._temperature_a = random.randint(0,0xffff)
         self.last_update = datetime.datetime.now()
-        self.log.info(f"Updated sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
+        self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
         
         return
 
