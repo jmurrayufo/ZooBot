@@ -1,7 +1,7 @@
 import sanic
 import asyncio
 import logging
-from Sensors import TMP102, TMP106
+from .Sensors import TMP102, TMP106
 
 class RoachHab:
 

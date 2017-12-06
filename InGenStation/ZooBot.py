@@ -6,20 +6,16 @@ import json
 import logging
 import logstash
 import platform
-import socket
-from logstash_formatter import LogstashFormatterV1
-
-
-# Only here for test code.
 import random
 import sanic
+import socket
 from sanic.response import text
 from sanic.views import CompositionView
-from CustomLogging import VerboseLogstashFormatter
 
-from Menu import Screen
-from RoachHab import RoachHab
-from WebServer import SanicMgr
+from code.CustomLogging import VerboseLogstashFormatter
+from code.Menu import Screen
+from code.RoachHab import RoachHab
+from code.WebServer import SanicMgr
 
 global log
 
