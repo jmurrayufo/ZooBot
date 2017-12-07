@@ -30,7 +30,6 @@ parser.add_argument('--host', metavar='addr', type=str, default='0.0.0.0',
                     help='Address to host Sanic on')
 
 args = parser.parse_args()
-# print(args)
 
 if args.purpose == 'dragon':
     log = Log('DragonHab')
