@@ -83,23 +83,23 @@ class SanicMgr:
 
 
     @app.listener('before_server_start')
-    async def setup_db(app, loop):
+    async def before_server_start(app, loop):
         log.info("Server Startup")
         log.info(f"Running sanic {sanic.__version__}")
 
 
     @app.listener('after_server_start')
-    async def notify_server_started(app, loop):
+    async def after_server_start(app, loop):
         log.info("Server Startup Completed")
 
 
     @app.listener('before_server_stop')
-    async def notify_server_stopping(app, loop):
+    async def before_server_stop(app, loop):
         log.info("Server Shutdown")
 
 
     @app.listener('after_server_stop')
-    async def close_db(app, loop):
+    async def after_server_stop(app, loop):
         log.info("Server Shutdown Completed")
 
 
