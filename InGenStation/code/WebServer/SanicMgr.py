@@ -9,7 +9,7 @@ import base64
 class SanicMgr:
     from sanic.config import Config
     Config.KEEP_ALIVE = False
-    app =  sanic.Sanic(__name__, log_config=None)
+    app = sanic.Sanic(__name__, log_config=None)
     def __init__(self, args):
         # Not sure how to just pull this from __main__....
         global log
@@ -39,7 +39,6 @@ class SanicMgr:
 
         # ret_val = sanic.response.text("Test complete !")
         return ret_val
-
 
     @app.route("/")
     async def test(request):
@@ -117,7 +116,7 @@ class SanicMgr:
                 authString = base64.urlsafe_b64decode(request.headers['authorization'].split()[1]).decode()
                 # authString = str(authString)
                 username,password = authString.split(":")
-                if username == 'this' and password == 'murray':
+                if username == 'demo' and password == 'user':
                     return
             ret_val = sanic.response.json( {'message': 'Please Login!'},
                                             headers={'WWW-Authenticate': 'Basic realm="User Visible Realm"'},
