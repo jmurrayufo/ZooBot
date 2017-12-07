@@ -13,9 +13,10 @@ class SanicMgr:
     Config.KEEP_ALIVE = False
     app = sanic.Sanic(__name__, log_config=None)
     log = Log()
+
+    
     def __init__(self, args):
         pass
-
 
 
     @app.route("/test", methods=["GET","POST",])
@@ -32,6 +33,7 @@ class SanicMgr:
 
         # ret_val = sanic.response.text("Test complete !")
         return ret_val
+
 
     @app.route("/")
     async def test(request):
