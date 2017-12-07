@@ -3,6 +3,7 @@ import smbus2
 import datetime
 import asyncio
 import time
+from ..CustomLogging import Log
 
 class TMP102:
 
@@ -15,8 +16,8 @@ class TMP102:
     P1 = 0b00000010
 
 
-    def __init__(self, address, log):
-        self.log = log
+    def __init__(self, address):
+        self.log = Log()
         assert address in self.valid_addresses
         self.address = address
         self.last_update = datetime.datetime.min

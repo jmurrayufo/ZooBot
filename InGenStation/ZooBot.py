@@ -3,8 +3,6 @@ import argparse
 import asyncio
 import datetime
 import json
-import logging
-import logstash
 import platform
 import random
 import sanic
@@ -12,12 +10,11 @@ import socket
 from sanic.response import text
 from sanic.views import CompositionView
 
-from code.CustomLogging import VerboseLogstashFormatter
+from code.CustomLogging import Log
 from code.Menu import Screen
 from code.RoachHab import RoachHab
 from code.WebServer import SanicMgr
 
-global log
 
 parser = argparse.ArgumentParser(description='Host ZooBot Instance')
 
@@ -36,34 +33,16 @@ args = parser.parse_args()
 # print(args)
 
 if args.purpose == 'dragon':
-    log = logging.getLogger('DragonHab')
-    hab = RoachHab(log)
+    log = Log('DragonHab')
+    hab = RoachHab()
 
 elif  args.purpose == 'bug':
-    log = logging.getLogger('BugHab')
-    hab = RoachHab(log)
+    log = Log('BugHab')
+    hab = RoachHab()
 
 elif  args.purpose == 'test':
-    log = logging.getLogger('DevHab')
-    hab = RoachHab(log)
-
-log.setLevel(logging.DEBUG)
-
-# log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
-
-sh = logstash.TCPLogstashHandler('192.168.1.2', 5003)
-sh.setFormatter(VerboseLogstashFormatter())
-log.addHandler(sh)
-
-
-formatter = logging.Formatter('{asctime} {levelname} {filename}:{lineno} {message}', style='{')
-ch = logging.StreamHandler()
-ch.setFormatter(formatter)
-# ch.setFormatter(LogstashFormatterV1())
-
-# TODO: File handler
-
-log.addHandler(ch)
+    log = Log('DevHab')
+    hab = RoachHab()
 
 log.info(f"Finished boot as {args.purpose}")
 

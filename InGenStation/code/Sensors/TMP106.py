@@ -4,6 +4,8 @@ import datetime
 import asyncio
 import time
 
+from ..CustomLogging import Log
+
 class TMP106:
 
     valid_addresses = [0b1000000, 
@@ -22,8 +24,8 @@ class TMP106:
     POINTER_DEVICE_ID = 0xFF
 
 
-    def __init__(self, address, log):
-        self.log = log
+    def __init__(self, address):
+        self.log = Log()
         assert address in self.valid_addresses
         self.address = address
         self.last_update = datetime.datetime.min

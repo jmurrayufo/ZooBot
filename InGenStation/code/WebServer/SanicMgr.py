@@ -128,7 +128,6 @@ class SanicMgr:
             log.debug("No auth needed, continue!")
 
 
-
     @app.middleware('response')
     async def print_on_response(request, response):
         log.info(f"{request.method} {request.url} {response.status}")
