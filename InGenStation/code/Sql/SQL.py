@@ -32,7 +32,10 @@ class SQL:
         self.log.info("Connect to db")
         if not self.connected:
             if not os.path.isfile(db_name):
-                self.logger.warning(f"Creating new db: {db_name}")
+                self.log.warning(f"Creating new db: {db_name}")
+                self.conn = sqlite3.connect(db_name)
+                self.setup()
+                self.conn.close()
             self.conn = sqlite3.connect(db_name)
             self.log.info("Connection established")
             self.conn.row_factory = sqlite3.Row
@@ -47,3 +50,7 @@ class SQL:
             self.conn.close()
             self.conn = None
             self.connected = False
+
+
+    def setup(self):
+        self.log.info("Begining DB setup")

@@ -7,15 +7,18 @@ import logging
 import base64
 
 from ..CustomLogging import Log
+from ..Sql import SQL
 
 class SanicMgr:
     from sanic.config import Config
     Config.KEEP_ALIVE = False
     app = sanic.Sanic(__name__, log_config=None)
     log = Log()
+    sql = SQL()
 
-    
+
     def __init__(self, args):
+        self.sql.connect()
         pass
 
 
