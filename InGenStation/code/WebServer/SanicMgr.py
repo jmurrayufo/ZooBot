@@ -6,27 +6,20 @@ import sanic_auth
 import logging
 import base64
 
+from ..CustomLogging import Log
+
 class SanicMgr:
     from sanic.config import Config
     Config.KEEP_ALIVE = False
     app = sanic.Sanic(__name__, log_config=None)
+    log = Log()
     def __init__(self, args):
-        # Not sure how to just pull this from __main__....
-        global log
-        if args.purpose == 'dragon':
-            log = logging.getLogger('DragonHab')
-
-        elif  args.purpose == 'bug':
-            log = logging.getLogger('BugHab')
-
-        elif  args.purpose == 'test':
-            log = logging.getLogger('DevHab')
+        pass
 
 
 
     @app.route("/test", methods=["GET","POST",])
     async def test(request):
-        log.info(f"Got request {request} on endpoint '/test'")
         if 'authorization' in request.headers:
             authString = base64.urlsafe_b64decode(request.headers['authorization'].split()[1]).decode()
             # authString = str(authString)
@@ -42,7 +35,6 @@ class SanicMgr:
 
     @app.route("/")
     async def test(request):
-        log.info(f"Got request {request} on endpoint '/'")
         html = """<p>Welcome to the ZooBot station!</p>"""
         ret_val =  sanic.response.html(html)
         return ret_val
@@ -84,23 +76,23 @@ class SanicMgr:
 
     @app.listener('before_server_start')
     async def before_server_start(app, loop):
-        log.info("Server Startup")
-        log.info(f"Running sanic {sanic.__version__}")
+        SanicMgr.log.info("Server Startup")
+        SanicMgr.log.info(f"Running sanic {sanic.__version__}")
 
 
     @app.listener('after_server_start')
     async def after_server_start(app, loop):
-        log.info("Server Startup Completed")
+        SanicMgr.log.info("Server Startup Completed")
 
 
     @app.listener('before_server_stop')
     async def before_server_stop(app, loop):
-        log.info("Server Shutdown")
+        SanicMgr.log.info("Server Shutdown")
 
 
     @app.listener('after_server_stop')
     async def after_server_stop(app, loop):
-        log.info("Server Shutdown Completed")
+        SanicMgr.log.info("Server Shutdown Completed")
 
 
     ##################
@@ -110,7 +102,7 @@ class SanicMgr:
 
     @app.middleware('request')
     async def print_on_request(request):
-        log.info(f"{request.method} {request.url}")
+        SanicMgr.log.info(f"{request.method} {request.url}")
         if request.path.startswith("/control"):
             if 'authorization' in request.headers:
                 authString = base64.urlsafe_b64decode(request.headers['authorization'].split()[1]).decode()
@@ -121,48 +113,46 @@ class SanicMgr:
             ret_val = sanic.response.json( {'message': 'Please Login!'},
                                             headers={'WWW-Authenticate': 'Basic realm="User Visible Realm"'},
                                             status=401 )
-
-            # ret_val = sanic.response.text("Test complete !")
             return ret_val
         else:
-            log.debug("No auth needed, continue!")
+            SanicMgr.log.debug("No auth needed, continue!")
 
 
     @app.middleware('response')
     async def print_on_response(request, response):
-        log.info(f"{request.method} {request.url} {response.status}")
+        SanicMgr.log.info(f"{request.method} {request.url} {response.status}")
 
 
     @app.exception(NotFound)
     async def handle_404(request, exception):
-        log.error(f"File not found: {request.url}")
+        SanicMgr.log.error(f"File not found: {request.url}")
         ret_val =  sanic.response.text(f"Woops! I couldn't find {request.url}", status=exception.status_code)
-        log.info(f"{exception.status_code} {request.url} {ret_val.status}")
+        SanicMgr.log.info(f"{exception.status_code} {request.url} {ret_val.status}")
         return ret_val    
 
 
     @app.exception(ServerError)
     async def handle_error(request, exception):
-        log.error(f"Server Error on: {request.url}")
+        SanicMgr.log.error(f"Server Error on: {request.url}")
         ret_val =  sanic.response.text(f"Woops! I couldn't find {request.url}", status=exception.status_code)
-        log.info(f"{exception.status_code} {request.url} {ret_val.status}")
+        SanicMgr.log.info(f"{exception.status_code} {request.url} {ret_val.status}")
         return ret_val
 
 
     @app.exception(RequestTimeout)
     async def handle_timeout(request, exception):
-        log.error(f"Request timed out! Oh well?")
-        log.error(exception)
-        log.error(dir(exception))
-        log.error(exception.args)
-        log.error(exception.status_code)
-        log.error(exception.with_traceback)
+        SanicMgr.log.error(f"Request timed out! Oh well?")
+        SanicMgr.log.error(exception)
+        SanicMgr.log.error(dir(exception))
+        SanicMgr.log.error(exception.args)
+        SanicMgr.log.error(exception.status_code)
+        SanicMgr.log.error(exception.with_traceback)
         return sanic.response.text("OK!")
 
 
     @app.exception(InvalidUsage)
     async def handle_usage(request, exception):
-        log.debug(exception.status_code)
+        SanicMgr.log.debug(exception.status_code)
         ret_val = sanic.response.text(f"Method {request.method} not allowed on URL {request.path}", status=exception.status_code)
-        log.exception(ret_val)
+        SanicMgr.log.exception(ret_val)
         return ret_val
