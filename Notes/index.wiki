@@ -5,3 +5,7 @@
 
 === Design ===
 [[ingen_design|Design]]
+
+= Design Journal =
+
+[[journal/jindex|Journal Index]]
