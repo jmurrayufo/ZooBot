@@ -10,6 +10,13 @@ class Si7021:
 
     valid_addresses = [0b10000000,] # 0x80
 
+    MEASURE_HUMIDITY_HOLD = 0xE5
+    MEASURE_HUMIDITY_NO_HOLD = 0xF5
+    MEASURE_TEMPERATURE_HOLD = 0xE3
+    MEASURE_TEMPERATURE_NO_HOLD = 0xF3
+    READ_TEMPERATURE_FROM_RH = 0xE0
+    RESET = 0xFE
+
 
     def __init__(self, address, args):
         self.log = Log()
@@ -25,35 +32,29 @@ class Si7021:
     @property
     def data(self):
         return {"last_update":self.last_update, "temperature":self.temperature,
-                "temperature_a":self.temperature_a, "address":self.address}
+                "humidity":self.humidity, "address":self.address}
 
 
     @property
-    def uva(self):
-        """Last measured UVA value (raw)
-        """
-        return self._uva - self.A*self._uvcomp1 - self.B*_uvcomp2
+    def temperature(self):
+        return (175.72 * self._temperature / 65536) - 46.85
 
 
     @property
-    def uvb(self):
-        """Last measured UVB value (raw)
-        """
-        return self._uvb - self.C*self._uvcomp1 - self.D*_uvcomp2
+    def humidity(self):
+        return (125 * self._humidity / 65536) - 6
 
 
     async def update(self):
         t_start = time.time()
         import random
-        self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
+        self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
         # Fake write to sensor
         await asyncio.sleep(0.8)
-        self._uva = random.randint(0,0xffff)
-        self._uvb = random.randint(0,0xffff)
-        self._uvcomp1 = random.randint(0,0xffff)
-        self._uvcomp2 = random.randint(0,0xffff)
+        self._temperature = random.randint(0,0xffff)
+        self._humidity = random.randint(0,0xffff)
         self.last_update = datetime.datetime.now()
-        self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
+        self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
         
         return
 
