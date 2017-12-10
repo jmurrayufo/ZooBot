@@ -36,7 +36,7 @@ class TMP106:
     UBB_RESPONSE = 2.1
 
 
-    def __init__(self, address):
+    def __init__(self, address, args):
         self.log = Log()
         assert address in self.valid_addresses
         self.address = address

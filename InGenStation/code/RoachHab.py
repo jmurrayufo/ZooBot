@@ -6,13 +6,13 @@ from .CustomLogging import Log
 
 class RoachHab:
 
-    def __init__(self): 
+    def __init__(self, args): 
         self.log = Log()
 
         self.sensors = {}
-        self.sensors['t0'] = TMP102(0b1001010)
-        self.sensors['t1'] = TMP106(0b1000100)
-        self.sensors['t2'] = TMP106(0b1000101)
+        self.sensors['t0'] = TMP102(0b1001010, args)
+        self.sensors['t1'] = TMP106(0b1000100, args)
+        self.sensors['t2'] = TMP106(0b1000101, args)
 
         # TODO: Check to see if a settings file exists
 

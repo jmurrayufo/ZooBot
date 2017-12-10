@@ -33,15 +33,15 @@ args = parser.parse_args()
 
 if args.purpose == 'dragon':
     log = Log('DragonHab')
-    hab = RoachHab()
+    hab = RoachHab(args)
 
 elif  args.purpose == 'bug':
     log = Log('BugHab')
-    hab = RoachHab()
+    hab = RoachHab(args)
 
 elif  args.purpose == 'test':
     log = Log('DevHab')
-    hab = RoachHab()
+    hab = RoachHab(args)
 
 log.info(f"Finished boot as {args.purpose}")
 
@@ -62,7 +62,7 @@ if  args.purpose == 'test':
 # hab = DragonHab()
 
 # Run forever
-sanic_mgr.app.run(debug=False, port=args.port, host=args.host)
+sanic_mgr.app.run(debug=False, access_log=False, port=args.port, host=args.host)
 # try:
 #     sanic_mgr = DragonHab()
 #     sanic_mgr.run()

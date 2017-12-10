@@ -11,7 +11,7 @@ class Si7021:
     valid_addresses = [0b10000000,] # 0x80
 
 
-    def __init__(self, address):
+    def __init__(self, address, args):
         self.log = Log()
         assert address in self.valid_addresses
         self.address = address
