@@ -62,7 +62,7 @@ if  args.purpose == 'test':
 # hab = DragonHab()
 
 # Run forever
-sanic_mgr.app.run(debug=False, log_config=None, port=args.port, host=args.host)
+sanic_mgr.app.run(debug=False, port=args.port, host=args.host)
 # try:
 #     sanic_mgr = DragonHab()
 #     sanic_mgr.run()
