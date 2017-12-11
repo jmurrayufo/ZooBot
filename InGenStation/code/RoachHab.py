@@ -21,9 +21,13 @@ class RoachHab:
     async def run(self):
         while True:
             self.log.debug("Update")
+            t = time.time()
             for sensor in self.sensors:
                 await self.sensors[sensor].update()
-            # await asyncio.sleep(60)
+            t_sleep = 60 - time.time() - t
+            t_sleep = max(0, t_sleep)
+            self.log.debug(f"Sleep for {t_sleep:.3f} s")
+            await asyncio.sleep(t_sleep)
 
 
     ### TEMPERATURE READINGS ###
