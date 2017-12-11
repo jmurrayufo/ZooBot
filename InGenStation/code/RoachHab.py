@@ -38,7 +38,7 @@ class RoachHab:
         except Exception as e:
             self.log.exception("Caught an exception")
             self.log.info("Sleeping for 60 seconds before we continue")
-            await.sleep(60)
+            await asyncio.sleep(60)
 
 
     ### TEMPERATURE READINGS ###
