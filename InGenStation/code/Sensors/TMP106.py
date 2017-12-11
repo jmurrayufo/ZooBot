@@ -78,7 +78,7 @@ class TMP106:
             vObj = bus.read_i2c_block_data(self.address, 0, 2)
             bus.write_byte(self.address, self.POINTER_AMBIENMT)
             tDie = bus.read_i2c_block_data(self.address, 0, 2)
-            self.log.debug(vOjb)
+            self.log.debug(vObj)
             self.log.debug(tDie)
 
 
