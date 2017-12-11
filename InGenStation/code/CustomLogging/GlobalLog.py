@@ -24,6 +24,10 @@ class Log:
         ch.setFormatter(formatter)
         self._log.addHandler(ch)
 
+        self._metric_log = logging.getLogger(_type)
+        self._metric_log.setLevel(logging.DEBUG)
+        self._metric_log.addHandler(logstash.LogstashHandler(host, 5002, version=1))
+
 
     def __getattr__(self, name):
         return getattr(self._log, name)
@@ -42,7 +46,7 @@ class Log:
         })
         for key in kwargs:
             report_dict[key] = kwargs[key]
-        self.info(json.dumps(report_dict))
+        self._metric_log.info(json.dumps(report_dict))
 
 
     @property
