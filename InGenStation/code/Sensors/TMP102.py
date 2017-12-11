@@ -54,7 +54,7 @@ class TMP102:
             bus.write_byte_data(self.address, 0, 0)
 
             self._temperature = bus.read_i2c_block_data(self.address, 0, 2)
-            self._temperature = (self._temperature[0] << 8) + self._temperature
+            self._temperature = (self._temperature[0] << 8) + self._temperature[1]
             self._temperature >>= 4
 
         self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
