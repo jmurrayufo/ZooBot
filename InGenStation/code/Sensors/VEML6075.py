@@ -10,7 +10,6 @@ class TMP106:
 
     valid_addresses = [0b00010100,]
 
-
     REGISTER_CONF      = 0x00
     REGISTER_UVA       = 0x07
     REGISTER_UVB       = 0x09

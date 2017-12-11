@@ -8,7 +8,7 @@ from ..CustomLogging import Log
 
 class Si7021:
 
-    valid_addresses = [0b10000000,] # 0x80
+    valid_addresses = [0b01000000,] # 0x40
 
     MEASURE_HUMIDITY_HOLD = 0xE5
     MEASURE_HUMIDITY_NO_HOLD = 0xF5
@@ -17,12 +17,31 @@ class Si7021:
     READ_TEMPERATURE_FROM_RH = 0xE0
     RESET = 0xFE
 
+    WRITE_HEATER_CONTROL_REGISTER = 0x51
+    READ_HEATER_CONTROL_REGISTER = 0x51
+    HEATER_MASK = 0x0F # 0x00 for minimal heat, 0x0F for max. Must set heater 
+    # to on before use!
+
+    WRITE_USER_REGISTER = 0xE6
+    READ_USER_REGISTER = 0xE7
+    RES_1 = 0x01
+    RES_2 = 0x10
+    RES_3 = 0x11
+    RES_4 = 0x00
+    CHIP_HEATER_ENABLE = 0x04
+    VDDS = 0x40
 
     def __init__(self, address, args):
         self.log = Log()
-        assert address in self.valid_addresses
+        self.args = args
+        if address not in self.valid_addresses: 
+            raise ValueError("Address not in value addresses")
         self.address = address
         self.last_update = datetime.datetime.min
+
+
+    def configure(self):
+        pass
 
 
     def __str__(self):
@@ -47,21 +66,27 @@ class Si7021:
 
     async def update(self):
         t_start = time.time()
-        import random
         self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
-        # Fake write to sensor
-        await asyncio.sleep(0.8)
-        self._temperature = random.randint(0,0xffff)
-        self._humidity = random.randint(0,0xffff)
-        self.last_update = datetime.datetime.now()
-        self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
-        
-        return
-
         with smbus2.SMBusWrapper(1) as bus:
-
-            bus.write_byte(self.address, 0, self.POINTER_OBJECT)
-            self._temperature = bus.read_i2c_block_data(self.address, 0, 2)
-            bus.write_byte(self.address, 0, self.POINTER_AMBIENMT)
-            self._temperature_a = bus.read_i2c_block_data(self.address, 0, 2)
-
+            write_RH = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
+            write_TP = smbus2.i2c_msg.write(self.address, [self.READ_TEMPERATURE_FROM_RH])
+            read = smbus2.i2c_msg.read(self.address, 2)
+            bus.i2c_rdwr(write_RH)
+            while 1:
+                try:
+                    bus.i2c_rdwr(read)
+                    break
+                except OSError:
+                    print("!")
+                    continue
+            self._humidity = list(read)[1] << 8 + list(read)[0]
+            bus.i2c_rdwr(write_TP)
+            while 1:
+                try:
+                    bus.i2c_rdwr(read)
+                    break
+                except OSError:
+                    print("!")
+                    continue
+            self._temperature = list(read)[1] << 8 + list(read)[0]
+        self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")

@@ -1,7 +1,7 @@
 import sanic
 import asyncio
 import logging
-from .Sensors import TMP102, TMP106
+from .Sensors import TMP102, TMP106, Si7021
 from .CustomLogging import Log
 
 class RoachHab:
@@ -13,6 +13,7 @@ class RoachHab:
         self.sensors['t0'] = TMP102(0b1001010, args)
         self.sensors['t1'] = TMP106(0b1000100, args)
         self.sensors['t2'] = TMP106(0b1000101, args)
+        self.sensors['h1'] = Si7021(0x40, args)
 
         # TODO: Check to see if a settings file exists
 
