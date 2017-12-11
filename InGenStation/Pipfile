@@ -15,6 +15,7 @@ python-logstash = "*"
 logstash-formatter = "*"
 sanic-auth = "*"
 numpy = "*"
+"rpi.gpio" = "*"
 
 
 [dev-packages]
