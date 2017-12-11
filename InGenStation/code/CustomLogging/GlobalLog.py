@@ -26,7 +26,7 @@ class Log:
 
         self._metric_log = logging.getLogger(_type)
         self._metric_log.setLevel(logging.DEBUG)
-        self._metric_log.addHandler(logstash.LogstashHandler(host, 5002, version=1))
+        self._metric_log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
 
 
     def __getattr__(self, name):
