@@ -51,7 +51,7 @@ class Si7021:
     @property
     def data(self):
         return {"last_update":self.last_update, "temperature":self.temperature,
-                "humidity":self.humidity, "address":self.address}
+                "humidity":self.humidity, "raw_h":hex(self._humidity), "address":self.address}
 
 
     @property
@@ -80,7 +80,8 @@ class Si7021:
                 except OSError:
                     print("!1")
                     continue
-            self._humidity = (list(read)[0] << 8) + list(read)[1]
+            print(list(read1))
+            self._humidity = (list(read1)[0] << 8) + list(read1)[1]
             bus.i2c_rdwr(write_TP)
             while 1:
                 try:
@@ -89,5 +90,5 @@ class Si7021:
                 except OSError:
                     print("!2")
                     continue
-            self._temperature = (list(read)[0] << 8) + list(read)[1]
+            self._temperature = (list(read2)[0] << 8) + list(read2)[1]
         self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
