@@ -28,6 +28,8 @@ class RoachHab:
             t_sleep = 60 - (time.time() - t)
             t_sleep = max(0, t_sleep)
             self.log.debug(f"Sleep for {t_sleep:.3f} s")
+            self.log.metric(name="t0.temp","generic_float"=self.sensors["t0"].temperature)
+            self.log.metric(name="h1.temp","generic_float"=self.sensors["h1"].temperature)
             await asyncio.sleep(t_sleep)
 
 

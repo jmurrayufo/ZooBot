@@ -1,5 +1,7 @@
 import logging
 import logstash
+import platform
+import json
 from . import VerboseLogstashFormatter
 
 
@@ -22,7 +24,28 @@ class Log:
         ch.setFormatter(formatter)
         self._log.addHandler(ch)
 
+
     def __getattr__(self, name):
         return getattr(self._log, name)
 
+
+    def metric(self, name, **kwargs):
+        report_dict = dict({
+           "metric": True,
+           "app.name":"DevHab",
+           "app.version":"0.1.0",
+           "env.domain":"dragon",
+           "env.infrastructure":"dev",
+           "env.name":"isbe",
+           "env.platform":platform.platform(),
+           "name":name
+        })
+        for key in kwargs:
+            report_dict[key] = kwargs[key]
+        self.info(json.dumps(report_dict))
+
+
+    @property
+    def report_dict(self):
+        return None
 
