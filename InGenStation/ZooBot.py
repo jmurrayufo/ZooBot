@@ -14,6 +14,7 @@ from code.CustomLogging import Log
 from code.Menu import Screen
 from code.RoachHab import RoachHab
 from code.WebServer import SanicMgr
+from __version__ import __version__
 
 
 parser = argparse.ArgumentParser(description='Host ZooBot Instance')
@@ -29,18 +30,21 @@ parser.add_argument('--port', metavar='N', type=int, default=8000,
 parser.add_argument('--host', metavar='addr', type=str, default='0.0.0.0',
                     help='Address to host Sanic on')
 
+parser.add_argument('--__version__', default=__version__,
+                    help=argparse.SUPPRESS)
+
 args = parser.parse_args()
 
 if args.purpose == 'dragon':
-    log = Log('DragonHab')
+    log = Log(args)
     hab = RoachHab(args)
 
 elif  args.purpose == 'bug':
-    log = Log('BugHab')
+    log = Log(args)
     hab = RoachHab(args)
 
 elif  args.purpose == 'test':
-    log = Log('DevHab')
+    log = Log(args)
     hab = RoachHab(args)
 
 log.info(f"Finished boot as {args.purpose}")
