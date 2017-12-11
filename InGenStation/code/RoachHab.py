@@ -11,10 +11,10 @@ class RoachHab:
         self.log = Log()
 
         self.sensors = {}
-        # self.sensors['t0'] = TMP102(0x48, args)
-        self.sensors['t1'] = TMP106(0x41, args)
+        self.sensors['t0'] = TMP102(0x48, args)
+        # self.sensors['t1'] = TMP106(0x41, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
-        # self.sensors['h1'] = Si7021(0x40, args)
+        self.sensors['h1'] = Si7021(0x40, args)
 
         addresses = set()
         for sensor in self.sensors:
@@ -35,9 +35,9 @@ class RoachHab:
                 for sensor in self.sensors:
                     await self.sensors[sensor].update()
                 
-                # self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
-                # self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
-                # self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
+                self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
+                self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
+                self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
 
                 t_sleep = 60 - (time.time() - t)
                 t_sleep = max(0, t_sleep)
