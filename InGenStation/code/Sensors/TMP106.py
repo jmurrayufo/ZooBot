@@ -69,6 +69,13 @@ class TMP106:
 
 
     async def update(self):
+        a1 = 1.75e-3
+        a2 = -1.678e-5
+        tRef = 298.15 #K
+        b0 = -2.94e-5
+        b1 = -5.7e-7
+        b2 = 4.63e-9
+        c2 = 13.4
         t_start = time.time()
         self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
         
@@ -88,6 +95,12 @@ class TMP106:
             self.log.debug(f"Config: {config:X}")
             self.log.debug(f"  vObj: {vObj:X}")
             self.log.debug(f"  tDie: {tDie:X}")
+            S0 = 6e-14
+            S = S0 * ( 1 + a1*(tDie - tRef) + a2*(tDie - tRef)**2 )
+            Vos = b0 + b1*(tDie - tRef) + b2*(tDie - tRef)**2
+            fVojb = (vObj - Vos) + c2*(vObj - Vos)**2
+            Tobj = (tDie**4 + (fVojb/S))**(1/4)
+            self.log.debug(f"TObject: {Tobj}")
 
 
         self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
