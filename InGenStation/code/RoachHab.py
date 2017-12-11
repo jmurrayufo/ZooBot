@@ -31,6 +31,7 @@ class RoachHab:
                 self.log.debug(f"Sleep for {t_sleep:.3f} s")
                 self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
                 self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
+                self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
                 await asyncio.sleep(t_sleep)
         except KeyboardInterrupt:
             raise
