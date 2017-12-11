@@ -89,12 +89,22 @@ class TMP106:
                 bus.i2c_rdwr(write,read)
                 read = list(read)
                 data.append((read[1]<<8)+read[0])
+
             vObj = data[0]
-            tDie = data[1]
+            if vObj & 0x8000:
+                vObj = (vObj - (1 << 16))
+            vObj = vObj/2**15 * 5.12 
+
+            tDie = data[1]    
+            if tDie & 0x8000:
+                tDie = (tDie - (1 << 16))
+                tDie >>= 2
+            tDie = tDie * .03125
+
             config = data[2]
             self.log.debug(f"Config: {config:X}")
-            self.log.debug(f"  vObj: {vObj:X}")
-            self.log.debug(f"  tDie: {tDie:X}")
+            self.log.debug(f"  vObj: {vObj}")
+            self.log.debug(f"  tDie: {tDie}")
             S0 = 6e-14
             S = S0 * ( 1 + a1*(tDie - tRef) + a2*(tDie - tRef)**2 )
             Vos = b0 + b1*(tDie - tRef) + b2*(tDie - tRef)**2
