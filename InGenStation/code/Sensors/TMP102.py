@@ -59,5 +59,5 @@ class TMP102:
 
         self.last_update = datetime.datetime.now()
 
-        self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
+        self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
         self.log.debug(f"Temperature was {self.temperature:.1f} C")
