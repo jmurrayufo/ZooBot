@@ -16,6 +16,12 @@ class RoachHab:
         # self.sensors['t2'] = TMP106(0b1000101, args)
         self.sensors['h1'] = Si7021(0x40, args)
 
+        addresses = set()
+        for sensor in sensors:
+            if sensor.address in addresses:
+                raise KeyError("Two sensors cannot share the same address")
+            addresses.add(sensor.address)
+
         # TODO: Check to see if a settings file exists
 
 
