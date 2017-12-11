@@ -70,11 +70,12 @@ class Si7021:
         with smbus2.SMBusWrapper(1) as bus:
             write_RH = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
             write_TP = smbus2.i2c_msg.write(self.address, [self.READ_TEMPERATURE_FROM_RH])
-            read = smbus2.i2c_msg.read(self.address, 2)
+            read1 = smbus2.i2c_msg.read(self.address, 2)
+            read2 = smbus2.i2c_msg.read(self.address, 2)
             bus.i2c_rdwr(write_RH)
             while 1:
                 try:
-                    bus.i2c_rdwr(read)
+                    bus.i2c_rdwr(read1)
                     break
                 except OSError:
                     print("!1")
@@ -83,7 +84,7 @@ class Si7021:
             bus.i2c_rdwr(write_TP)
             while 1:
                 try:
-                    bus.i2c_rdwr(read)
+                    bus.i2c_rdwr(read2)
                     break
                 except OSError:
                     print("!2")
