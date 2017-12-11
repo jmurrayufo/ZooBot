@@ -74,9 +74,9 @@ class TMP106:
         
 
         with smbus2.SMBusWrapper(1) as bus:
-            bus.write_byte(self.address, 0, self.POINTER_OBJECT)
+            bus.write_byte(self.address, self.POINTER_OBJECT)
             vObj = bus.read_i2c_block_data(self.address, 0, 2)
-            bus.write_byte(self.address, 0, self.POINTER_AMBIENMT)
+            bus.write_byte(self.address, self.POINTER_AMBIENMT)
             tDie = bus.read_i2c_block_data(self.address, 0, 2)
             self.log.debug(vOjb)
             self.log.debug(tDie)
