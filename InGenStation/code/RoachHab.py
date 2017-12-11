@@ -11,7 +11,7 @@ class RoachHab:
         self.log = Log()
 
         self.sensors = {}
-        # self.sensors['t0'] = TMP102(0b1001010, args)
+        self.sensors['t0'] = TMP102(0x48, args)
         # self.sensors['t1'] = TMP106(0b1000100, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
         self.sensors['h1'] = Si7021(0x40, args)

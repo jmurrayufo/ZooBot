@@ -47,14 +47,11 @@ class TMP102:
         t_start = time.time()
         import random
         self.log.debug(f"Updating TMP102 sensor 0x{self.address:02x}")
-        self._temperature = random.randint(0,0xff)
-        self.last_update = datetime.datetime.now()
-
-        self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
-        
-        return
-
         with smbus2.SMBusWrapper(1) as bus:
+            # This is really a config thing? Maybe?
             bus.write_byte(self.address, 0, 0)
+
             self._temperature = bus.read_byte(self.address)
 
+        self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
+        self.log.debug(f"Temperature was {self.temperature:.1f} C")
