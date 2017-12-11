@@ -80,7 +80,6 @@ class Si7021:
                 except OSError:
                     print("!1")
                     continue
-            print(list(read1))
             self._humidity = (list(read1)[0] << 8) + list(read1)[1]
             bus.i2c_rdwr(write_TP)
             while 1:
@@ -92,3 +91,4 @@ class Si7021:
                     continue
             self._temperature = (list(read2)[0] << 8) + list(read2)[1]
         self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
+        self.log.debug(f"Temperature was {self.temperature:.1f} C and humidity was {self.humidity:.1f}%")
