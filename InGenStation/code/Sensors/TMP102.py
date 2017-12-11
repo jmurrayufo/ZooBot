@@ -36,11 +36,14 @@ class TMP102:
 
     @property 
     def temperature(self):
-        if self._temperature & 0x800:
+        if self._temperature & 0x8000:
             # This is a negative number, flip it!
-            return (self._temperature - (1 << 12))*.0625
+            temp = (self._temperature - (1 << 12))
         else:
-            return self._temperature*.0625
+            temp = self._temperature
+        temp >>= 4
+        temp *= 0.0625
+        return temp
 
 
     async def update(self):
