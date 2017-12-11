@@ -1,71 +1,35 @@
 #!/usr/bin/env python3
 
+import smbus2
 
-import json
-import logging
-import logstash
-from logstash_formatter import LogstashFormatterV1
+MEASURE_HUMIDITY_HOLD = 0xE5
+MEASURE_HUMIDITY_NO_HOLD = 0xF5
+MEASURE_TEMPERATURE_HOLD = 0xE3
+MEASURE_TEMPERATURE_NO_HOLD = 0xF3
+READ_TEMPERATURE_FROM_RH = 0xE0
+RESET = 0xFE
 
+WRITE_HEATER_CONTROL_REGISTER = 0x51
+READ_HEATER_CONTROL_REGISTER = 0x51
+HEATER_MASK = 0x0F # 0x00 for minimal heat, 0x0F for max. Must set heater 
+# to on before use!
 
-class MyLogstashFormatter(logstash.formatter.LogstashFormatterBase):
+WRITE_USER_REGISTER = 0xE6
+READ_USER_REGISTER = 0xE7
+RES_1 = 0x01
+RES_2 = 0x10
+RES_3 = 0x11
+RES_4 = 0x00
+CHIP_HEATER_ENABLE = 0x04
+VDDS = 0x40
 
-    def format(self, record):
-        # Create message dict
-        message = {
-            '@timestamp': self.format_timestamp(record.created),
-            '@version': '1',
-            'message': record.getMessage(),
-            'host': self.host,
-            'path': record.pathname,
-            'tags': self.tags,
-            'type': self.message_type,
+address = 0x40
 
-            # Extra Fields
-            'args': record.args,
-            'filename': record.filename,
-            'funcName': record.funcName,
-            'level': record.levelname,
-            'levelno': record.levelno,
-            'lineno': record.lineno,
-            'logger_name': record.name,
-            'module': record.module,
-            'process': record.process,
-            'processName': record.processName,
-            'relativeCreated': record.relativeCreated,
-            'thread': record.thread,
-            'threadName': record.threadName,
-            'filename': record.filename,
-            'name': record.name,
-            'pathname': record.pathname,
-        }
+with smbus2.SMBusWrapper(1) as bus:
+    bus.write_byte(address, 0, MEASURE_HUMIDITY_NO_HOLD)
+    humidity = bus.read_i2c_block_data(address, 0, 2)
+    bus.write_byte(address, 0, READ_TEMPERATURE_FROM_RH)
+    temperature = bus.read_i2c_block_data(address, 0, 2)
 
-        # Add extra fields
-        message.update(self.get_extra_fields(record))
-
-        # If exception, add debug info
-        if record.exc_info:
-            message.update(self.get_debug_fields(record))
-
-        return self.serialize(message)
-
-
-log = logging.getLogger('Tester')
-log.setLevel(logging.DEBUG)
-
-formatter = logging.Formatter('{asctime} {levelname} {filename}:{lineno} {message}', style='{')
-sh = logstash.TCPLogstashHandler('192.168.1.2', 5003)
-# sh = MySocketHandler('192.168.1.2', 5003)
-# sh = logging.handlers.SocketHandler('192.168.1.2', 5003)
-# sh = logging.handlers.HTTPHandler('192.168.1.2:5003', "/", "POST")
-sh.setFormatter(MyLogstashFormatter())
-# sh.setFormatter(formatter)
-log.addHandler(sh)
-
-formatter = logging.Formatter('{asctime} {levelname} {filename}:{lineno} {message}', style='{')
-ch = logging.StreamHandler()
-# ch.setFormatter(formatter)
-ch.setFormatter(LogstashFormatterV1())
-log.addHandler(ch)
-
-log.info("test")
-print("fin")
+print(f"{humidity} {humidity:X}")
+print(f"{temperature} {temperature:X}")
