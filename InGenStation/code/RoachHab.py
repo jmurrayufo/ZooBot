@@ -18,9 +18,9 @@ class RoachHab:
 
         addresses = set()
         for sensor in self.sensors:
-            if sensor.address in addresses:
+            if self.sensors[sensor].address in addresses:
                 raise KeyError("Two sensors cannot share the same address")
-            addresses.add(sensor.address)
+            addresses.add(self.sensors[sensor].address)
 
         # TODO: Check to see if a settings file exists
 
