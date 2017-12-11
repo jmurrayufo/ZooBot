@@ -3,6 +3,7 @@ import smbus2
 import datetime
 import asyncio
 import time
+import numpy
 
 from ..CustomLogging import Log
 
@@ -22,6 +23,13 @@ class TMP106:
     POINTER_CONFIG = 0x02
     POINER_MANU_ID = 0xFE
     POINTER_DEVICE_ID = 0xFF
+    a1 = 1.75e-3
+    a2 = -1.678e-5
+    tRef = 298.15 #K
+    b0 = -2.94e-5
+    b1 = -5.7e-7
+    b2 = 4.63e-9
+    c2 = 13.4
 
 
     def __init__(self, address, args):
@@ -62,18 +70,17 @@ class TMP106:
 
     async def update(self):
         t_start = time.time()
-        import random
         self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
-        self._temperature = random.randint(0,0xffff)
-        self._temperature_a = random.randint(0,0xffff)
-        self.last_update = datetime.datetime.now()
-        self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
         
-        return
 
         with smbus2.SMBusWrapper(1) as bus:
             bus.write_byte(self.address, 0, self.POINTER_OBJECT)
-            self._temperature = bus.read_i2c_block_data(self.address, 0, 2)
+            vObj = bus.read_i2c_block_data(self.address, 0, 2)
             bus.write_byte(self.address, 0, self.POINTER_AMBIENMT)
-            self._temperature_a = bus.read_i2c_block_data(self.address, 0, 2)
+            tDie = bus.read_i2c_block_data(self.address, 0, 2)
+            self.log.debug(vOjb)
+            self.log.debug(tDie)
+
+
+        self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
 
