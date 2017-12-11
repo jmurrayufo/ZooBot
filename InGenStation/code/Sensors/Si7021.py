@@ -95,6 +95,7 @@ class Si7021:
                 continue
         return (list(read)[0] << 8) + list(read)[1]
 
+
     async def _measure_temperature(self, bus, max_loops):
         write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
         bus.i2c_rdwr(write)
