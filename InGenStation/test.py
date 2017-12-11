@@ -28,7 +28,7 @@ address = 0x40
 
 with smbus2.SMBusWrapper(1) as bus:
     t = time.time()
-    write = smbus2.i2c_msg.write(0x40, [0xE5])
+    write = smbus2.i2c_msg.write(0x40, [0xE3])
     read = smbus2.i2c_msg.read(0x40, 2)
     bus.i2c_rdwr(write)
     while 1:
@@ -39,6 +39,8 @@ with smbus2.SMBusWrapper(1) as bus:
             print("woops")
             continue
     data = list(read)[1] << 8 + list(read)[0]
+    print(data)
+    data = 175.72*data/65536 - 46.85
     print(data)
     print(time.time()-t)
     exit()
