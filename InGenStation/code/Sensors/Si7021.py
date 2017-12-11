@@ -70,32 +70,37 @@ class Si7021:
         t_start = time.time()
         self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
         with smbus2.SMBusWrapper(1) as bus:
-            write_RH = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
-            write_TP = smbus2.i2c_msg.write(self.address, [self.READ_TEMPERATURE_FROM_RH])
-            read1 = smbus2.i2c_msg.read(self.address, 2)
-            read2 = smbus2.i2c_msg.read(self.address, 2)
-            bus.i2c_rdwr(write_RH)
-            loop1 = 0
-            while 1:
-                try:
-                    bus.i2c_rdwr(read1)
-                    break
-                except OSError:
-                    loop1 += 1
-                    continue
-            self._humidity = (list(read1)[0] << 8) + list(read1)[1]
-            bus.i2c_rdwr(write_TP)
-            loop2 = 0
-            while 1:
-                try:
-                    bus.i2c_rdwr(read2)
-                    break
-                except OSError:
-                    loop2 += 1
-                    continue
-            self._temperature = (list(read2)[0] << 8) + list(read2)[1]
+            self._humidity = await self._measure_humidity(bus, 50)
+            self._temperature = await self._measure_temperature(bus, 50)
         self.last_update = datetime.datetime.now()
         self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
         self.log.debug(f"Temperature was {self.temperature:.1f} C and humidity was {self.humidity:.1f}%")
-        self.log.debug(f"Loop1: {loop1}")
-        self.log.debug(f"Loop2: {loop2}")
+
+
+    async def _measure_humidity(self, bus, max_loops):
+        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
+        bus.i2c_rdwr(write)
+        read = smbus2.i2c_msg.read(self.address, 2)
+        loop = 0
+        while loop < max_loops:
+            try:
+                bus.i2c_rdwr(read)
+                break
+            except OSError:
+                loop += 1
+                continue
+        return (list(read)[0] << 8) + list(read)[1]
+
+    async def _measure_temperature(self, bus, max_loops):
+        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
+        bus.i2c_rdwr(write)
+        read = smbus2.i2c_msg.read(self.address, 2)
+        loop = 0
+        while loop < max_loops:
+            try:
+                bus.i2c_rdwr(read)
+                break
+            except OSError:
+                loop += 1
+                continue
+        return (list(read)[0] << 8) + list(read)[1]
