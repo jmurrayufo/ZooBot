@@ -35,7 +35,7 @@ class RoachHab:
                 await asyncio.sleep(t_sleep)
         except KeyboardInterrupt:
             raise
-        except as e:
+        except Exception as e:
             self.log.exception("Caught an exception")
             self.log.info("Sleeping for 60 seconds before we continue")
             await.sleep(60)
