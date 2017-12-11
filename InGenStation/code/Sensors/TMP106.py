@@ -88,29 +88,43 @@ class TMP106:
                 read = smbus2.i2c_msg.read(self.address, 2)
                 bus.i2c_rdwr(write,read)
                 read = list(read)
-                data.append((read[1]<<8)+read[0])
+                data.append((read[0]<<8)+read[1])
 
             vObj = data[0]
             if vObj & 0x8000:
                 vObj = (vObj - (1 << 16))
-            vObj = vObj/2**15 * 5.12 
+            vObj = vObj/2**15 * 5.12e-3 
 
             tDie = data[1]    
             if tDie & 0x8000:
                 tDie = (tDie - (1 << 16))
                 tDie >>= 2
             tDie = tDie * .03125
+            tDie += 273.15
 
             config = data[2]
             self.log.debug(f"Config: {config:X}")
-            self.log.debug(f"  vObj: {vObj}")
-            self.log.debug(f"  tDie: {tDie}")
-            S0 = 6e-14
+            self.log.debug(f"  vObj: {vObj:8.3e} (0x{data[0]:04X})")
+            self.log.debug(f"  tDie: {tDie-273.15:8.3f}/{tDie:8.3f} (0x{data[1]:04X})")
+            S0 = 5e-14
+
             S = S0 * ( 1 + a1*(tDie - tRef) + a2*(tDie - tRef)**2 )
+            self.log.debug(f"   d-r: {(tDie - tRef):8.3f}")
+            self.log.debug(f"     S: {S:8.3f}")
+
             Vos = b0 + b1*(tDie - tRef) + b2*(tDie - tRef)**2
+            self.log.debug(f"   Vos: {Vos:8.3f}")
+
             fVojb = (vObj - Vos) + c2*(vObj - Vos)**2
-            Tobj = (tDie**4 + (fVojb/S))**(1/4)
-            self.log.debug(f"TObject: {Tobj}")
+            self.log.debug(f" fVojb: {fVojb:8.3f}")
+
+            Tobj = numpy.sqrt(numpy.sqrt( tDie**4 + (fVojb/S) ))
+            self.log.debug(f"  Tobj: {Tobj-49:8.3f}")
+            self.log.debug(f"  Tobj: {Tobj-273.15-49:8.3f}")
+
+            cali = fVojb/( 1+ a1*(tDie - tRef) + a2*(tDie-tRef)**2 )
+            self.log.debug(f"  cali: {cali}")
+            self.log.debug(f"tDie^4: {tDie**4}")
 
 
         self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
