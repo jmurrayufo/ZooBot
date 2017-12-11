@@ -29,17 +29,21 @@ class RoachHab:
     ### TEMPERATURE READINGS ###
 
 
-    def temperature_handler(self, request, sensor_id):
+    async def temperature_handler(self, request, sensor_id):
         # TODO: These really should just respond with data, and let a sanic
         # manager do the actual http stuff...
         self.log.info(f"Request for temperature received against id {sensor_id}")
+        for sensor in self.sensors:
+            await self.sensors[sensor].update()
         return sanic.response.json({sensor_id: self.sensors[sensor_id].data})
 
 
-    def all_temperature_handler(self, request):
+    async def all_temperature_handler(self, request):
         # TODO: These really should just respond with data, and let a sanic
         # manager do the actual http stuff...
         self.log.info(f"Request for temperature received against all sensors")
+        for sensor in self.sensors:
+            await self.sensors[sensor].update()
         data = {}
         for key in self.sensors:
             data[key] = self.sensors[key].data
