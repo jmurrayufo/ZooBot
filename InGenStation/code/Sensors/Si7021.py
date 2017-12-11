@@ -70,7 +70,11 @@ class Si7021:
         t_start = time.time()
         self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
         with smbus2.SMBusWrapper(1) as bus:
-            self._humidity = await self._measure_humidity(bus, 50)
+            h_list = []
+            for i in range(5):
+                h_list.append(await self._measure_humidity(bus, 50))
+            h_list = sorted(h_list)
+            self._humidity = h_list[2]
             self._temperature = await self._measure_temperature(bus, 50)
         self.last_update = datetime.datetime.now()
         self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
