@@ -79,8 +79,6 @@ class TMP106:
         t_start = time.time()
         self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
         
-
-
         with smbus2.SMBusWrapper(1) as bus:
             data = []
             for i in [self.POINTER_OBJECT, self.POINTER_AMBIENMT, self.POINTER_CONFIG]:
@@ -119,8 +117,9 @@ class TMP106:
             self.log.debug(f" fVojb: {fVojb:8.3f}")
 
             Tobj = numpy.sqrt(numpy.sqrt( tDie**4 + (fVojb/S) ))
-            self.log.debug(f"  Tobj: {Tobj-49:8.3f}")
-            self.log.debug(f"  Tobj: {Tobj-273.15-49:8.3f}")
+            self.log.debug(f"  Tobj: {Tobj-54:8.3f}")
+            self.log.debug(f"  Tobj: {Tobj-273.15-54:8.3f}")
+            self.log.debug(f" error: {37-(Tobj-273.15):8.3f}")
 
             cali = fVojb/( 1+ a1*(tDie - tRef) + a2*(tDie-tRef)**2 )
             self.log.debug(f"  cali: {cali}")
