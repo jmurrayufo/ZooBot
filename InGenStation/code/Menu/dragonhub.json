@@ -1,0 +1,52 @@
+{
+    "menus": [
+        {
+            "id":0,
+            "title":"Main Menu",
+            "parent":null,
+            "options":[1]
+        },
+        {
+            "id":1,
+            "title":"Temperature",
+            "parent":0,
+            "options":[100,101,102]
+        }
+    ],
+    "readings": [
+        {
+            "id":100,
+            "title":"T0",
+            "reading":"t0"
+        },
+        {
+            "id":101,
+            "title":"T1",
+            "reading":"t1"
+        },
+        {
+            "id":102,
+            "title":"T2",
+            "reading":"t2"
+        }
+    ],
+    "timers": [
+        {
+            "id":200,
+            "title":"Feeding",
+            "alarm_s":43200
+        },
+        {
+            "id":201,
+            "title":"Bathing",
+            "alarm_s":345600
+        },
+        {
+            "id":202,
+            "title":"T2",
+            "alarm_s":null
+        }
+    ],
+    "actions":[],
+    "alerts":[]
+}

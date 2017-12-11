@@ -1,0 +1,5 @@
+= 2017-12-09 =
+
+Checked around the house this morning for my soldering iron. Couldn't find it at all. Asking roommates again to be sure, but might just need to buy a new one. The last one was cheap anyway. 
+
+The Raspberry Pis have both been setup and are running basic python monitoring software now. 

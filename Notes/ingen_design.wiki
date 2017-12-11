@@ -1,0 +1,32 @@
+= Design =
+
+== Interface ==
+
+Web API. Simple interface to access data, send commands, etc. 
+
+== API End Points ==
+
+=== / ===
+
+    Root endpoint provides a JSON reply of the current status of the system as a whole. Is somewhat verbose.
+    
+=== /temperature/[id] ===
+    
+    Get the current temperature of sensor with given ID. This forces the system to poll the current value, and return it. If a sensor is not found, then a null will be placed into the resulting json. 
+    
+=== /humidity/[id] ===
+
+    Get the current humidity of sensor with given ID. This forces the system to poll the current value, and return it. If a sensor is not found, then a null will be placed into the resulting json. 
+    
+    
+=== /uv/ ===
+
+
+    Get the current uv sensor data. This forces the system to poll the current value, and return it. If a sensor is not found, then a null will be placed into the resulting json. 
+    
+    
+=== /timers/ ===
+
+    Ask the tanks for the current timers. This will return a set of strings and timestamps of events.
+
+== Controls ==
