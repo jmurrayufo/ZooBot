@@ -52,7 +52,8 @@ class Si7021:
     def data(self):
         return {"last_update":self.last_update, "temperature":self.temperature,
                 "humidity":self.humidity, "raw_h":hex(self._humidity), 
-                "raw_t":hex(self._temperature), "address":self.address}
+                "raw_t":hex(self._temperature), "address":self.address,
+                "update_age": str(datetime.datetime.now() - self.last_update)}
 
 
     @property
