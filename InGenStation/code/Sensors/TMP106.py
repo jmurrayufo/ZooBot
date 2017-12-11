@@ -73,13 +73,21 @@ class TMP106:
         self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
         
 
+
         with smbus2.SMBusWrapper(1) as bus:
-            bus.write_byte(self.address, self.POINTER_OBJECT)
-            vObj = bus.read_i2c_block_data(self.address, 0, 2)
-            bus.write_byte(self.address, self.POINTER_AMBIENMT)
-            tDie = bus.read_i2c_block_data(self.address, 0, 2)
-            self.log.debug(vObj)
-            self.log.debug(tDie)
+            data = []
+            for i in [self.POINTER_OBJECT, self.POINTER_AMBIENMT, self.POINTER_CONFIG]:
+                write = smbus2.i2c_msg.write(self.address, [i])
+                read = smbus2.i2c_msg.read(self.address, 2)
+                bus.i2c_rdwr(write,read)
+                read = list(read)
+                data.append((read[1]<<8)+read[0])
+            vObj = data[0]
+            tDie = data[1]
+            config = data[2]
+            self.log.debug(f"Config: {config:X}")
+            self.log.debug(f"  vObj: {vObj:X}")
+            self.log.debug(f"  tDie: {tDie:X}")
 
 
         self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
