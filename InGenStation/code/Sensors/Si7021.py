@@ -74,23 +74,27 @@ class Si7021:
             read1 = smbus2.i2c_msg.read(self.address, 2)
             read2 = smbus2.i2c_msg.read(self.address, 2)
             bus.i2c_rdwr(write_RH)
+            loop1 = 0
             while 1:
                 try:
                     bus.i2c_rdwr(read1)
                     break
                 except OSError:
-                    print("!1")
+                    loop1 += 1
                     continue
             self._humidity = (list(read1)[0] << 8) + list(read1)[1]
             bus.i2c_rdwr(write_TP)
+            loop2 = 0
             while 1:
                 try:
                     bus.i2c_rdwr(read2)
                     break
                 except OSError:
-                    print("!2")
+                    loop2 += 1
                     continue
             self._temperature = (list(read2)[0] << 8) + list(read2)[1]
         self.last_update = datetime.datetime.now()
         self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
         self.log.debug(f"Temperature was {self.temperature:.1f} C and humidity was {self.humidity:.1f}%")
+        self.log.debug(f"Loop1: {loop1}")
+        self.log.debug(f"Loop2: {loop2}")
