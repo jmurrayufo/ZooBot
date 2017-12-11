@@ -49,7 +49,7 @@ class TMP102:
         self.log.debug(f"Updating TMP102 sensor 0x{self.address:02x}")
         with smbus2.SMBusWrapper(1) as bus:
             # This is really a config thing? Maybe?
-            bus.write_byte(self.address, 0, 0)
+            bus.write_byte_data(self.address, 0, 0)
 
             self._temperature = bus.read_byte(self.address)
 
