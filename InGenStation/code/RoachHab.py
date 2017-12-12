@@ -10,6 +10,7 @@ class RoachHab:
     def __init__(self, args): 
         self.log = Log()
 
+        self.args = args
         self.sensors = {}
         self.sensors['t0'] = TMP102(0x48, args)
         # self.sensors['t1'] = TMP106(0x41, args)
@@ -38,11 +39,11 @@ class RoachHab:
 
                 # Log results
 
-                t_sleep = 60 - (time.time() - t)
+                t_sleep = self.args.update_freq - (time.time() - t)
                 t_sleep = max(0, t_sleep)
                 self.log.debug(f"Sleep for {t_sleep:.3f} s")
-                # await asyncio.sleep(t_sleep)
-                await asyncio.sleep(5)
+                await asyncio.sleep(t_sleep)
+                # await asyncio.sleep(5)
         except KeyboardInterrupt:
             raise
         except Exception as e:

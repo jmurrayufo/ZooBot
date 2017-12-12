@@ -33,6 +33,10 @@ parser.add_argument('--host', metavar='addr', type=str, default='0.0.0.0',
 parser.add_argument('--__version__', default=__version__,
                     help=argparse.SUPPRESS)
 
+parser.add_argument('--update-freq', type=float,
+                    default=60.0,
+                    help='What type of instance are we running')
+
 args = parser.parse_args()
 
 if args.purpose == 'dragon':
