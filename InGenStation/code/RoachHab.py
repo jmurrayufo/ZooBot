@@ -65,6 +65,7 @@ class RoachHab:
 
 
     async def log_sensors(self):
+        self.log.debug("Run metrics logging")
         self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
         self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
         self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
