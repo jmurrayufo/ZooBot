@@ -41,7 +41,6 @@ class Log:
 
 
     def metric(self, name, **kwargs):
-        self._log.debug("Called metric")
         report_dict = dict({
            "metric": True,
            "app.name":self.name,

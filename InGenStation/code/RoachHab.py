@@ -30,20 +30,15 @@ class RoachHab:
     async def run(self):
         try:
             while True:
-                self.log.debug("Update")
-
                 t = time.time()
 
                 await self.update()
                 await self.log_sensors()
 
-                # Log results
-
                 t_sleep = self.args.update_freq - (time.time() - t)
                 t_sleep = max(0, t_sleep)
                 self.log.debug(f"Sleep for {t_sleep:.3f} s")
                 await asyncio.sleep(t_sleep)
-                # await asyncio.sleep(5)
         except KeyboardInterrupt:
             raise
         except Exception as e:
@@ -54,6 +49,8 @@ class RoachHab:
 
     ### TEMPERATURE READINGS ###
     async def update(self):
+        self.log.debug("Update sensors")
+        t = time.time()
         if self.update_in_progress:
             self.log.warning("Cannot start an update when we are already doing one.")
             return
@@ -63,6 +60,7 @@ class RoachHab:
                 await self.sensors[sensor].update()
         finally:
             self.update_in_progress = False
+            self.log.info(f"Sensor update completed in {time.time()-t:.3f}s")
 
 
     async def log_sensors(self):
