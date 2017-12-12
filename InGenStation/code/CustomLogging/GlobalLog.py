@@ -27,7 +27,7 @@ class Log:
         ch.setFormatter(formatter)
         self._log.addHandler(ch)
 
-        self._metric_log = logging.getLogger(self.name+"metric")
+        self._metric_log = logging.getLogger(self.name[args.purpose]+"metric")
         # ch2 = logging.StreamHandler(stream=None)
         # self._metric_log.addHandler(ch2)
         self._metric_log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
