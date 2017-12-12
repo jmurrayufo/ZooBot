@@ -15,7 +15,7 @@ class Log:
 
 
         self.name = {'dragon':'DragonHab','bug':'BugHab','test':'DevHab'}
-        self._log = logging.getLogger(self.name)
+        self._log = logging.getLogger(self.name[args.purpose])
         self._log.setLevel(logging.DEBUG)
 
         sh = logstash.TCPLogstashHandler('192.168.1.2', 5003)
