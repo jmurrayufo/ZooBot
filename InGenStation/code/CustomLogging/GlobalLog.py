@@ -12,10 +12,10 @@ class Log:
 
         if args is None:
             return
-
+        self.args = args
 
         self.name = {'dragon':'DragonHab','bug':'BugHab','test':'DevHab'}
-        self._log = logging.getLogger(self.name[args.purpose])
+        self._log = logging.getLogger(self.name[self.args.purpose])
         self._log.setLevel(logging.DEBUG)
 
         sh = logstash.TCPLogstashHandler('192.168.1.2', 5003)
@@ -27,7 +27,7 @@ class Log:
         ch.setFormatter(formatter)
         self._log.addHandler(ch)
 
-        self._metric_log = logging.getLogger(self.name[args.purpose]+"metric")
+        self._metric_log = logging.getLogger(self.name[self.args.purpose]+"metric")
         # ch2 = logging.StreamHandler(stream=None)
         # self._metric_log.addHandler(ch2)
         self._metric_log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
