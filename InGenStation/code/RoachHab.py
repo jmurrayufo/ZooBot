@@ -60,7 +60,7 @@ class RoachHab:
                 await self.sensors[sensor].update()
         finally:
             self.update_in_progress = False
-            self.log.info(f"Sensor update completed in {time.time()-t:.3f}s")
+            self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
 
 
     async def log_sensors(self):
