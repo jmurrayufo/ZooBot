@@ -12,7 +12,7 @@ class RoachHab:
 
         self.sensors = {}
         self.sensors['t0'] = TMP102(0x48, args)
-        # self.sensors['t1'] = TMP106(0x41, args)
+        self.sensors['t1'] = TMP106(0x41, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
         self.sensors['h1'] = Si7021(0x40, args)
 
@@ -22,6 +22,7 @@ class RoachHab:
                 raise KeyError("Two sensors cannot share the same address")
             addresses.add(self.sensors[sensor].address)
 
+        self.update_in_progress = False
         # TODO: Check to see if a settings file exists
 
 
@@ -32,17 +33,16 @@ class RoachHab:
 
                 t = time.time()
 
-                for sensor in self.sensors:
-                    await self.sensors[sensor].update()
-                
-                self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
-                self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
-                self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
+                await self.update()
+                await self.log_sensors()
+
+                # Log results
 
                 t_sleep = 60 - (time.time() - t)
                 t_sleep = max(0, t_sleep)
                 self.log.debug(f"Sleep for {t_sleep:.3f} s")
-                await asyncio.sleep(t_sleep)
+                # await asyncio.sleep(t_sleep)
+                await asyncio.sleep(5)
         except KeyboardInterrupt:
             raise
         except Exception as e:
@@ -52,6 +52,22 @@ class RoachHab:
 
 
     ### TEMPERATURE READINGS ###
+    async def update(self):
+        if self.update_in_progress:
+            self.log.warning("Cannot start an update when we are already doing one.")
+            return
+        try:
+            self.update_in_progress = True   
+            for sensor in self.sensors:
+                await self.sensors[sensor].update()
+        finally:
+            self.update_in_progress = False
+
+
+    async def log_sensors(self):
+        self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
+        self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
+        self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
 
 
     async def temperature_handler(self, request, sensor_id):
