@@ -35,7 +35,7 @@ parser.add_argument('--__version__', default=__version__,
 
 parser.add_argument('--update-freq', type=float,
                     default=60.0,
-                    help='What type of instance are we running')
+                    help='Minumum time between sensor updates')
 
 args = parser.parse_args()
 

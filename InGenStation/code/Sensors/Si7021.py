@@ -78,7 +78,7 @@ class Si7021:
             self._temperature = await self._measure_temperature(bus, 50)
         self.last_update = datetime.datetime.now()
         self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
-        self.log.debug(f"Temperature was {self.temperature:.1f} C and humidity was {self.humidity:.1f}%")
+        self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
 
 
     async def _measure_humidity(self, bus, max_loops):
