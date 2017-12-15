@@ -76,19 +76,25 @@ class Si7021:
             h_list = sorted(h_list)
             self._humidity = h_list[2]
             measured_temperature = await self._measure_temperature(bus, 50)
-            if hasattr(self,"_temperature"):
-                delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
-                t_slope = abs(measured_temperature-self._temperature)/delta_t_update
-                self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
-                if t_slope > 1:
-                    # Slope exceeded 1deg/minute!
-                    self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
 
-                    t_list = []
-                    for i in range(5):
-                        t_list.append(await self._measure_temperature(bus, 50))
-                    t_list = sorted(t_list)
-                    measured_temperature = t_list[2]
+            # Handle boot loop!
+            if not hasattr(self,"_temperature"): self._temperature = measured_temperature
+
+            # Check the slope of the temperature for sudden changes
+            delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
+            t_slope = abs(measured_temperature - self._temperature)/delta_t_update
+            self.log.debug(f"delta_t_update: {delta_t_update}")
+
+            self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
+            if t_slope > 1:
+                # Slope exceeded 1deg/minute!
+                self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
+
+                t_list = []
+                for i in range(5):
+                    t_list.append(await self._measure_temperature(bus, 50))
+                t_list = sorted(t_list)
+                measured_temperature = t_list[2]
 
             self._temperature = measured_temperature
 
