@@ -58,7 +58,12 @@ class Si7021:
 
     @property
     def temperature(self):
-        return (175.72 * self._temperature / 65536) - 46.85
+        return self._conv_temp(self._temperature)
+    
+
+    def _conv_temp(self, value):
+        return (175.72 * value / 65536) - 46.85
+
 
 
     @property
@@ -82,10 +87,7 @@ class Si7021:
 
             # Check the slope of the temperature for sudden changes
             delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
-            t_slope = abs(measured_temperature - self._temperature)/delta_t_update
-            self.log.debug(f"delta_t_update: {delta_t_update}")
-            self.log.debug(f"measured_temperature: {measured_temperature}")
-            self.log.debug(f"self._temperature: {self._temperature}")
+            t_slope = abs(self._conv_temp(measured_temperature) - self._conv_temp(self._temperature))/delta_t_update
 
             self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
             if t_slope > 1:
