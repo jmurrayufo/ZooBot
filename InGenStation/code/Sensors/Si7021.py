@@ -65,7 +65,6 @@ class Si7021:
         return (175.72 * value / 65536) - 46.85
 
 
-
     @property
     def humidity(self):
         return (125 * self._humidity / 65536) - 6
@@ -87,10 +86,10 @@ class Si7021:
 
             # Check the slope of the temperature for sudden changes
             delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
-            t_slope = abs(self._conv_temp(measured_temperature) - self._conv_temp(self._temperature))/delta_t_update
+            t_slope = self._conv_temp(measured_temperature) - self._conv_temp(self._temperature)/delta_t_update
 
             self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
-            if t_slope > 1:
+            if abs(t_slope) > 1:
                 # Slope exceeded 1deg/minute!
                 self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
 
