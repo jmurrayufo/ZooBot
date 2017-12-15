@@ -3,6 +3,7 @@
 import datetime
 
 from .State import State
+from ..CustomLogging import Log
 
 class Heater:
     """Controller for heater element
@@ -38,7 +39,7 @@ class Heater:
         return ret_val
 
 
-    def enable(self):
+    def enable(self, *, override=False):
         if self.state == State.ON:
             return
         if self.state == State.OFF and self.off_time < self.min_off:
@@ -48,7 +49,7 @@ class Heater:
         self.last_on = datetime.datetime.now()
 
 
-    def disable(self):
+    def disable(self, *, override=False):
         if self.state == State.OFF:
             return
         if self.state == State.ON and self.on_time < self.min_on:
@@ -82,7 +83,6 @@ class Heater:
                 self.enable()
             elif value < self.temperature_limit_min:
                 self.enable()
-                
 
 
     @property
