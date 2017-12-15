@@ -78,7 +78,8 @@ class Si7021:
             measured_temperature = await self._measure_temperature(bus, 50)
             if hasattr(self,"_temperature"):
                 delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
-                t_slope = abs(measured_temperature-self._temperature)/delta_t_update 
+                t_slope = abs(measured_temperature-self._temperature)/delta_t_update
+                self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
                 if t_slope > 1:
                     # Slope exceeded 1deg/minute!
                     self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
