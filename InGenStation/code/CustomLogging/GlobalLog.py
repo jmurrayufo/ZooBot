@@ -7,12 +7,16 @@ from . import VerboseLogstashFormatter
 
 class Log:
     __shared_state = {}
-    def __init__(self, _type=None):
+    def __init__(self, args=None):
         self.__dict__ = self.__shared_state
-        if _type is None:
-            return
 
-        self._log = logging.getLogger(_type)
+        if args is None:
+            return
+        self.args = args
+
+        name = {'dragon':'DragonHab','bug':'BugHab','test':'DevHab'}
+        self.name = name[self.args.purpose]
+        self._log = logging.getLogger(self.name)
         self._log.setLevel(logging.DEBUG)
 
         sh = logstash.TCPLogstashHandler('192.168.1.2', 5003)
@@ -24,12 +28,12 @@ class Log:
         ch.setFormatter(formatter)
         self._log.addHandler(ch)
 
-        self._metric_log = logging.getLogger(_type+"metric")
+        self._metric_log = logging.getLogger(self.name+"_metric")
         # ch2 = logging.StreamHandler(stream=None)
         # self._metric_log.addHandler(ch2)
         self._metric_log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
         self._metric_log.setLevel(logging.DEBUG)
-        self._metric_log.propagate = False
+        self._metric_log.propagate = True
 
 
     def __getattr__(self, name):
@@ -39,8 +43,8 @@ class Log:
     def metric(self, name, **kwargs):
         report_dict = dict({
            "metric": True,
-           "app.name":"DevHab",
-           "app.version":"0.1.0",
+           "app.name":self.name,
+           "app.version":self.args.__version__,
            "env.domain":"dragon",
            "env.infrastructure":"dev",
            "env.name":"isbe",

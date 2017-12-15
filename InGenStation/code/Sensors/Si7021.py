@@ -58,7 +58,11 @@ class Si7021:
 
     @property
     def temperature(self):
-        return (175.72 * self._temperature / 65536) - 46.85
+        return self._conv_temp(self._temperature)
+    
+
+    def _conv_temp(self, value):
+        return (175.72 * value / 65536) - 46.85
 
 
     @property
@@ -75,10 +79,31 @@ class Si7021:
                 h_list.append(await self._measure_humidity(bus, 50))
             h_list = sorted(h_list)
             self._humidity = h_list[2]
-            self._temperature = await self._measure_temperature(bus, 50)
+            measured_temperature = await self._measure_temperature(bus, 50)
+
+            # Handle boot loop!
+            if not hasattr(self,"_temperature"): self._temperature = measured_temperature
+
+            # Check the slope of the temperature for sudden changes
+            delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
+            t_slope = self._conv_temp(measured_temperature) - self._conv_temp(self._temperature)/delta_t_update
+
+            self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
+            if abs(t_slope) > 1:
+                # Slope exceeded 1deg/minute!
+                self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
+
+                t_list = []
+                for i in range(5):
+                    t_list.append(await self._measure_temperature(bus, 50))
+                t_list = sorted(t_list)
+                measured_temperature = t_list[2]
+
+            self._temperature = measured_temperature
+
         self.last_update = datetime.datetime.now()
         self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
-        self.log.debug(f"Temperature was {self.temperature:.1f} C and humidity was {self.humidity:.1f}%")
+        self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
 
 
     async def _measure_humidity(self, bus, max_loops):
@@ -94,6 +119,7 @@ class Si7021:
                 loop += 1
                 continue
         return (list(read)[0] << 8) + list(read)[1]
+
 
     async def _measure_temperature(self, bus, max_loops):
         write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
