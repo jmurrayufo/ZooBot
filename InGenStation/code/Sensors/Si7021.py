@@ -84,6 +84,8 @@ class Si7021:
             delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
             t_slope = abs(measured_temperature - self._temperature)/delta_t_update
             self.log.debug(f"delta_t_update: {delta_t_update}")
+            self.log.debug(f"measured_temperature: {measured_temperature}")
+            self.log.debug(f"self._temperature: {self._temperature}")
 
             self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
             if t_slope > 1:
