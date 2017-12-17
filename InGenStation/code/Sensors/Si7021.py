@@ -86,7 +86,7 @@ class Si7021:
 
             # Check the slope of the temperature for sudden changes
             delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
-            t_slope = self._conv_temp(measured_temperature) - self._conv_temp(self._temperature)/delta_t_update
+            t_slope = (self._conv_temp(measured_temperature) - self._conv_temp(self._temperature))/delta_t_update
 
             self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
             if abs(t_slope) > 1:
