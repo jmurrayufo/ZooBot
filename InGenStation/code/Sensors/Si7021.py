@@ -92,7 +92,7 @@ class Si7021:
             if abs(t_slope) > 1:
                 # Slope exceeded 1deg/minute!
                 self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
-
+                self.log.warning(f"This event was triggered from a temperature of {self._conv_temp(measured_temperature):.3f} C")
                 t_list = []
                 for i in range(5):
                     t_list.append(await self._measure_temperature(bus, 50))
