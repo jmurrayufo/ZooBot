@@ -25,8 +25,8 @@ class Heater:
         self.max_off = datetime.timedelta(seconds=60) # This might not make sense?
         self.min_off = datetime.timedelta(seconds=120)
 
-        self.temperature_limit_max = 40
-        self.temperature_limit_min = 30
+        self.temperature_limit_max = 30
+        self.temperature_limit_min = 26
 
         self.state = State.OFF
         GPIO.setmode(GPIO.BCM)
