@@ -62,7 +62,7 @@ class RoachHab:
             self.update_in_progress = True   
             for sensor in self.sensors:
                 await self.sensors[sensor].update()
-            self.devices['heater0'].update(self.sensors["t1"].temperature)
+            self.devices['heater0'].update(self.sensors["t0"].temperature)
         finally:
             self.update_in_progress = False
             self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
