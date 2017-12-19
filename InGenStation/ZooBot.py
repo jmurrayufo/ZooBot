@@ -64,6 +64,18 @@ if  args.purpose == 'test':
     view.add(['GET'], hab.temperature_handler)
     sanic_mgr.app.add_route(view,'/temp/<sensor_id>')
 
+    view = CompositionView()
+    view.add(['GET'], hab.heater_on)
+    sanic_mgr.app.add_route(view,'/heater/on')
+
+    view = CompositionView()
+    view.add(['GET'], hab.heater_off)
+    sanic_mgr.app.add_route(view,'/heater/off')
+
+    view = CompositionView()
+    view.add(['GET'], hab.heater_disable)
+    sanic_mgr.app.add_route(view,'/heater/disable')
+
 
     sanic_mgr.app.add_task(hab.run)
 

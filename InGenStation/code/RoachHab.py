@@ -90,3 +90,24 @@ class RoachHab:
         for key in self.sensors:
             data[key] = self.sensors[key].data
         return sanic.response.json(data)
+
+    async def heater_on(self, request):
+        # TODO: These really should just respond with data, and let a sanic
+        # manager do the actual http stuff...
+        self.log.info(f"Request to turn heater on")
+        self.devices['heater0'].on()
+        return sanic.response.text("Heater on")
+
+    async def heater_off(self, request):
+        # TODO: These really should just respond with data, and let a sanic
+        # manager do the actual http stuff...
+        self.log.info(f"Request to turn heater off")
+        self.devices['heater0'].off()
+        return sanic.response.text("Heater off")
+
+    async def heater_disabled(self, request):
+        # TODO: These really should just respond with data, and let a sanic
+        # manager do the actual http stuff...
+        self.log.info(f"Request to disable heater")
+        self.devices['heater0'].disable()
+        return sanic.response.text("Heater disabled")

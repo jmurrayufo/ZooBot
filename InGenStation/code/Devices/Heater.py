@@ -53,7 +53,7 @@ class Heater:
         return ret_val
 
 
-    def enable(self, *, override=False):
+    def on(self, *, override=False):
         if self.state == State.ON:
             return
         if self.state == State.OFF and self.off_time < self.min_off:
@@ -61,12 +61,12 @@ class Heater:
             return
         self.state = State.ON
         self.last_on = datetime.datetime.now()
-        self.log.info("Heater Enabled")
+        self.log.info("Heater On")
         GPIO.output(20,GPIO.LOW)
         GPIO.output(21,GPIO.HIGH)
 
 
-    def disable(self, *, override=False):
+    def off(self, *, override=False):
         if self.state == State.OFF:
             return
         if self.state == State.ON and self.on_time < self.min_on:
@@ -74,6 +74,13 @@ class Heater:
             return
         self.state = State.OFF
         self.last_off = datetime.datetime.now()
+        self.log.info("Heater Off")
+        GPIO.output(20,GPIO.LOW)
+        GPIO.output(21,GPIO.LOW)
+
+
+    def disable(self, *, override=False):
+        self.state = State.DISABLED
         self.log.info("Heater Disabled")
         GPIO.output(20,GPIO.LOW)
         GPIO.output(21,GPIO.LOW)
@@ -81,10 +88,10 @@ class Heater:
 
     def toggle(self):
         if self.state == State.OFF:
-            self.enable()
+            self.on()
             return
         elif self.state == State.ON:
-            self.disable()
+            self.off()
             return
 
 
@@ -96,17 +103,17 @@ class Heater:
         if self.state == State.ON:
             if self.on_time > self.max_on:
                 self.log.debug("Diable for max on time")
-                self.disable()
+                self.off()
             elif value > self.temperature_limit_max:
                 self.log.debug("Diable for max temperature")
-                self.disable()
+                self.off()
         elif self.state == State.OFF:
             if self.off_time > self.max_off and 0:
                 self.log.debug("Enable for max off time")
-                self.enable()
+                self.on()
             elif value < self.temperature_limit_min:
                 self.log.debug("Enable for min temperature")
-                self.enable()
+                self.on()
 
 
     @property
@@ -129,6 +136,7 @@ class Heater:
 
     def is_off(self):
         return self.state == State.OFF
+
 
 def _exit_function():
     log = Log()
