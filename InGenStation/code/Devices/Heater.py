@@ -28,7 +28,7 @@ class Heater:
         self.temperature_limit_max = 30
         self.temperature_limit_min = 26
 
-        self.state = State.OFF
+        self.state = State.UNKNOWN
         GPIO.setmode(GPIO.BCM)
 
         self.log.info("Heater Setup")
@@ -38,6 +38,8 @@ class Heater:
 
         self.log.info("Register exit function")
         atexit.register(_exit_function)
+
+        self.disable()
 
 
     def __repr__(self):
