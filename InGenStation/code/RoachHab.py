@@ -105,7 +105,7 @@ class RoachHab:
         self.devices['heater0'].off()
         return sanic.response.text("Heater off")
 
-    async def heater_disabled(self, request):
+    async def heater_disable(self, request):
         # TODO: These really should just respond with data, and let a sanic
         # manager do the actual http stuff...
         self.log.info(f"Request to disable heater")
