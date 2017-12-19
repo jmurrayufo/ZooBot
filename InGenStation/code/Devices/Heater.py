@@ -93,17 +93,17 @@ class Heater:
         """
         if self.state == State.ON:
             if self.on_time > self.max_on:
-                self.log.debug("Diable for max time")
+                self.log.debug("Diable for max on time")
                 self.disable()
             elif value > self.temperature_limit_max:
                 self.log.debug("Diable for max temperature")
                 self.disable()
         elif self.state == State.OFF:
             if self.off_time > self.max_off and 0:
-                self.log.debug("Enable for max time")
+                self.log.debug("Enable for max off time")
                 self.enable()
             elif value < self.temperature_limit_min:
-                self.log.debug("Enable for max temperature")
+                self.log.debug("Enable for min temperature")
                 self.enable()
 
 
