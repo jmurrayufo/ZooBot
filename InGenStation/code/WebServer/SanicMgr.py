@@ -113,7 +113,7 @@ class SanicMgr:
                 authString = base64.urlsafe_b64decode(request.headers['authorization'].split()[1]).decode()
                 # authString = str(authString)
                 username,password = authString.split(":")
-                if username == 'demo' and password == 'user':
+                if username == 'user' and password == 'password':
                     return
             ret_val = sanic.response.json( {'message': 'Please Login!'},
                                             headers={'WWW-Authenticate': 'Basic realm="User Visible Realm"'},
