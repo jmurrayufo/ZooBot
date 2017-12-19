@@ -1,31 +1,43 @@
 
 
 import datetime
+import atexit
 
 from .State import State
 from ..CustomLogging import Log
+import RPi.GPIO as GPIO
 
 class Heater:
     """Controller for heater element
     """
 
     def __init__(self, name, args):
+        self.log = Log()
         self.args = args
         self.name = name
 
         self.last_on = datetime.datetime.min
         self.last_off = datetime.datetime.now()
 
-        self.max_on = datetime.timedelta(seconds=60)
-        self.min_on = datetime.timedelta(seconds=10)
+        self.max_on = datetime.timedelta(minutes=30)
+        self.min_on = datetime.timedelta(seconds=60)
 
         self.max_off = datetime.timedelta(seconds=60) # This might not make sense?
-        self.min_off = datetime.timedelta(seconds=10)
+        self.min_off = datetime.timedelta(seconds=120)
 
         self.temperature_limit_max = 40
         self.temperature_limit_min = 30
 
         self.state = State.OFF
+        GPIO.setmode(GPIO.BCM)
+
+        self.log.info("Heater Setup")
+        GPIO.setup(20,GPIO.OUT)
+        GPIO.setup(21,GPIO.OUT)
+        self.log.info("Heater Setup Complete")
+
+        self.log.info("Register exit function")
+        atexit.register(_exit_function)
 
 
     def __repr__(self):
@@ -47,6 +59,9 @@ class Heater:
             return
         self.state = State.ON
         self.last_on = datetime.datetime.now()
+        self.log.info("Heater Enabled")
+        GPIO.output(20,GPIO.LOW)
+        GPIO.output(21,GPIO.HIGH)
 
 
     def disable(self, *, override=False):
@@ -57,6 +72,9 @@ class Heater:
             return
         self.state = State.OFF
         self.last_off = datetime.datetime.now()
+        self.log.info("Heater Disabled")
+        GPIO.output(20,GPIO.LOW)
+        GPIO.output(21,GPIO.LOW)
 
 
     def toggle(self):
@@ -75,13 +93,17 @@ class Heater:
         """
         if self.state == State.ON:
             if self.on_time > self.max_on:
+                self.log.debug("Diable for max time")
                 self.disable()
             elif value > self.temperature_limit_max:
+                self.log.debug("Diable for max temperature")
                 self.disable()
         elif self.state == State.OFF:
-            if self.off_time > self.max_off:
+            if self.off_time > self.max_off and 0:
+                self.log.debug("Enable for max time")
                 self.enable()
             elif value < self.temperature_limit_min:
+                self.log.debug("Enable for max temperature")
                 self.enable()
 
 
@@ -105,3 +127,38 @@ class Heater:
 
     def is_off(self):
         return self.state == State.OFF
+
+def _exit_function():
+    log = Log()
+    log.info("Cleanup before exit")
+    GPIO.cleanup()
+
+"""
+#!/usr/bin/env python3.6
+
+import time
+#import rpi.gpio as GPIO
+import RPi.GPIO as GPIO
+
+try:
+    print("Lets check this out!")
+
+    print(f"Check mode: {GPIO.getmode()}")
+
+    GPIO.setmode(GPIO.BCM)
+
+    print("SETUP")
+    GPIO.setup(20,GPIO.OUT)
+    GPIO.setup(21,GPIO.OUT)
+
+    print("ON")
+    GPIO.output(20,GPIO.LOW)
+    GPIO.output(21,GPIO.HIGH)
+
+    time.sleep(10)
+
+finally:
+    print("OFF")
+    GPIO.cleanup()
+    pass
+    """

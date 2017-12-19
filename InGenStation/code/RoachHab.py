@@ -3,6 +3,7 @@ import logging
 import sanic
 import time
 from .Sensors import TMP102, TMP106, Si7021
+from .Devices import Heater
 from .CustomLogging import Log
 
 class RoachHab:
@@ -16,6 +17,9 @@ class RoachHab:
         # self.sensors['t1'] = TMP106(0x41, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
         self.sensors['h1'] = Si7021(0x40, args)
+
+        self.devices = {}
+        self.devices['heater0'] = Heater("heater0", args) 
 
         addresses = set()
         for sensor in self.sensors:
@@ -58,6 +62,7 @@ class RoachHab:
             self.update_in_progress = True   
             for sensor in self.sensors:
                 await self.sensors[sensor].update()
+            self.devices['heater0'].update(self.sensors["h1"].temperature)
         finally:
             self.update_in_progress = False
             self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
