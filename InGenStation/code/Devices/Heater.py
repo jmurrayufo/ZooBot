@@ -11,11 +11,11 @@ class Heater:
     """Controller for heater element
     """
 
-    def __init__(self, name, args, temperature_object):
+    def __init__(self, name, args, device):
         self.log = Log()
         self.args = args
         self.name = name
-        self.temperature_object = temperature_object
+        self.device = device
 
         self.last_on = datetime.datetime.min
         self.last_off = datetime.datetime.now()
@@ -103,7 +103,7 @@ class Heater:
         """
         self.log.debug("Update heater state")
 
-        temperature = self.temperature_object
+        temperature = self.device.temperature
 
         self.log.debug(f"Current temperature is {temperature}")
 

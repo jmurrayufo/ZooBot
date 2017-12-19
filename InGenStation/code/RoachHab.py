@@ -19,7 +19,7 @@ class RoachHab:
         self.sensors['h1'] = Si7021(0x40, args)
 
         self.devices = {}
-        self.devices['heater0'] = Heater("heater0", args, self.sensors['t0'].temperature) 
+        self.devices['heater0'] = Heater("heater0", args, self.sensors['t0']) 
 
         addresses = set()
         for sensor in self.sensors:
