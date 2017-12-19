@@ -11,10 +11,11 @@ class Heater:
     """Controller for heater element
     """
 
-    def __init__(self, name, args):
+    def __init__(self, name, args, temperature_object):
         self.log = Log()
         self.args = args
         self.name = name
+        self.temperature_object = temperature_object
 
         self.last_on = datetime.datetime.min
         self.last_off = datetime.datetime.now()
@@ -95,23 +96,29 @@ class Heater:
             return
 
 
-    def update(self, value):
+    def update(self):
         """Update the device with it's current feedback values
 
         This may result in a state change 
         """
+        self.log.debug("Update heater state")
+
+        temperature = self.temperature_object
+
+        self.log.debug(f"Current temperature is {temperature}")
+
         if self.state == State.ON:
             if self.on_time > self.max_on:
                 self.log.debug("Diable for max on time")
                 self.off()
-            elif value > self.temperature_limit_max:
+            elif temperature > self.temperature_limit_max:
                 self.log.debug("Diable for max temperature")
                 self.off()
         elif self.state == State.OFF:
             if self.off_time > self.max_off and 0:
                 self.log.debug("Enable for max off time")
                 self.on()
-            elif value < self.temperature_limit_min:
+            elif temperature < self.temperature_limit_min:
                 self.log.debug("Enable for min temperature")
                 self.on()
 
