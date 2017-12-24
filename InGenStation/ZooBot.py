@@ -8,7 +8,6 @@ import random
 import sanic
 import socket
 from sanic.response import text
-from sanic.views import CompositionView
 
 from code.CustomLogging import Log
 from code.Menu import Screen
@@ -40,12 +39,5 @@ args = parser.parse_args()
 
 sanic_mgr = SanicMgr(args)
 
-# hab = DragonHab()
-
 # Run forever
 sanic_mgr.app.run(debug=False, access_log=False, port=args.port, host=args.host)
-# try:
-#     sanic_mgr = DragonHab()
-#     sanic_mgr.run()
-# except:
-#     log.exception("Something died")
