@@ -43,18 +43,6 @@ class SanicMgr:
             view.add(['GET'], self.hab.temperature_handler)
             SanicMgr.app.add_route(view, '/temp/<sensor_id>')
 
-            # view = CompositionView()
-            # view.add(['GET'], self.hab.heater_on)
-            # SanicMgr.app.add_route(view, '/heater/on')
-
-            # view = CompositionView()
-            # view.add(['GET'], self.hab.heater_off)
-            # SanicMgr.app.add_route(view, '/heater/off')
-
-            # view = CompositionView()
-            # view.add(['GET'], self.hab.heater_disable)
-            # SanicMgr.app.add_route(view, '/heater/disable')
-
             view = CompositionView()
             view.add(['GET','PUT','POST','DELETE'], self.hab.heater_state)
             SanicMgr.app.add_route(view, '/heater/<state>')
@@ -62,6 +50,9 @@ class SanicMgr:
             view = CompositionView()
             view.add(['GET'], self.hab.heater_state)
             SanicMgr.app.add_route(view, '/heater/')
+
+            SanicMgr.app.static('/ui','./html/')
+            SanicMgr.app.static('/js','./js/')
 
             SanicMgr.app.add_task(self.hab.run)
         SanicMgr.log.info(f"Finished boot as {args.purpose}")
@@ -88,6 +79,13 @@ class SanicMgr:
         html = """<p>Welcome to the ZooBot station!</p>"""
         ret_val =  sanic.response.html(html)
         return ret_val
+
+
+    @app.route("/ui")
+    async def ui_base(request):
+        with open("html/index.html",'r') as fp:
+            html = fp.read()
+        return sanic.response.html(html)
 
 
     @app.route("/menu_sample", methods=["GET","POST",])
