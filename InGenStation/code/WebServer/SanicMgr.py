@@ -173,6 +173,11 @@ class SanicMgr:
         SanicMgr.log.info(f"{request.method} {request.url} {response.status}")
 
 
+    ##################
+    ### EXCEPTIONS ###
+    ##################
+
+
     @app.exception(NotFound)
     async def handle_404(request, exception):
         SanicMgr.log.error(f"File not found: {request.url}")
