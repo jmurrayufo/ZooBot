@@ -12,7 +12,6 @@ from sanic.views import CompositionView
 
 from code.CustomLogging import Log
 from code.Menu import Screen
-from code.RoachHab import RoachHab
 from code.WebServer import SanicMgr
 from __version__ import __version__
 
@@ -39,46 +38,7 @@ parser.add_argument('--update-freq', type=float,
 
 args = parser.parse_args()
 
-if args.purpose == 'dragon':
-    log = Log(args)
-    hab = RoachHab(args)
-
-elif  args.purpose == 'bug':
-    log = Log(args)
-    hab = RoachHab(args)
-
-elif  args.purpose == 'test':
-    log = Log(args)
-    hab = RoachHab(args)
-
-log.info(f"Finished boot as {args.purpose}")
-
 sanic_mgr = SanicMgr(args)
-log.debug("Booted with Manager")
-if  args.purpose in ['test', 'bug']:
-    
-    view = CompositionView()
-    view.add(['GET'], hab.all_temperature_handler)
-    sanic_mgr.app.add_route(view,'/temp/')
-
-    view = CompositionView()
-    view.add(['GET'], hab.temperature_handler)
-    sanic_mgr.app.add_route(view,'/temp/<sensor_id>')
-
-    view = CompositionView()
-    view.add(['GET'], hab.heater_on)
-    sanic_mgr.app.add_route(view,'/heater/on')
-
-    view = CompositionView()
-    view.add(['GET'], hab.heater_off)
-    sanic_mgr.app.add_route(view,'/heater/off')
-
-    view = CompositionView()
-    view.add(['GET'], hab.heater_disable)
-    sanic_mgr.app.add_route(view,'/heater/disable')
-
-
-    sanic_mgr.app.add_task(hab.run)
 
 # hab = DragonHab()
 

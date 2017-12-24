@@ -2,12 +2,14 @@ import sanic
 # from sanic.response import text, html
 from sanic.exceptions import NotFound, ServerError, RequestTimeout,\
                              InvalidUsage
+from sanic.views import CompositionView
 import sanic_auth
 import logging
 import base64
 
 from ..CustomLogging import Log
 from ..Sql import SQL
+from ..RoachHab import RoachHab
 
 class SanicMgr:
     from sanic.config import Config
@@ -18,8 +20,44 @@ class SanicMgr:
 
 
     def __init__(self, args):
+        SanicMgr.log = Log(args)
+
+        SanicMgr.log.debug("Booted with Manager")
+
         self.sql.connect()
-        pass
+
+        if args.purpose == 'dragon':
+            # self.hab = RoachHab(args)
+            raise NotImplementedError("Dragon hab is not yet implemented")
+        elif  args.purpose == 'bug':
+            self.hab = RoachHab(args)
+        elif  args.purpose == 'test':
+            self.hab = RoachHab(args)
+
+        if  args.purpose in ['test', 'bug']:
+            view = CompositionView()
+            view.add(['GET'], self.hab.all_temperature_handler)
+            SanicMgr.app.add_route(view, '/temp/')
+
+            view = CompositionView()
+            view.add(['GET'], self.hab.temperature_handler)
+            SanicMgr.app.add_route(view, '/temp/<sensor_id>')
+
+            view = CompositionView()
+            view.add(['GET'], self.hab.heater_on)
+            SanicMgr.app.add_route(view, '/heater/on')
+
+            view = CompositionView()
+            view.add(['GET'], self.hab.heater_off)
+            SanicMgr.app.add_route(view, '/heater/off')
+
+            view = CompositionView()
+            view.add(['GET'], self.hab.heater_disable)
+            SanicMgr.app.add_route(view, '/heater/disable')
+
+
+            SanicMgr.app.add_task(self.hab.run)
+        SanicMgr.log.info(f"Finished boot as {args.purpose}")
 
 
     @app.route("/test", methods=["GET","POST",])
