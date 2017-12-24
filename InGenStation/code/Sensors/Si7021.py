@@ -73,6 +73,17 @@ class Si7021:
     async def update(self):
         t_start = time.time()
         self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
+
+        # Test case for demos
+        if self.args.purpose == 'test':
+            import random
+            self._temperature = random.randint(0,0xFFFF)
+            self._humidity = random.randint(0,0xFFFF)        
+            self.last_update = datetime.datetime.now()
+            self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+            self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
+            return
+
         with smbus2.SMBusWrapper(1) as bus:
             h_list = []
             for i in range(5):

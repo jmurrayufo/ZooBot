@@ -55,7 +55,8 @@ log.info(f"Finished boot as {args.purpose}")
 
 sanic_mgr = SanicMgr(args)
 log.debug("Booted with Manager")
-if  args.purpose == 'test':
+if  args.purpose in ['test', 'bug']:
+    
     view = CompositionView()
     view.add(['GET'], hab.all_temperature_handler)
     sanic_mgr.app.add_route(view,'/temp/')

@@ -80,6 +80,11 @@ class TMP106:
         c2 = 13.4
         t_start = time.time()
         self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
+
+        if self.args.purpose == 'test':
+            import random
+            self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+            return
         
         with smbus2.SMBusWrapper(1) as bus:
             await self.power_crtl(bus, True)

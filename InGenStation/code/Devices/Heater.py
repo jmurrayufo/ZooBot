@@ -5,7 +5,12 @@ import atexit
 
 from .State import State
 from ..CustomLogging import Log
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except RuntimeError:
+    from .GPioStub import GPioStub as GPIO
+
+
 
 class Heater:
     """Controller for heater element

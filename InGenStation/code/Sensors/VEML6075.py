@@ -71,15 +71,17 @@ class TMP106:
         import random
         self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
         # Fake write to sensor
-        await asyncio.sleep(0.8)
-        self._uva = random.randint(0,0xffff)
-        self._uvb = random.randint(0,0xffff)
-        self._uvcomp1 = random.randint(0,0xffff)
-        self._uvcomp2 = random.randint(0,0xffff)
-        self.last_update = datetime.datetime.now()
-        self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
-        
-        return
+
+        if self.args.purpose == 'test':
+            import random
+            await asyncio.sleep(0.8)
+            self._uva = random.randint(0,0xffff)
+            self._uvb = random.randint(0,0xffff)
+            self._uvcomp1 = random.randint(0,0xffff)
+            self._uvcomp2 = random.randint(0,0xffff)
+            self.last_update = datetime.datetime.now()
+            self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)/1e3:.3f} ms")
+            return
 
         with smbus2.SMBusWrapper(1) as bus:
 

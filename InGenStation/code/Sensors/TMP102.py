@@ -18,6 +18,7 @@ class TMP102:
 
     def __init__(self, address, args):
         self.log = Log()
+        self.args = args
         assert address in self.valid_addresses
         self.address = address
         self.last_update = datetime.datetime.min
@@ -47,8 +48,15 @@ class TMP102:
 
     async def update(self):
         t_start = time.time()
-        import random
         self.log.debug(f"Updating TMP102 sensor 0x{self.address:02x}")
+        if self.args.purpose == 'test':
+            import random
+            self._temperature = random.randint(0,0xFFF)
+            self.last_update = datetime.datetime.now()
+            self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+            self.log.debug(f"Temperature was {self.temperature:.1f} C")
+            return
+
         with smbus2.SMBusWrapper(1) as bus:
             # This is really a config thing? Maybe?
             bus.write_byte_data(self.address, 0, 0)
@@ -58,6 +66,5 @@ class TMP102:
             self._temperature >>= 4
 
         self.last_update = datetime.datetime.now()
-
         self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
         self.log.debug(f"Temperature was {self.temperature:.1f} C")
