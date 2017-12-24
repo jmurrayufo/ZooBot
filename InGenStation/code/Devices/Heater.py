@@ -7,7 +7,7 @@ from .State import State
 from ..CustomLogging import Log
 try:
     import RPi.GPIO as GPIO
-except RuntimeError:
+except (RuntimeError, ModuleNotFoundError):
     from .GPioStub import GPioStub as GPIO
 
 
