@@ -43,18 +43,25 @@ class SanicMgr:
             view.add(['GET'], self.hab.temperature_handler)
             SanicMgr.app.add_route(view, '/temp/<sensor_id>')
 
-            view = CompositionView()
-            view.add(['GET'], self.hab.heater_on)
-            SanicMgr.app.add_route(view, '/heater/on')
+            # view = CompositionView()
+            # view.add(['GET'], self.hab.heater_on)
+            # SanicMgr.app.add_route(view, '/heater/on')
+
+            # view = CompositionView()
+            # view.add(['GET'], self.hab.heater_off)
+            # SanicMgr.app.add_route(view, '/heater/off')
+
+            # view = CompositionView()
+            # view.add(['GET'], self.hab.heater_disable)
+            # SanicMgr.app.add_route(view, '/heater/disable')
 
             view = CompositionView()
-            view.add(['GET'], self.hab.heater_off)
-            SanicMgr.app.add_route(view, '/heater/off')
+            view.add(['GET','PUT','POST','DELETE'], self.hab.heater_state)
+            SanicMgr.app.add_route(view, '/heater/<state>')
 
             view = CompositionView()
-            view.add(['GET'], self.hab.heater_disable)
-            SanicMgr.app.add_route(view, '/heater/disable')
-
+            view.add(['GET'], self.hab.heater_state)
+            SanicMgr.app.add_route(view, '/heater/')
 
             SanicMgr.app.add_task(self.hab.run)
         SanicMgr.log.info(f"Finished boot as {args.purpose}")

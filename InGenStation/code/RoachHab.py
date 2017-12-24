@@ -92,23 +92,27 @@ class RoachHab:
             data[key] = self.sensors[key].data
         return sanic.response.json(data)
 
-    async def heater_on(self, request):
-        # TODO: These really should just respond with data, and let a sanic
-        # manager do the actual http stuff...
-        self.log.info(f"Request to turn heater on")
-        self.devices['heater0'].on()
-        return sanic.response.text("Heater on")
 
-    async def heater_off(self, request):
-        # TODO: These really should just respond with data, and let a sanic
-        # manager do the actual http stuff...
-        self.log.info(f"Request to turn heater off")
-        self.devices['heater0'].off()
-        return sanic.response.text("Heater off")
+    async def heater_state(self, request, state=None):
+        # TODO: add a 'id' paramter to target different heaters
+        # self.log.debug(f"Handle request {request}")
+        # self.log.debug(f"Method was {request.method}")
+        # self.log.debug(f"Args was {request.args}")
+        # self.log.debug(f"Form was {request.form}")
+        # self.log.debug(f"State was {state}")
+        if state == 'on':
+            self.log.info(f"Request to turn heater on")
+            self.devices['heater0'].on()
+            return sanic.response.text("Heater on")
 
-    async def heater_disable(self, request):
-        # TODO: These really should just respond with data, and let a sanic
-        # manager do the actual http stuff...
-        self.log.info(f"Request to disable heater")
-        self.devices['heater0'].disable()
-        return sanic.response.text("Heater disabled")
+        elif state == 'off':
+            self.log.info(f"Request to turn heater off")
+            self.devices['heater0'].off()
+            return sanic.response.text("Heater off")
+
+        elif state == 'disable':
+            self.log.info(f"Request to disable heater")
+            self.devices['heater0'].disable()
+            return sanic.response.text("Heater disabled")
+
+        return sanic.response.text("Heater function")

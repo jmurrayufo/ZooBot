@@ -5,6 +5,7 @@ class GPioStub:
     BCM = None
     OUT = None
     LOW = None
+    HIGH = None
 
     @staticmethod
     def setmode(*args, **kwargs):
