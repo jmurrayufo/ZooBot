@@ -34,7 +34,7 @@ class Heater:
         self.temperature_limit_max = 30
         self.temperature_limit_min = 26
 
-        self.state = State.UNKNOWN
+        self.state = State.ON
         GPIO.setmode(GPIO.BCM)
 
         self.log.info("Heater Setup")
