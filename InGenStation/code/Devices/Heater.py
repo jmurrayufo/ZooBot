@@ -25,7 +25,7 @@ class Heater:
         self.last_on = datetime.datetime.min
         self.last_off = datetime.datetime.now()
 
-        self.max_on = datetime.timedelta(minutes=120)
+        self.max_on = datetime.timedelta(minutes=60)
         self.min_on = datetime.timedelta(seconds=60)
 
         self.max_off = datetime.timedelta(seconds=60) # This might not make sense?
