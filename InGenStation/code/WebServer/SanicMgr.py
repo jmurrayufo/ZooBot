@@ -51,7 +51,7 @@ class SanicMgr:
             view.add(['GET'], self.hab.heater_state)
             SanicMgr.app.add_route(view, '/heater/')
 
-            SanicMgr.app.static('/ui','./html/')
+            # SanicMgr.app.static('/ui','./html/')
             SanicMgr.app.static('/js','./js/')
 
             SanicMgr.app.add_task(self.hab.run)
@@ -81,9 +81,21 @@ class SanicMgr:
         return ret_val
 
 
-    @app.route("/ui")
+    @app.route("/ui/")
     async def ui_base(request):
-        with open("html/index.html",'r') as fp:
+        with open(f"html/index.html",'r') as fp:
+            html = fp.read()
+        return sanic.response.html(html)
+
+
+    @app.route("/ui/<page>")
+    async def ui_base_page(request, page="index"):
+        # Oddity, as a result of this we can ONLY load .html files from the 
+        # .html directory.... Might wanna change that depending?
+        if not page.endswith(".html"):
+            page += ".html"
+
+        with open(f"html/{page}",'r') as fp:
             html = fp.read()
         return sanic.response.html(html)
 
