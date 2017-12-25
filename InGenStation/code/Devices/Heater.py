@@ -29,7 +29,7 @@ class Heater:
         self.min_on = datetime.timedelta(seconds=60)
 
         self.max_off = datetime.timedelta(seconds=60) # This might not make sense?
-        self.min_off = datetime.timedelta(seconds=120)
+        self.min_off = datetime.timedelta(seconds=60)
 
         self.temperature_limit_max = 30
         self.temperature_limit_min = 26
