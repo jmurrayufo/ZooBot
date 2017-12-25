@@ -34,7 +34,7 @@ class Heater:
         self.temperature_limit_max = 30
         self.temperature_limit_min = 26
 
-        self.state = State.ON
+        self.state = State.UNKNOWN
         GPIO.setmode(GPIO.BCM)
 
         self.log.info("Heater Setup")
@@ -45,7 +45,8 @@ class Heater:
         self.log.info("Register exit function")
         atexit.register(_exit_function)
 
-        self.disable()
+        # self.disable()
+        self.on(override=True)
 
 
     def __repr__(self):
@@ -60,11 +61,12 @@ class Heater:
 
 
     def on(self, *, override=False):
-        if self.state == State.ON:
-            return
-        if self.state == State.OFF and self.off_time < self.min_off:
-            # TODO: Raise an error here?
-            return
+        if not override:
+            if self.state == State.ON:
+                return
+            if self.state == State.OFF and self.off_time < self.min_off:
+                # TODO: Raise an error here?
+                return
         self.state = State.ON
         self.last_on = datetime.datetime.now()
         self.log.info("Heater On")
@@ -73,11 +75,12 @@ class Heater:
 
 
     def off(self, *, override=False):
-        if self.state == State.OFF:
-            return
-        if self.state == State.ON and self.on_time < self.min_on:
-            # TODO: Raise an error here?
-            return
+        if not override:
+            if self.state == State.OFF:
+                return
+            if self.state == State.ON and self.on_time < self.min_on:
+                # TODO: Raise an error here?
+                return
         self.state = State.OFF
         self.last_off = datetime.datetime.now()
         self.log.info("Heater Off")
