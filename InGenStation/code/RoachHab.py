@@ -102,17 +102,17 @@ class RoachHab:
         # self.log.debug(f"State was {state}")
         if state == 'on':
             self.log.info(f"Request to turn heater on")
-            self.devices['heater0'].on()
+            self.devices['heater0'].on(override=True)
             return sanic.response.text("Heater on")
 
         elif state == 'off':
             self.log.info(f"Request to turn heater off")
-            self.devices['heater0'].off()
+            self.devices['heater0'].off(override=True)
             return sanic.response.text("Heater off")
 
         elif state == 'disable':
             self.log.info(f"Request to disable heater")
-            self.devices['heater0'].disable()
+            self.devices['heater0'].disable(override=True)
             return sanic.response.text("Heater disabled")
 
         return sanic.response.text("Heater function")
