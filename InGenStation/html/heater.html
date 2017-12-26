@@ -14,11 +14,14 @@
 
 <div w3-include-html="/ui/navbar.html"></div>
 
-<body class=".container">
-  <p id="demo">WIP: Heater</p>
-  <button type="button" class="btn btn-primary" onclick="heaterState('on');">Heater On</button>
-  <button type="button" class="btn btn-primary" onclick="heaterState('off');">Heater Off</button>
-  <button type="button" class="btn btn-primary" onclick="heaterState('disable');">Heater Disabled</button>
+<body>
+  <div class="jumbotron">
+    <p id="demo">WIP: Heater</p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-primary" onclick="heaterState('on');">Heater On</button>
+      <button type="button" class="btn btn-primary" onclick="heaterState('off');">Heater Off</button>
+      <button type="button" class="btn btn-primary" onclick="heaterState('disable');">Heater Disabled</button>
+    </div>
 </body>
 
 <script>
