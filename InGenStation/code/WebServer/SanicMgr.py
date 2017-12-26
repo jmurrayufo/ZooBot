@@ -44,11 +44,11 @@ class SanicMgr:
             SanicMgr.app.add_route(view, '/temp/<sensor_id>')
 
             view = CompositionView()
-            view.add(['GET','PUT','POST','DELETE'], self.hab.heater_state)
+            view.add(['GET','POST'], self.hab.heater_state)
             SanicMgr.app.add_route(view, '/heater/<state>')
 
             view = CompositionView()
-            view.add(['GET'], self.hab.heater_state)
+            view.add(['GET','POST'], self.hab.heater_state)
             SanicMgr.app.add_route(view, '/heater/')
 
             # SanicMgr.app.static('/ui','./html/')
