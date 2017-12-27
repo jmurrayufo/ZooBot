@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Heater</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/empty.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
@@ -15,16 +16,31 @@
 <div w3-include-html="/ui/navbar.html"></div>
 
 <body>
-  <div class="jumbotron">
-    <p id="demo">WIP: Heater</p>
-    <div class="btn-group" role="group" aria-label="Basic example">
-      <button type="button" class="btn btn-primary" onclick="heaterState('on');">Heater On</button>
-      <button type="button" class="btn btn-warning" onclick="heaterState('off');">Heater Off</button>
-      <button type="button" class="btn btn-danger" onclick="heaterState('disable');">Disable Heater</button>
+  <div class="container-fluid">
+    <div class="jumbotron">
+      <div class="row">
+        <p id="demo">WIP: Heater</p>
+      </div>
+      <div class="row">
+        <div class="btn-group bottom-buffer" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-primary" onclick="heaterState('on');">Heater On</button>
+          <button type="button" class="btn btn-warning" onclick="heaterState('off');">Heater Off</button>
+          <button type="button" class="btn btn-danger" onclick="heaterState('disable');">Disable Heater</button>
+        </div>
+      </div>
+      <form class="form-inline" action="/action_page.php">
+        <div class="form-group">
+            <label for="temp" class="right-buffer">Temperature:</label>
+            <input type="text" class="form-control" id="temp-setting">
+        </div> 
+        <button type="button" class="btn btn-primary left-buffer" onclick="temperatureHandler(parseInt(document.getElementById('temp-setting').value));">Update</button>
+      </form>
     </div>
+  </div>
 </body>
 
 <script>
   w3.includeHTML();
 </script>
 <script src="/js/heaterCtl.js"></script>
+<script src="/js/tempCtl.js"></script>
