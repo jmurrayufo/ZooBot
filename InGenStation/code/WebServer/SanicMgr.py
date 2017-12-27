@@ -59,7 +59,7 @@ class SanicMgr:
         SanicMgr.log.info(f"Finished boot as {args.purpose}")
 
 
-    @app.route("/test")
+    @app.route("/test", methods=['GET','POST','PUT','DELETE','UPDATE'])
     async def test(request):
         SanicMgr.log.debug(f"Handle request {request}")
         SanicMgr.log.debug(f"Method was {request.method}")
