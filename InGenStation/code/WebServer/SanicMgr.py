@@ -61,10 +61,10 @@ class SanicMgr:
 
     @app.route("/test")
     async def test(request):
-        self.log.debug(f"Handle request {request}")
-        self.log.debug(f"Method was {request.method}")
-        self.log.debug(f"Args was {request.args}")
-        self.log.debug(f"Form was {request.form}")
+        SanicMgr.log.debug(f"Handle request {request}")
+        SanicMgr.log.debug(f"Method was {request.method}")
+        SanicMgr.log.debug(f"Args was {request.args}")
+        SanicMgr.log.debug(f"Form was {request.form}")
         return sanic.response.text("test point")
 
 
