@@ -65,6 +65,9 @@ class SanicMgr:
         SanicMgr.log.debug(f"Method was {request.method}")
         SanicMgr.log.debug(f"Args was {request.args}")
         SanicMgr.log.debug(f"Form was {request.form}")
+        SanicMgr.log.debug(f"Headers was {request.headers}")
+        SanicMgr.log.debug(f"Body was {request.body}")
+
         return sanic.response.text("test point")
 
 
