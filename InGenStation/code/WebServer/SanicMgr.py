@@ -59,20 +59,13 @@ class SanicMgr:
         SanicMgr.log.info(f"Finished boot as {args.purpose}")
 
 
-    @app.route("/test", methods=["GET","POST",])
+    @app.route("/test")
     async def test(request):
-        if 'authorization' in request.headers:
-            authString = base64.urlsafe_b64decode(request.headers['authorization'].split()[1]).decode()
-            # authString = str(authString)
-            username,password = authString.split(":")
-            if username == 'john' and password == 'murray':
-                return sanic.response.text(f"Authoed!\n{username}\n{password}")
-        ret_val = sanic.response.json( {'message': 'Please Login!'},
-                                        headers={'WWW-Authenticate': 'Basic realm="User Visible Realm"'},
-                                        status=401 )
-
-        # ret_val = sanic.response.text("Test complete !")
-        return ret_val
+        self.log.debug(f"Handle request {request}")
+        self.log.debug(f"Method was {request.method}")
+        self.log.debug(f"Args was {request.args}")
+        self.log.debug(f"Form was {request.form}")
+        return sanic.response.text("test point")
 
 
     @app.route("/")
