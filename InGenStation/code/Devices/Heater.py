@@ -110,6 +110,10 @@ class Heater:
         min_off = self.sql.get_setting(self.name,'min_off')
         temperature_limit_max = self.sql.get_setting(self.name,'temperature_limit_max')
         temperature_limit_min = self.sql.get_setting(self.name,'temperature_limit_min')
+        self.log.debug(f"max_on: {max_on}")
+        self.log.debug(f"min_on: {min_on}")
+        self.log.debug(f"max_off: {max_off}")
+        self.log.debug(f"min_off: {min_off}")
 
         self.last_on = datetime.datetime.min
         self.last_off = datetime.datetime.now()
