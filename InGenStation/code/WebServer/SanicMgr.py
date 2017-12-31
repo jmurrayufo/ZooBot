@@ -47,12 +47,16 @@ class SanicMgr:
             view.add(['GET','POST'], self.hab.heater_state)
             SanicMgr.app.add_route(view, '/heater/')
 
+            view = CompositionView()
+            view.add(['GET','POST'], self.hab.heater_settings)
+            SanicMgr.app.add_route(view, '/heater/settings/')
+
             # SanicMgr.app.static('/ui','./html/')
             SanicMgr.app.static('/js','./js/')
             SanicMgr.app.static('/css','./css/')
 
             SanicMgr.app.add_task(self.hab.run)
-            
+
         SanicMgr.log.info(f"Finished boot as {args.purpose}")
 
 

@@ -100,11 +100,6 @@ class RoachHab:
 
     async def heater_state(self, request, state=None):
         # TODO: add a 'id' paramter to target different heaters
-        # self.log.debug(f"Handle request {request}")
-        # self.log.debug(f"Method was {request.method}")
-        # self.log.debug(f"Args was {request.args}")
-        # self.log.debug(f"Form was {request.form}")
-        # self.log.debug(f"State was {state}")
         if state == 'on':
             self.log.info(f"Request to turn heater on")
             self.devices['heater0'].on(override=True)
@@ -122,5 +117,20 @@ class RoachHab:
 
         return sanic.response.text("Heater function")
 
+
     async def heater_settings(self, request):
-        pass
+        if request.method == 'GET':
+            ret_json = {}
+            ret_json['test'] = 'foo'
+            ret_json['max_on'] = self.devices['heater0'].max_on.total_seconds()
+            ret_json['max_off'] = self.devices['heater0'].max_off.total_seconds()
+            ret_json['min_on'] = self.devices['heater0'].min_on.total_seconds()
+            ret_json['min_off'] = self.devices['heater0'].min_off.total_seconds()
+            ret_json['temperature_limit_max'] = self.devices['heater0'].temperature_limit_max
+            ret_json['temperature_limit_min'] = self.devices['heater0'].temperature_limit_min
+            self.log.debug(ret_json)
+            return sanic.response.json(ret_json)
+        elif request.method == 'POST':
+            return sanic.response.text("POST")
+        else:
+            self.log.error(f"How did we even get here? Invalid method {request.method}")
