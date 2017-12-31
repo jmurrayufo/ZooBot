@@ -60,7 +60,7 @@ class Heater:
             if self.state == State.ON:
                 return
             if self.state == State.OFF and self.off_time < self.min_off:
-                # TODO: Raise an error here?
+                self.log.warning(f"Cannot set state to ON")
                 self.log.warning(f"Min off time is {self.min_off}")
                 self.log.warning(f"Current off time is {self.off_time}")
                 self.log.warning(f"No state change")
@@ -77,7 +77,10 @@ class Heater:
             if self.state == State.OFF:
                 return
             if self.state == State.ON and self.on_time < self.min_on:
-                # TODO: Raise an error here?
+                self.log.warning(f"Cannot set state to OFF")
+                self.log.warning(f"Min off time is {self.min_on}")
+                self.log.warning(f"Current off time is {self.on_time}")
+                self.log.warning(f"No state change")
                 return
         self.state = State.OFF
         self.last_off = datetime.datetime.now()
@@ -113,10 +116,6 @@ class Heater:
         min_off = self.sql.get_setting(self.name,'min_off')
         temperature_limit_max = self.sql.get_setting(self.name,'temperature_limit_max')
         temperature_limit_min = self.sql.get_setting(self.name,'temperature_limit_min')
-        self.log.debug(f"max_on: {max_on}")
-        self.log.debug(f"min_on: {min_on}")
-        self.log.debug(f"max_off: {max_off}")
-        self.log.debug(f"min_off: {min_off}")
 
         self.max_on = datetime.timedelta(seconds=max_on)
         self.min_on = datetime.timedelta(seconds=min_on)
