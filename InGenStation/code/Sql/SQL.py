@@ -22,10 +22,11 @@ class SQL:
         if hasattr(self, 'initialized'):
             return
         self.args = args
-        self.initialized = True
         self.conn = None
         self.connected = False
         self.log = Log()
+        self.initialized = True
+        self.db_version = 1 # Used to check the version of the db
 
 
     def connect(self, db_name="hab.db"):
@@ -88,7 +89,15 @@ class SQL:
 
             sqlcmd = """INSERT INTO settings VALUES ("heater0","temperature_limit_min",26)"""
             self.c.execute(sqlcmd)
+            self.conn.commit()
 
+            self.c.execute("PRAGMA journal_mode=WAL")
+            self.conn.commit()
+
+            self.c.execute("PRAGMA synchronous=1")
+            self.conn.commit()
+
+            self.c.execute(f"PRAGMA user_version = {self.db_version}")
             self.conn.commit()
 
     def get_setting(self, device, key):
