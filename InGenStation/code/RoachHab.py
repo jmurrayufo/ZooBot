@@ -130,6 +130,7 @@ class RoachHab:
             self.log.debug(ret_json)
             return sanic.response.json(ret_json)
         elif request.method == 'POST':
+            self.log.debug(f"Request given with form: {request.form}")
             for key in request.form:
                 val = request.form[key][0]
                 
