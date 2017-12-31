@@ -23,24 +23,41 @@
       </div>
       <div class="row">
         <div class="btn-group bottom-buffer" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-primary" onclick="heaterState('on');">Heater On</button>
-          <button type="button" class="btn btn-warning" onclick="heaterState('off');">Heater Off</button>
-          <button type="button" class="btn btn-danger" onclick="heaterState('disable');">Disable Heater</button>
+          <button type="button" class="btn btn-primary" onclick="heaterState('on')">Heater On</button>
+          <button type="button" class="btn btn-warning" onclick="heaterState('off')">Heater Off</button>
+          <button type="button" class="btn btn-danger" onclick="heaterState('disable')">Disable Heater</button>
         </div>
       </div>
-      <form class="form-inline" action="/action_page.php">
+      <form>
         <div class="form-group">
-            <label for="temp" class="right-buffer">Temperature:</label>
-            <input type="text" class="form-control" id="temp-setting">
+
+            <label for="temp" class="right-buffer">Minimum Temperature:</label>
+            <input type="text" class="form-control" id="temperature_limit_min">
+
+            <label for="temp" class="right-buffer">Maximum Temperature:</label>
+            <input type="text" class="form-control" id="temperature_limit_max">
+
+            <label for="temp" class="right-buffer">On Time Min:</label>
+            <input type="text" class="form-control" id="min_on">
+
+            <label for="temp" class="right-buffer">On Time Max:</label>
+            <input type="text" class="form-control" id="max_on">
+
+            <label for="temp" class="right-buffer">Off Time Min:</label>
+            <input type="text" class="form-control" id="min_off">
+
+            <label for="temp" class="right-buffer">On Time MAx:</label>
+            <input type="text" class="form-control" id="max_off">
         </div> 
-        <button type="button" class="btn btn-primary left-buffer" onclick="temperatureHandler(parseInt(document.getElementById('temp-setting').value));">Update</button>
+        <button type="button" class="btn btn-primary left-buffer" onclick="getHeaterSettings()">Pull Settings</button>
+        <button type="button" class="btn btn-danger left-buffer" onclick="setHeaterSettings(this)">Push Settings</button>
       </form>
     </div>
   </div>
 </body>
 
+<script src="/js/heaterCtl.js"></script>
 <script>
   w3.includeHTML();
+  getHeaterSettings();
 </script>
-<script src="/js/heaterCtl.js"></script>
-<script src="/js/tempCtl.js"></script>

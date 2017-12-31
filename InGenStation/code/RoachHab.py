@@ -121,7 +121,6 @@ class RoachHab:
     async def heater_settings(self, request):
         if request.method == 'GET':
             ret_json = {}
-            ret_json['test'] = 'foo'
             ret_json['max_on'] = self.devices['heater0'].max_on.total_seconds()
             ret_json['max_off'] = self.devices['heater0'].max_off.total_seconds()
             ret_json['min_on'] = self.devices['heater0'].min_on.total_seconds()
@@ -131,6 +130,19 @@ class RoachHab:
             self.log.debug(ret_json)
             return sanic.response.json(ret_json)
         elif request.method == 'POST':
+            for key in request.form:
+                val = request.form[key][0]
+                
+                try:
+                    val = int(val)
+                except ValueError:
+                    try:
+                        val = float(val)
+                    except ValueError:
+                        pass
+                self.sql.set_setting("heater0",key,val)
+            self.devices['heater0'].load_from_sql()
+
             return sanic.response.text("POST")
         else:
             self.log.error(f"How did we even get here? Invalid method {request.method}")
