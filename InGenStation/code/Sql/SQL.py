@@ -63,7 +63,9 @@ class SQL:
                 CREATE TABLE settings(
                 device TEXT,
                 key TEXT,
-                value TEXT);"""
+                value TEXT,
+                UNIQUE(device,key) ON CONFLICT REPLACE
+                );"""
             self.c.execute(sqlcmd)
 
             sqlcmd = """
@@ -115,6 +117,11 @@ class SQL:
             except ValueError:
                 pass
             return row['value']
+
+    def set_setting(self, device, key, value):
+            sqlcmd = """INSERT INTO settings VALUES (?,?,?)"""
+            self.c.execute(sqlcmd,(device,key,value))
+            self.conn.commit()
 
 
 

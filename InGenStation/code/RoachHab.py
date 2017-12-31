@@ -121,3 +121,6 @@ class RoachHab:
             return sanic.response.text("Heater disabled")
 
         return sanic.response.text("Heater function")
+
+    async def heater_settings(self, request):
+        pass

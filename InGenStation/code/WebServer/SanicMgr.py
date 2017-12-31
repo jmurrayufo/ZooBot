@@ -52,6 +52,7 @@ class SanicMgr:
             SanicMgr.app.static('/css','./css/')
 
             SanicMgr.app.add_task(self.hab.run)
+            
         SanicMgr.log.info(f"Finished boot as {args.purpose}")
 
 
