@@ -58,6 +58,9 @@ class Heater:
                 return
             if self.state == State.OFF and self.off_time < self.min_off:
                 # TODO: Raise an error here?
+                self.log.warning(f"Min off time is {self.min_off}")
+                self.log.warning(f"Current off time is {self.off_time}")
+                self.log.warning(f"No state change")
                 return
         self.state = State.ON
         self.last_on = datetime.datetime.now()
@@ -127,7 +130,7 @@ class Heater:
         This may result in a state change 
         """
         self.log.debug("Update heater state")
-        
+
         self.load_from_sql()
 
         temperature = self.device.temperature
