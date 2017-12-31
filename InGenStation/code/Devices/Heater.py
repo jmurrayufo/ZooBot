@@ -5,6 +5,7 @@ import atexit
 
 from .State import State
 from ..CustomLogging import Log
+from ..Sql import SQL
 try:
     import RPi.GPIO as GPIO
 except (RuntimeError, ModuleNotFoundError):
@@ -21,18 +22,9 @@ class Heater:
         self.args = args
         self.name = name
         self.device = device
+        self.sql = SQL()
 
-        self.last_on = datetime.datetime.min
-        self.last_off = datetime.datetime.now()
-
-        self.max_on = datetime.timedelta(minutes=60)
-        self.min_on = datetime.timedelta(seconds=60)
-
-        self.max_off = datetime.timedelta(seconds=60) # This might not make sense?
-        self.min_off = datetime.timedelta(seconds=60)
-
-        self.temperature_limit_max = 29
-        self.temperature_limit_min = 26
+        self.load_from_sql()
 
         self.state = State.UNKNOWN
         GPIO.setmode(GPIO.BCM)
@@ -104,12 +96,39 @@ class Heater:
             return
 
 
+    def load_from_sql(self):
+        """Load current values from SQL
+        """
+
+        self.log.debug("Loading values from SQL")
+        max_on = self.sql.get_setting(self.name,'max_on')
+        min_on = self.sql.get_setting(self.name,'min_on')
+        max_off = self.sql.get_setting(self.name,'max_off')
+        min_off = self.sql.get_setting(self.name,'min_off')
+        temperature_limit_max = self.sql.get_setting(self.name,'temperature_limit_max')
+        temperature_limit_min = self.sql.get_setting(self.name,'temperature_limit_min')
+
+        self.last_on = datetime.datetime.min
+        self.last_off = datetime.datetime.now()
+
+        self.max_on = datetime.timedelta(seconds=max_on)
+        self.min_on = datetime.timedelta(seconds=min_on)
+
+        self.max_off = datetime.timedelta(seconds=max_off) # This might not make sense?
+        self.min_off = datetime.timedelta(seconds=min_off)
+
+        self.temperature_limit_max = temperature_limit_max
+        self.temperature_limit_min = temperature_limit_min
+
+
     def update(self):
         """Update the device with it's current feedback values
 
         This may result in a state change 
         """
         self.log.debug("Update heater state")
+        
+        self.load_from_sql()
 
         temperature = self.device.temperature
 

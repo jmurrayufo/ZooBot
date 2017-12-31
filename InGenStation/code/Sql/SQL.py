@@ -17,11 +17,11 @@ class SQL:
     __shared_state = {}
 
 
-    def __init__(self):
-        self.__dict__ = self.__shared_state
+    def __init__(self, args=None):
+        self.__dict__ = SQL.__shared_state
         if hasattr(self, 'initialized'):
             return
-
+        self.args = args
         self.initialized = True
         self.conn = None
         self.connected = False
@@ -31,9 +31,11 @@ class SQL:
     def connect(self, db_name="hab.db"):
         self.log.info("Connect to db")
         if not self.connected:
+            self.log.info("Not connected, open one")
             if not os.path.isfile(db_name):
                 self.log.warning(f"Creating new db: {db_name}")
                 self.conn = sqlite3.connect(db_name)
+                self.c = self.conn.cursor()
                 self.setup()
                 self.conn.close()
             self.conn = sqlite3.connect(db_name)
@@ -54,3 +56,56 @@ class SQL:
 
     def setup(self):
         self.log.info("Begining DB setup")
+        if self.args.purpose in ['bug','test']:
+            # Setup values for the bug hab
+            sqlcmd = """
+                CREATE TABLE settings(
+                device TEXT,
+                key TEXT,
+                value TEXT);"""
+            self.c.execute(sqlcmd)
+
+            sqlcmd = """
+                CREATE TABLE devices(
+                device TEXT);"""
+            self.c.execute(sqlcmd)
+
+            # Setup default values
+            sqlcmd = """INSERT INTO settings VALUES ("heater0","max_on",60*60)"""
+            self.c.execute(sqlcmd)
+
+            sqlcmd = """INSERT INTO settings VALUES ("heater0","min_on",60)"""
+            self.c.execute(sqlcmd)
+
+            sqlcmd = """INSERT INTO settings VALUES ("heater0","max_off",60)"""
+            self.c.execute(sqlcmd)
+
+            sqlcmd = """INSERT INTO settings VALUES ("heater0","min_off",60)"""
+            self.c.execute(sqlcmd)
+
+            sqlcmd = """INSERT INTO settings VALUES ("heater0","temperature_limit_max",29)"""
+            self.c.execute(sqlcmd)
+
+            sqlcmd = """INSERT INTO settings VALUES ("heater0","temperature_limit_min",26)"""
+            self.c.execute(sqlcmd)
+
+            self.conn.commit()
+
+    def get_setting(self, device, key):
+            sqlcmd = """SELECT * FROM settings WHERE (device=? AND key=?)"""
+            row = self.c.execute(sqlcmd,(device,key)).fetchone()
+
+            if row == None:
+                return None
+            try:
+                return int(row['value'])
+            except ValueError:
+                pass
+            try:
+                return float(row['value'])
+            except ValueError:
+                pass
+            return row['value']
+
+
+

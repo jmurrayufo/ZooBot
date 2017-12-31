@@ -8,7 +8,6 @@ import logging
 import base64
 
 from ..CustomLogging import Log
-from ..Sql import SQL
 from ..RoachHab import RoachHab
 
 class SanicMgr:
@@ -16,15 +15,12 @@ class SanicMgr:
     Config.KEEP_ALIVE = False
     app = sanic.Sanic(__name__, log_config=None)
     log = Log()
-    sql = SQL()
 
 
     def __init__(self, args):
         SanicMgr.log = Log(args)
 
         SanicMgr.log.debug("Booted with Manager")
-
-        self.sql.connect()
 
         if args.purpose == 'dragon':
             # self.hab = RoachHab(args)

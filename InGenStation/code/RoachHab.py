@@ -5,11 +5,15 @@ import time
 from .Sensors import TMP102, TMP106, Si7021
 from .Devices import Heater
 from .CustomLogging import Log
+from .Sql import SQL
 
 class RoachHab:
 
     def __init__(self, args): 
         self.log = Log()
+
+        self.sql = SQL(args)
+        self.sql.connect()
 
         self.args = args
         self.sensors = {}
@@ -20,6 +24,7 @@ class RoachHab:
 
         self.devices = {}
         self.devices['heater0'] = Heater("heater0", args, self.sensors['h1']) 
+
 
         addresses = set()
         for sensor in self.sensors:
