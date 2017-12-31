@@ -29,25 +29,25 @@
         </div>
       </div>
       <form>
-        <div class="form-group">
+        <div>
 
             <label for="temp" class="right-buffer">Minimum Temperature:</label>
-            <input type="text" class="form-control" id="temperature_limit_min">
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="temperature_limit_min">
 
             <label for="temp" class="right-buffer">Maximum Temperature:</label>
-            <input type="text" class="form-control" id="temperature_limit_max">
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="temperature_limit_max">
 
             <label for="temp" class="right-buffer">On Time Min:</label>
-            <input type="text" class="form-control" id="min_on">
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="min_on">
 
             <label for="temp" class="right-buffer">On Time Max:</label>
-            <input type="text" class="form-control" id="max_on">
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="max_on">
 
             <label for="temp" class="right-buffer">Off Time Min:</label>
-            <input type="text" class="form-control" id="min_off">
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="min_off">
 
             <label for="temp" class="right-buffer">On Time MAx:</label>
-            <input type="text" class="form-control" id="max_off">
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="max_off">
         </div> 
         <button type="button" class="btn btn-primary left-buffer" onclick="getHeaterSettings()">Pull Settings</button>
         <button type="button" class="btn btn-danger left-buffer" onclick="setHeaterSettings(this)">Push Settings</button>
