@@ -26,6 +26,9 @@ class Heater:
 
         self.load_from_sql()
 
+        self.last_on = datetime.datetime.min
+        self.last_off = datetime.datetime.now()
+
         self.state = State.UNKNOWN
         GPIO.setmode(GPIO.BCM)
 
@@ -114,9 +117,6 @@ class Heater:
         self.log.debug(f"min_on: {min_on}")
         self.log.debug(f"max_off: {max_off}")
         self.log.debug(f"min_off: {min_off}")
-
-        self.last_on = datetime.datetime.min
-        self.last_off = datetime.datetime.now()
 
         self.max_on = datetime.timedelta(seconds=max_on)
         self.min_on = datetime.timedelta(seconds=min_on)
