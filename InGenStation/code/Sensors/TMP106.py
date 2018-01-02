@@ -79,7 +79,7 @@ class TMP106:
         b2 = 4.63e-9
         c2 = 13.4
         t_start = time.time()
-        self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
+        # self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
 
         if self.args.purpose == 'test':
             import random
@@ -146,7 +146,7 @@ class TMP106:
             await self.power_crtl(bus, False)
 
 
-        self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+        # self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
 
 
     def basic_setup(self, bus, reset=False, power_on=True, conv_rate=4,
@@ -182,12 +182,12 @@ class TMP106:
     async def power_crtl(self, bus, power_on = True):
         # Disable or enable power
         config = await self.get_config_reg(bus)
-        self.log.debug(f"Pre mod config: 0x{config:04X}")
+        # self.log.debug(f"Pre mod config: 0x{config:04X}")
         if power_on:
             config |= 0b0111000000000000
         else:
             config &= 0b1000111111111111
-        self.log.debug(f"Post mod config: 0x{config:04X}")
+        # self.log.debug(f"Post mod config: 0x{config:04X}")
         
         config_msb = (0xFF00 & config) >> 8
         config_lsb = (0x00FF & config)
@@ -195,4 +195,4 @@ class TMP106:
         bus.i2c_rdwr(write)
 
         config_post = await self.get_config_reg(bus)
-        self.log.debug(f"Wrote 0x{config:04X} and then read back 0x{config_post:04X}")
+        # self.log.debug(f"Wrote 0x{config:04X} and then read back 0x{config_post:04X}")

@@ -2,6 +2,7 @@ import asyncio
 import logging
 import sanic
 import time
+import datetime
 from .Sensors import TMP102, TMP106, Si7021
 from .Devices import Heater
 from .CustomLogging import Log
@@ -25,7 +26,7 @@ class RoachHab:
         self.devices = {}
         self.devices['heater0'] = Heater("heater0", args, self.sensors['h1']) 
 
-
+        self.last_metric_log = datetime.datetime.min
         addresses = set()
         for sensor in self.sensors:
             if self.sensors[sensor].address in addresses:
@@ -42,11 +43,15 @@ class RoachHab:
                 t = time.time()
 
                 await self.update()
-                await self.log_sensors()
+
+                if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_freq):
+                    self.log.debug("Log sensor data")
+                    await self.log_sensors()
+                    self.last_metric_log = datetime.datetime.now()
 
                 t_sleep = self.args.update_freq - (time.time() - t)
                 t_sleep = max(0, t_sleep)
-                self.log.debug(f"Sleep for {t_sleep:.3f} s")
+                # self.log.debug(f"Sleep for {t_sleep:.3f} s")
                 await asyncio.sleep(t_sleep)
         except KeyboardInterrupt:
             raise
@@ -58,7 +63,7 @@ class RoachHab:
 
     ### TEMPERATURE READINGS ###
     async def update(self):
-        self.log.debug("Update sensors")
+        # self.log.debug("Update sensors")
         t = time.time()
         if self.update_in_progress:
             self.log.warning("Cannot start an update when we are already doing one.")
@@ -71,7 +76,7 @@ class RoachHab:
                 self.devices[element].update()
         finally:
             self.update_in_progress = False
-            self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
+            # self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
 
 
     async def log_sensors(self):

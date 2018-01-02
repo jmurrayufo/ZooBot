@@ -69,7 +69,7 @@ class TMP106:
     async def update(self):
         t_start = time.time()
         import random
-        self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
+        # self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
         # Fake write to sensor
 
         if self.args.purpose == 'test':

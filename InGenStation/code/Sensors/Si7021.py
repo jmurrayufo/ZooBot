@@ -72,7 +72,7 @@ class Si7021:
 
     async def update(self):
         t_start = time.time()
-        self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
+        # self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
 
         # Test case for demos
         if self.args.purpose == 'test':
@@ -80,8 +80,8 @@ class Si7021:
             self._temperature = random.randint(0,0xFFFF)
             self._humidity = random.randint(0,0xFFFF)        
             self.last_update = datetime.datetime.now()
-            self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
-            self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
+            # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+            # self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
             return
 
         with smbus2.SMBusWrapper(1) as bus:
@@ -99,11 +99,11 @@ class Si7021:
             delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
             t_slope = (self._conv_temp(measured_temperature) - self._conv_temp(self._temperature))/delta_t_update
 
-            self.log.debug(f"Slope measured to be {t_slope:.3f} C/min")
+            # self.log.debug(f"Slospe measured to be {t_slope:.3f} C/min")
             if abs(t_slope) > 1:
                 # Slope exceeded 1deg/minute!
-                self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
-                self.log.warning(f"This event was triggered from a temperature of {self._conv_temp(measured_temperature):.3f} C")
+                # self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
+                # self.log.warning(f"This event was triggered from a temperature of {self._conv_temp(measured_temperature):.3f} C")
                 t_list = []
                 for i in range(5):
                     t_list.append(await self._measure_temperature(bus, 50))
@@ -113,8 +113,8 @@ class Si7021:
             self._temperature = measured_temperature
 
         self.last_update = datetime.datetime.now()
-        self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
-        self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
+        # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+        # self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
 
 
     async def _measure_humidity(self, bus, max_loops):

@@ -31,9 +31,15 @@ parser.add_argument('--host', metavar='addr', type=str, default='0.0.0.0',
 parser.add_argument('--__version__', default=__version__,
                     help=argparse.SUPPRESS)
 
-parser.add_argument('--update-freq', type=float,
-                    default=60.0,
+parser.add_argument('--update-freq', 
+                    type=float,
+                    default=1.0,
                     help='Minumum time between sensor updates')
+
+parser.add_argument('--log-freq', 
+                    type=float,
+                    default=60.0,
+                    help='Minumum time between metric logging')
 
 args = parser.parse_args()
 

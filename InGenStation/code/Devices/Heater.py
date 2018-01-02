@@ -109,7 +109,7 @@ class Heater:
         """Load current values from SQL
         """
 
-        self.log.debug("Loading values from SQL")
+        # self.log.debug("Loading values from SQL")
         max_on = self.sql.get_setting(self.name,'max_on')
         min_on = self.sql.get_setting(self.name,'min_on')
         max_off = self.sql.get_setting(self.name,'max_off')
@@ -132,13 +132,13 @@ class Heater:
 
         This may result in a state change 
         """
-        self.log.debug("Update heater state")
+        # self.log.debug("Update heater state")
 
         self.load_from_sql()
 
         temperature = self.device.temperature
 
-        self.log.debug(f"Current temperature is {temperature}")
+        # self.log.debug(f"Current temperature is {temperature}")
 
         if self.state == State.ON:
             if self.on_time > self.max_on:
