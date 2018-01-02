@@ -4,7 +4,7 @@ import sanic
 import time
 import datetime
 from .Sensors import TMP102, TMP106, Si7021
-from .Devices import Heater
+from .Devices import Heater, Dimmer
 from .CustomLogging import Log
 from .Sql import SQL
 
@@ -24,7 +24,10 @@ class RoachHab:
         self.sensors['h1'] = Si7021(0x40, args)
 
         self.devices = {}
-        self.devices['heater0'] = Heater("heater0", args, self.sensors['h1']) 
+        self.devices['heater0'] = Heater("heater0", args, self.sensors['h1'])
+        # Check this in under the test group
+        if self.args.purpose == 'test':
+            self.devices['dimmer0'] = Dimmer("dimmer0", 0x27, args, (self.sensors['h1'], None, None, None)) 
 
         self.last_metric_log = datetime.datetime.min
         addresses = set()
@@ -73,7 +76,7 @@ class RoachHab:
             for sensor in self.sensors:
                 await self.sensors[sensor].update()
             for element in self.devices:
-                self.devices[element].update()
+                await self.devices[element].update()
         finally:
             self.update_in_progress = False
             # self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")

@@ -26,7 +26,7 @@ class SQL:
         self.connected = False
         self.log = Log()
         self.initialized = True
-        self.db_version = 1 # Used to check the version of the db
+        self.db_version = 3 # Used to check the version of the db
 
 
     def connect(self, db_name="hab.db"):
@@ -45,6 +45,7 @@ class SQL:
             self.c = self.conn.cursor()
             self.log.info("Cursor created, connection complete")
             self.connected = True
+            self.version_sync()
 
 
     def disconnect(self):
@@ -73,34 +74,83 @@ class SQL:
                 device TEXT);"""
             self.c.execute(sqlcmd)
 
-            # Setup default values
-            sqlcmd = """INSERT INTO settings VALUES ("heater0","max_on",60*60)"""
-            self.c.execute(sqlcmd)
-
-            sqlcmd = """INSERT INTO settings VALUES ("heater0","min_on",60)"""
-            self.c.execute(sqlcmd)
-
-            sqlcmd = """INSERT INTO settings VALUES ("heater0","max_off",60)"""
-            self.c.execute(sqlcmd)
-
-            sqlcmd = """INSERT INTO settings VALUES ("heater0","min_off",60)"""
-            self.c.execute(sqlcmd)
-
-            sqlcmd = """INSERT INTO settings VALUES ("heater0","temperature_limit_max",29)"""
-            self.c.execute(sqlcmd)
-
-            sqlcmd = """INSERT INTO settings VALUES ("heater0","temperature_limit_min",26)"""
-            self.c.execute(sqlcmd)
-            self.conn.commit()
-
             self.c.execute("PRAGMA journal_mode=WAL")
             self.conn.commit()
 
             self.c.execute("PRAGMA synchronous=1")
             self.conn.commit()
 
-            self.c.execute(f"PRAGMA user_version = {self.db_version}")
+            self.c.execute(f"PRAGMA user_version=0")
             self.conn.commit()
+
+    def version_sync(self):
+        result = self.c.execute(f"PRAGMA user_version").fetchone()[0]
+        self.log.debug(f"user_version: {result}")
+        if result == self.db_version:
+            return
+        self.log.critical(f"Updateing db to version {self.db_version}")
+
+        # Setup default values
+        sqlcmd = """INSERT INTO settings VALUES ("heater0","max_on",60*60)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("heater0","min_on",60)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("heater0","max_off",60)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("heater0","min_off",60)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("heater0","temperature_limit_max",29)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("heater0","temperature_limit_min",26)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","p1",1)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","i1",0.01)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","d1",0)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","set_point1",30)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","p2",1)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","i2",0.01)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","d2",0)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","set_point2",30)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","p3",1)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","i3",0.01)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","d3",0)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","set_point3",30)"""
+        self.c.execute(sqlcmd)
+
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","p4",1)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","i4",0.01)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","d4",0)"""
+        self.c.execute(sqlcmd)
+        sqlcmd = """INSERT INTO settings VALUES ("dimmer0","set_point4",30)"""
+        self.c.execute(sqlcmd)
+
+        self.conn.commit()
+
+        self.c.execute(f"PRAGMA user_version = {self.db_version}")
+        self.conn.commit()
+
+
 
     def get_setting(self, device, key):
             sqlcmd = """SELECT * FROM settings WHERE (device=? AND key=?)"""

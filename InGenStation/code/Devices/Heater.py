@@ -127,7 +127,7 @@ class Heater:
         self.temperature_limit_min = temperature_limit_min
 
 
-    def update(self):
+    async def update(self):
         """Update the device with it's current feedback values
 
         This may result in a state change 
