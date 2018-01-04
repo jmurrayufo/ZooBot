@@ -174,7 +174,7 @@ class PID:
         print(f"P: {self.P_value} I: {self.I_value}")
         print(f"PID: {self.P_value + self.I_value + self.D_value}")
 
-        return (self.P_value + self.I_value + self.D_value)
+        return (self.P_value, self.I_value, self.D_value)
 
     def setPoint(self,set_point):
         """
