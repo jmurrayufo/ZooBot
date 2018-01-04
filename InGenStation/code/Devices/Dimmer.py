@@ -54,7 +54,7 @@ class Dimmer:
         self.pid[3].setPoint(self.set_point3)
         self.pid[4].setPoint(self.set_point4)
 
-        self.log.info("Dimmer booted at address {}")
+        self.log.info("Dimmer booted at address {self.address}")
 
 
 
