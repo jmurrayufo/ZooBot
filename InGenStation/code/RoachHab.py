@@ -40,8 +40,8 @@ class RoachHab:
 
 
     async def run(self):
-        try:
-            while True:
+        while True:
+            try:
                 t = time.time()
 
                 await self.update()
@@ -55,12 +55,13 @@ class RoachHab:
                 t_sleep = max(0, t_sleep)
                 # self.log.debug(f"Sleep for {t_sleep:.3f} s")
                 await asyncio.sleep(t_sleep)
-        except KeyboardInterrupt:
-            raise
-        except Exception as e:
-            self.log.exception("Caught an exception")
-            self.log.info("Sleeping for 60 seconds before we continue")
-            await asyncio.sleep(60)
+            except KeyboardInterrupt:
+                raise
+            except Exception as e:
+                self.log.exception("Caught an exception")
+                self.log.info("Sleeping for 60 seconds before we continue")
+                await asyncio.sleep(60)
+                self.log.info("Sleep complete, continue")
 
 
     ### TEMPERATURE READINGS ###
