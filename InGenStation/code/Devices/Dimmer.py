@@ -85,12 +85,6 @@ class Dimmer:
                 bus.i2c_rdwr(msg)
 
 
-        adjust = self.pid[1].update(self.devices[1].temperature)
-
-
-
-
-
     def load_from_sql(self):
         """Load current values from SQL
         """

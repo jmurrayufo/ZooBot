@@ -87,10 +87,10 @@ class RoachHab:
         self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
         self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
         if "dimmer0" in self.devices:
-            self.log.metric(name="dimmer0.value1", generic_float=self.devices["dimmer0"].values[1])
-            self.log.metric(name="dimmer0.value2", generic_float=self.devices["dimmer0"].values[2])
-            self.log.metric(name="dimmer0.value3", generic_float=self.devices["dimmer0"].values[3])
-            self.log.metric(name="dimmer0.value4", generic_float=self.devices["dimmer0"].values[4])
+            self.log.metric(name="dimmer0.value1", int=self.devices["dimmer0"].values[1])
+            self.log.metric(name="dimmer0.value2", int=self.devices["dimmer0"].values[2])
+            self.log.metric(name="dimmer0.value3", int=self.devices["dimmer0"].values[3])
+            self.log.metric(name="dimmer0.value4", int=self.devices["dimmer0"].values[4])
 
 
     async def temperature_handler(self, request, sensor_id):
