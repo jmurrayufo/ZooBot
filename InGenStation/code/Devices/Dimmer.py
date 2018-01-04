@@ -68,7 +68,7 @@ class Dimmer:
 
     async def update(self):
         self.load_from_sql()
-        print()
+        # print()
         for idx in [1,2,3,4]:
             if self.devices[idx] is None:
                 continue
@@ -77,7 +77,7 @@ class Dimmer:
             adjust = p+i+d
             adjust = np.clip(adjust,0,100)
             adjust = int(adjust)
-            print(f"Set dimmer to: {adjust}%")
+            # print(f"Set dimmer to: {adjust}%")
             self.values[idx] = adjust
 
             with smbus2.SMBusWrapper(1) as bus:
@@ -145,7 +145,7 @@ class PID:
         """
 
         self.error = self.set_point - current_value
-        print(f"Error: {self.set_point:.3f} - {current_value:.3f} = {self.error:.3f}")
+        # print(f"Error: {self.set_point:.3f} - {current_value:.3f} = {self.error:.3f}")
         if self.last_update is None:
             self.last_update = datetime.datetime.now()
             self.D_value = 0
@@ -172,8 +172,8 @@ class PID:
         self.I_value = self.Integrator * self.Ki
 
         # PID = self.P_value + self.I_value + self.D_value
-        print(f"P: {self.P_value} I: {self.I_value}")
-        print(f"PID: {self.P_value + self.I_value + self.D_value}")
+        # print(f"P: {self.P_value} I: {self.I_value}")
+        # print(f"PID: {self.P_value + self.I_value + self.D_value}")
 
         return (self.P_value, self.I_value, self.D_value)
 
