@@ -51,7 +51,7 @@ class SanicMgr:
             view.add(['GET','POST'], self.hab.heater_settings)
             SanicMgr.app.add_route(view, '/heater/settings/')
 
-            SanicMgr.app.static('/','./media')
+            # SanicMgr.app.static('/','./media/')
             SanicMgr.app.static('/js','./js/')
             SanicMgr.app.static('/css','./css/')
 
