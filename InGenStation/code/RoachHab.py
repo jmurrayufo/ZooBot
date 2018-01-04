@@ -59,8 +59,8 @@ class RoachHab:
                 raise
             except Exception as e:
                 self.log.exception("Caught an exception")
-                self.log.info("Sleeping for 60 seconds before we continue")
-                await asyncio.sleep(60)
+                self.log.info("Sleeping for 10 seconds before we continue")
+                await asyncio.sleep(10)
                 self.log.info("Sleep complete, continue")
 
 
