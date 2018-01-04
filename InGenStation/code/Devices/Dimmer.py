@@ -69,14 +69,22 @@ class Dimmer:
     async def update(self):
         self.load_from_sql()
         print()
-        adjust = self.pid[1].update(self.devices[1].temperature)
-        adjust = np.clip(adjust,0,100)
-        adjust = int(adjust)
-        print(f"Set dimmer to: {adjust}%")
+        for idx in [1,2,3,4]:
+            if self.devices[idx] is None:
+                continue
+            p,i,d = self.pid[idx].update(self.devices[idx].temperature)
+            adjust = p+i+d
+            adjust = np.clip(adjust,0,100)
+            adjust = int(adjust)
+            print(f"Set dimmer to: {adjust}%")
+            self.values[idx] = adjust
 
-        with smbus2.SMBusWrapper(1) as bus:
-            msg = smbus2.i2c_msg.write(0x3f, [0x80, 100-adjust])
-            bus.i2c_rdwr(msg)
+            with smbus2.SMBusWrapper(1) as bus:
+                msg = smbus2.i2c_msg.write(0x3f, [0x7F+idx, 100-adjust])
+                bus.i2c_rdwr(msg)
+
+            
+        adjust = self.pid[1].update(self.devices[1].temperature)
 
 
 
@@ -161,11 +169,11 @@ class PID:
 
         self.I_value = self.Integrator * self.Ki
 
-        PID = self.P_value + self.I_value + self.D_value
+        # PID = self.P_value + self.I_value + self.D_value
         print(f"P: {self.P_value} I: {self.I_value}")
-        print(f"PID: {PID}")
+        print(f"PID: {self.P_value + self.I_value + self.D_value}")
 
-        return PID
+        return (self.P_value + self.I_value + self.D_value)
 
     def setPoint(self,set_point):
         """
