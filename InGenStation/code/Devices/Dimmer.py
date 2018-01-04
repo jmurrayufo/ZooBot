@@ -94,6 +94,13 @@ class Dimmer:
         self.i1 = self.sql.get_setting(self.name,'i1')
         self.d1 = self.sql.get_setting(self.name,'d1')
         self.set_point1 = self.sql.get_setting(self.name,'set_point1')
+        # TODO: Man, you can loop this, right?
+        if self.pid[1].Kp != self.p1:
+            self.self.pid[1].Kp = self.p1
+            self.log.info(f"Updated PID1.Kp to {self.p1}")
+        if self.pid[1].Ki != self.i1:
+            self.self.pid[1].Ki = self.i1
+            self.log.info(f"Updated PID1.Ki to {self.i1}")
 
         self.p2 = self.sql.get_setting(self.name,'p2')
         self.i2 = self.sql.get_setting(self.name,'i2')
