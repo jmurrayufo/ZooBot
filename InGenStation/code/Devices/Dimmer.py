@@ -4,6 +4,7 @@ import datetime
 import asyncio
 import time
 import numpy as np
+import atexit
 
 from ..CustomLogging import Log
 from ..Sql import SQL
@@ -22,8 +23,10 @@ class Dimmer:
         self.log = Log()
         self.name = name
         self.args = args
+
         if address not in self.valid_addresses: 
             raise ValueError("Address not in value addresses")
+
         self.address = address
         self.last_update = datetime.datetime.min
         self.sql = SQL()
@@ -56,6 +59,7 @@ class Dimmer:
 
         self.log.info(f"Dimmer booted at address {self.address}")
 
+        atexit.register(_exit_function)
 
 
     def configure(self):
@@ -120,6 +124,9 @@ class Dimmer:
         if self.pid[1].Ki != self.i1:
             self.pid[1].Ki = self.i1
             self.log.info(f"Updated PID1.Ki to {self.i1}")
+        if self.pid[1].set_point != self.set_point1:
+            self.pid[1].set_point = self.set_point1
+            self.log.info(f"Updated PID1.set_point to {self.set_point1}")
 
 
 
@@ -186,5 +193,12 @@ class PID:
         Initilize the setpoint of PID
         """
         self.set_point = set_point
-        self.Integrator=0
-        self.Derivator=0
+        # self.Integrator=0
+        # self.Derivator=0
+
+
+def _exit_function():
+    Log().info("Exiting, set power to 100 (full closed)")
+    with smbus2.SMBusWrapper(1) as bus:
+        msg = smbus2.i2c_msg.write(0x3f, [0x80, 100])
+        bus.i2c_rdwr(msg)

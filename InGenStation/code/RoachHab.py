@@ -159,3 +159,33 @@ class RoachHab:
             return sanic.response.text("POST")
         else:
             self.log.error(f"How did we even get here? Invalid method {request.method}")
+
+
+    async def dimmer_settings(self, request):
+        if request.method == 'GET':
+            ret_json = {}
+            ret_json['dimmer0'] = {}
+            ret_json['dimmer0']['pid1'] = {}
+            ret_json['dimmer0']['pid2'] = {}
+            ret_json['dimmer0']['pid3'] = {}
+            ret_json['dimmer0']['pid4'] = {}
+            self.log.debug(ret_json)
+            return sanic.response.json(ret_json)
+        elif request.method == 'POST':
+            self.log.debug(f"Request given with form: {request.form}")
+            for key in request.form:
+                val = request.form[key][0]
+                
+                try:
+                    val = int(val)
+                except ValueError:
+                    try:
+                        val = float(val)
+                    except ValueError:
+                        pass
+                self.sql.set_setting("heater0",key,val)
+            self.devices['heater0'].load_from_sql()
+
+            return sanic.response.text("POST")
+        else:
+            self.log.error(f"How did we even get here? Invalid method {request.method}")
