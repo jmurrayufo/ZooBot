@@ -72,8 +72,8 @@ class Dimmer:
         adjust = 100 - np.clip(adjust,0,100)
         self.log.debug("Set dimmer to: {adjust}")
 
-        with SMBusWrapper(1) as bus:
-            msg = i2c_msg.write(0x3f, [0x80, adjust])
+        with smbus2.SMBusWrapper(1) as bus:
+            msg = smbus2.i2c_msg.write(0x3f, [0x80, adjust])
             bus.i2c_rdwr(msg)
 
 
