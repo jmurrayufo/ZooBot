@@ -70,12 +70,12 @@ class Dimmer:
         self.load_from_sql()
         print()
         adjust = self.pid[1].update(self.devices[1].temperature)
-        adjust = 100 - np.clip(adjust,0,100)
+        adjust = np.clip(adjust,0,100)
         adjust = int(adjust)
-        print(f"Set dimmer to: {adjust}")
+        print(f"Set dimmer to: {adjust}%")
 
         with smbus2.SMBusWrapper(1) as bus:
-            msg = smbus2.i2c_msg.write(0x3f, [0x80, adjust])
+            msg = smbus2.i2c_msg.write(0x3f, [0x80, 100-adjust])
             bus.i2c_rdwr(msg)
 
 
