@@ -71,7 +71,7 @@ class Dimmer:
         adjust = self.pid[1].update(self.devices[1].temperature)
         adjust = 100 - np.clip(adjust,0,100)
         adjust = int(adjust)
-        self.log.debug("Set dimmer to: {adjust}")
+        self.log.debug(f"Set dimmer to: {adjust}")
 
         with smbus2.SMBusWrapper(1) as bus:
             msg = smbus2.i2c_msg.write(0x3f, [0x80, adjust])
