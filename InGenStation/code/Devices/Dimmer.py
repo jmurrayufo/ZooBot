@@ -115,10 +115,10 @@ class Dimmer:
 
         # TODO: Man, you can loop this, right?
         if self.pid[1].Kp != self.p1:
-            self.self.pid[1].Kp = self.p1
+            self.pid[1].Kp = self.p1
             self.log.info(f"Updated PID1.Kp to {self.p1}")
         if self.pid[1].Ki != self.i1:
-            self.self.pid[1].Ki = self.i1
+            self.pid[1].Ki = self.i1
             self.log.info(f"Updated PID1.Ki to {self.i1}")
 
 
