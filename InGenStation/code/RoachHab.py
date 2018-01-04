@@ -24,10 +24,9 @@ class RoachHab:
         self.sensors['h1'] = Si7021(0x40, args)
 
         self.devices = {}
-        self.devices['heater0'] = Heater("heater0", args, self.sensors['h1'])
+        # self.devices['heater0'] = Heater("heater0", args, self.sensors['h1'])
         # Check this in under the test group
-        if self.args.purpose == 'test':
-            self.devices['dimmer0'] = Dimmer("dimmer0", 0x27, args, (self.sensors['h1'], None, None, None)) 
+        self.devices['dimmer0'] = Dimmer("dimmer0", 0x27, args, (self.sensors['h1'], None, None, None)) 
 
         self.last_metric_log = datetime.datetime.min
         addresses = set()

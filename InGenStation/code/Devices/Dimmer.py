@@ -147,7 +147,8 @@ class PID:
         self.I_value = self.Integrator * self.Ki
 
         PID = self.P_value + self.I_value + self.D_value
-        print(self.P_value, self.I_value, self.D_value)
+        self.log.debug(f"P: {self.P_value} I: {self.I_value}")
+        self.log.debug(f"PID: {PID}")
 
         return PID
 
