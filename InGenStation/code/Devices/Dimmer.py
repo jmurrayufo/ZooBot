@@ -71,7 +71,7 @@ class Dimmer:
         adjust = self.pid[1].update(self.devices[1].temperature)
         adjust = 100 - np.clip(adjust,0,100)
         adjust = int(adjust)
-        self.log.debug(f"Set dimmer to: {adjust}")
+        print(f"Set dimmer to: {adjust}")
 
         with smbus2.SMBusWrapper(1) as bus:
             msg = smbus2.i2c_msg.write(0x3f, [0x80, adjust])
@@ -160,8 +160,8 @@ class PID:
         self.I_value = self.Integrator * self.Ki
 
         PID = self.P_value + self.I_value + self.D_value
-        self.log.debug(f"P: {self.P_value} I: {self.I_value}")
-        self.log.debug(f"PID: {PID}")
+        print(f"P: {self.P_value} I: {self.I_value}")
+        print(f"PID: {PID}")
 
         return PID
 
