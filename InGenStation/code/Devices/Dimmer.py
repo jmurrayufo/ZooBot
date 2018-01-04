@@ -3,6 +3,7 @@ import smbus2
 import datetime
 import asyncio
 import time
+import numpy as np
 
 from ..CustomLogging import Log
 from ..Sql import SQL
@@ -67,6 +68,16 @@ class Dimmer:
 
     async def update(self):
         self.load_from_sql()
+        adjust = self.pid[1].update(self.devices[1].temperature)
+        adjust = 100 - np.clip(adjust,0,100)
+        self.log.debug("Set dimmer to: {adjust}")
+
+        with SMBusWrapper(1) as bus:
+            msg = i2c_msg.write(0x3f, [0x80, adjust])
+            bus.i2c_rdwr(msg)
+
+
+
 
 
     def load_from_sql(self):
