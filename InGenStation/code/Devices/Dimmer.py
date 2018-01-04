@@ -135,7 +135,7 @@ class PID:
         """
 
         self.error = self.set_point - current_value
-        print(f"Error: {self.error}")
+        print(f"Error: {self.set_point} - {current_value} = {self.error}")
         if self.last_update is None:
             self.last_update = datetime.datetime.now()
             self.D_value = 0
