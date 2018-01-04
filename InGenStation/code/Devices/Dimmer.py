@@ -114,6 +114,7 @@ class PID:
 
     def __init__(self, P=1.0, I=0.0, D=0.0, Derivator=0, Integrator=0, Integrator_max=100, Integrator_min=-100):
 
+        self.log = Log()
         self.Kp=P
         self.Ki=I
         self.Kd=D
