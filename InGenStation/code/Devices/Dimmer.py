@@ -72,7 +72,8 @@ class Dimmer:
         for idx in [1,2,3,4]:
             if self.devices[idx] is None:
                 continue
-            p,i,d = self.pid[idx].update(self.devices[idx].temperature)
+            controller = self.pid[idx]
+            p,i,d = controller.update(self.devices[idx].temperature)
             adjust = p+i+d
             adjust = np.clip(adjust,0,100)
             adjust = int(adjust)
@@ -83,7 +84,7 @@ class Dimmer:
                 msg = smbus2.i2c_msg.write(0x3f, [0x7F+idx, 100-adjust])
                 bus.i2c_rdwr(msg)
 
-            
+
         adjust = self.pid[1].update(self.devices[1].temperature)
 
 
