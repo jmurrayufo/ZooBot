@@ -47,6 +47,12 @@ class Dimmer:
         self.values[3] = 0
         self.values[4] = 0
 
+        self.components = {}
+        for idx in [1,2,3,4]:
+            self.components[idx] = {}
+            for comp in ['p','i','d']:
+                self.components[idx][comp] = 0
+
         self.pid = {}
         self.pid[1] = PID(self.p1, self.i1, self.d1)
         self.pid[2] = PID(self.p2, self.i2, self.d2)
@@ -73,11 +79,14 @@ class Dimmer:
     async def update(self):
         self.load_from_sql()
         # print()
-        for idx in [1,2,3,4]:
+        for idx in [1,]:
             if self.devices[idx] is None:
                 continue
             controller = self.pid[idx]
             p,i,d = controller.update(self.devices[idx].temperature)
+            self.components[idx]['p'] = p
+            self.components[idx]['i'] = i
+            self.components[idx]['d'] = d
             adjust = p+i+d
             adjust = np.clip(adjust,0,100)
             adjust = int(adjust)

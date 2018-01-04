@@ -39,19 +39,23 @@ class SanicMgr:
             view.add(['GET'], self.hab.temperature_handler)
             SanicMgr.app.add_route(view, '/temp/<sensor_id>')
 
-            view = CompositionView()
-            view.add(['GET','POST'], self.hab.heater_state)
-            SanicMgr.app.add_route(view, '/heater/<state>')
+            # view = CompositionView()
+            # view.add(['GET','POST'], self.hab.heater_state)
+            # SanicMgr.app.add_route(view, '/heater/<state>')
 
-            view = CompositionView()
-            view.add(['GET','POST'], self.hab.heater_state)
-            SanicMgr.app.add_route(view, '/heater/')
+            # view = CompositionView()
+            # view.add(['GET','POST'], self.hab.heater_state)
+            # SanicMgr.app.add_route(view, '/heater/')
+
+            # view = CompositionView()
+            # view.add(['GET','POST'], self.hab.heater_settings)
+            # SanicMgr.app.add_route(view, '/heater/settings/')
 
             view = CompositionView()
             view.add(['GET','POST'], self.hab.heater_settings)
-            SanicMgr.app.add_route(view, '/heater/settings/')
+            SanicMgr.app.add_route(view, '/dimmer/settings/')
 
-            # SanicMgr.app.static('/','./media/')
+            # SanicMgr.app.static('/','./media/') # This breaks other static routes?
             SanicMgr.app.static('/js','./js/')
             SanicMgr.app.static('/css','./css/')
 

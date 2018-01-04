@@ -88,9 +88,10 @@ class RoachHab:
         self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
         if "dimmer0" in self.devices:
             self.log.metric(name="dimmer0.value1", generic_int=self.devices["dimmer0"].values[1])
-            self.log.metric(name="dimmer0.value2", generic_int=self.devices["dimmer0"].values[2])
-            self.log.metric(name="dimmer0.value3", generic_int=self.devices["dimmer0"].values[3])
-            self.log.metric(name="dimmer0.value4", generic_int=self.devices["dimmer0"].values[4])
+            self.log.metric(name="dimmer0.pid1.p1", generic_float=self.devices["dimmer0"].components[1]['p'])
+            self.log.metric(name="dimmer0.pid1.i1", generic_float=self.devices["dimmer0"].components[1]['i'])
+            self.log.metric(name="dimmer0.pid1.d1", generic_float=self.devices["dimmer0"].components[1]['d'])
+
 
 
     async def temperature_handler(self, request, sensor_id):
@@ -166,26 +167,20 @@ class RoachHab:
             ret_json = {}
             ret_json['dimmer0'] = {}
             ret_json['dimmer0']['pid1'] = {}
+            ret_json['dimmer0']['pid1']['p'] = self.devices['dimmer0'].pid[1].Kp
+            ret_json['dimmer0']['pid1']['i'] = self.devices['dimmer0'].pid[1].Ki
+            ret_json['dimmer0']['pid1']['d'] = self.devices['dimmer0'].pid[1].Kd
+            ret_json['dimmer0']['pid1']['set_point'] = self.devices['dimmer0'].pid[1].set_point
             ret_json['dimmer0']['pid2'] = {}
             ret_json['dimmer0']['pid3'] = {}
             ret_json['dimmer0']['pid4'] = {}
             self.log.debug(ret_json)
             return sanic.response.json(ret_json)
         elif request.method == 'POST':
-            self.log.debug(f"Request given with form: {request.form}")
-            for key in request.form:
-                val = request.form[key][0]
-                
-                try:
-                    val = int(val)
-                except ValueError:
-                    try:
-                        val = float(val)
-                    except ValueError:
-                        pass
-                self.sql.set_setting("heater0",key,val)
-            self.devices['heater0'].load_from_sql()
+
+            raise sanic.exceptions.ServerError
 
             return sanic.response.text("POST")
         else:
             self.log.error(f"How did we even get here? Invalid method {request.method}")
+            raise sanic.exceptions.ServerError
