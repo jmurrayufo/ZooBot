@@ -52,7 +52,7 @@ class SanicMgr:
             # SanicMgr.app.add_route(view, '/heater/settings/')
 
             view = CompositionView()
-            view.add(['GET','POST'], self.hab.heater_settings)
+            view.add(['GET','POST'], self.hab.dimmer_settings)
             SanicMgr.app.add_route(view, '/dimmer/settings/')
 
             # SanicMgr.app.static('/','./media/') # This breaks other static routes?

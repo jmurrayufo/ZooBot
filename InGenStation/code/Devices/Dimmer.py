@@ -65,7 +65,8 @@ class Dimmer:
 
         self.log.info(f"Dimmer booted at address {self.address}")
 
-        atexit.register(_exit_function)
+        if not args.purpose == 'test':
+            atexit.register(_exit_function)
 
 
     def configure(self):
@@ -92,7 +93,8 @@ class Dimmer:
             adjust = int(adjust)
             # print(f"Set dimmer to: {adjust}%")
             self.values[idx] = adjust
-
+            if self.args.purpose == 'test':
+                continue
             with smbus2.SMBusWrapper(1) as bus:
                 msg = smbus2.i2c_msg.write(0x3f, [0x7F+idx, 100-adjust])
                 bus.i2c_rdwr(msg)

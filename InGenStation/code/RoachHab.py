@@ -167,19 +167,17 @@ class RoachHab:
         if request.method == 'GET':
             ret_json = {}
             ret_json['dimmer0'] = {}
-            ret_json['dimmer0']['pid1'] = {}
-            ret_json['dimmer0']['pid1']['p'] = self.devices['dimmer0'].pid[1].Kp
-            ret_json['dimmer0']['pid1']['i'] = self.devices['dimmer0'].pid[1].Ki
-            ret_json['dimmer0']['pid1']['d'] = self.devices['dimmer0'].pid[1].Kd
-            ret_json['dimmer0']['pid1']['set_point'] = self.devices['dimmer0'].pid[1].set_point
-            ret_json['dimmer0']['pid2'] = {}
-            ret_json['dimmer0']['pid3'] = {}
-            ret_json['dimmer0']['pid4'] = {}
+            for idx in [1,2,3,4]:            
+                ret_json['dimmer0'][f'pid{idx}'] = {}
+                ret_json['dimmer0'][f'pid{idx}']['p'] = self.devices['dimmer0'].pid[idx].Kp
+                ret_json['dimmer0'][f'pid{idx}']['i'] = self.devices['dimmer0'].pid[idx].Ki
+                ret_json['dimmer0'][f'pid{idx}']['d'] = self.devices['dimmer0'].pid[idx].Kd
+                ret_json['dimmer0'][f'pid{idx}']['set_point'] = self.devices['dimmer0'].pid[idx].set_point
             self.log.debug(ret_json)
             return sanic.response.json(ret_json)
         elif request.method == 'POST':
 
-            raise sanic.exceptions.ServerError
+            return sanic.exceptions.ServerError("We dun goofed!")
 
             return sanic.response.text("POST")
         else:
