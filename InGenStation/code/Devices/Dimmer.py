@@ -149,6 +149,10 @@ class PID:
     def __init__(self, P=1.0, I=0.0, D=0.0, Derivator=0, Integrator=0, Integrator_max=100, Integrator_min=-100):
 
         self.log = Log()
+        self.P_value = 0
+        self.I_value = 0
+        self.D_value = 0
+        self.output = 0
         self.Kp=P
         self.Ki=I
         self.Kd=D
@@ -196,7 +200,7 @@ class PID:
         # PID = self.P_value + self.I_value + self.D_value
         # print(f"P: {self.P_value} I: {self.I_value}")
         # print(f"PID: {self.P_value + self.I_value + self.D_value}")
-
+        self.output = self.P_value + self.I_value + self.D_value
         return (self.P_value, self.I_value, self.D_value)
 
     def setPoint(self,set_point):

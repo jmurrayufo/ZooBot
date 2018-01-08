@@ -14,10 +14,49 @@
 
 <div w3-include-html="/ui/navbar.html"></div>
 
-<body class=".container">
-  <p id="demo">WIP: Status</p>
+<body>
+  <div class="container-fluid">
+    <div class="jumbotron">
+      <div class="row">
+        <p id="demo">Status Screen</p>
+      </div>
+      <form>
+        <div class="form-group">
+          
+          <div class="form-inline">
+            <label for="temp" class="top-buffer">PID1 Kp:</label>
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="dimmer0.pid1.p">
+          </div>
+          
+          <div class="form-inline">
+            <label for="temp" class="top-buffer">PID1 Ki:</label>
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="dimmer0.pid1.i">
+          </div>
+          
+          <div class="form-inline">
+            <label for="temp" class="top-buffer">PID1 Kd:</label>
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="dimmer0.pid1.d">
+          </div>
+          
+          <div class="form-inline">
+            <label for="temp" class="top-buffer">PID1 Set Point:</label>
+            <input type="number" class="form-control col-md-2 col-sm-3 col-xs-4" id="dimmer0.pid1.set_point">
+          </div>
+
+        </div> 
+        <button type="button" class="btn btn-primary top-buffer left-buffer bottom-buffer" onclick="getDimmerSettings()">Pull Settings</button>
+        <button type="button" class="btn btn-danger top-buffer left-buffer bottom-buffer" onclick="setDimmerSettings(this)">Push Settings</button>
+      </form>
+      <p>Dimmer0.P_value: <span id="dimmer0.pid1.p_value"></span></p>
+      <p>Dimmer0.I_value: <span id="dimmer0.pid1.i_value"></span></p>
+      <p>Dimmer0.D_value: <span id="dimmer0.pid1.d_value"></span></p>
+      <p>Dimmer0.output: <span id="dimmer0.pid1.output"></span></p>
+    </div>
+  </div>
 </body>
 
+<script src="/js/dimmerCtl.js"></script>
 <script>
   w3.includeHTML();
+  getDimmerSettings();
 </script>

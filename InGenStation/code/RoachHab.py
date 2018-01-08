@@ -173,13 +173,31 @@ class RoachHab:
                 ret_json['dimmer0'][f'pid{idx}']['i'] = self.devices['dimmer0'].pid[idx].Ki
                 ret_json['dimmer0'][f'pid{idx}']['d'] = self.devices['dimmer0'].pid[idx].Kd
                 ret_json['dimmer0'][f'pid{idx}']['set_point'] = self.devices['dimmer0'].pid[idx].set_point
+                ret_json['dimmer0'][f'pid{idx}']['p_value'] = self.devices['dimmer0'].pid[idx].P_value
+                ret_json['dimmer0'][f'pid{idx}']['i_value'] = self.devices['dimmer0'].pid[idx].I_value
+                ret_json['dimmer0'][f'pid{idx}']['d_value'] = self.devices['dimmer0'].pid[idx].D_value
+                ret_json['dimmer0'][f'pid{idx}']['output'] = self.devices['dimmer0'].pid[idx].output
+                if self.devices['dimmer0'].devices[idx] is not None:
+                    ret_json['dimmer0'][f'device{idx}'] = {}
+                    ret_json['dimmer0'][f'device{idx}']['temperature'] = self.devices['dimmer0'].devices[idx].temperature
             self.log.debug(ret_json)
             return sanic.response.json(ret_json)
         elif request.method == 'POST':
+            self.log.debug(request.form)
 
-            return sanic.exceptions.ServerError("We dun goofed!")
+            for keyString in request.form:
+                newValue = request.form[keyString][0]
 
-            return sanic.response.text("POST")
+                keys = keyString.split(".")
+                device = keys[0]
+                pidNum = int(keys[1][-1])
+                key = keys[2]
+
+                self.log.debug(f"Set device {device}, key {key}{pidNum} to {newValue}")
+
+                self.sql.set_setting(device, f"{key}{pidNum}", newValue)
+
+            return sanic.response.text("Updated")
         else:
             self.log.error(f"How did we even get here? Invalid method {request.method}")
             raise sanic.exceptions.ServerError
