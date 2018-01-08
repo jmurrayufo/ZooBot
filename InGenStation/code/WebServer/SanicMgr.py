@@ -55,7 +55,7 @@ class SanicMgr:
             view.add(['GET','POST'], self.hab.dimmer_settings)
             SanicMgr.app.add_route(view, '/dimmer/settings/')
 
-            # SanicMgr.app.static('/','./media/') # This breaks other static routes?
+            SanicMgr.app.static('/favicon.ico','./media/favicon.ico') # This breaks other static routes?
             SanicMgr.app.static('/js','./js/')
             SanicMgr.app.static('/css','./css/')
 
