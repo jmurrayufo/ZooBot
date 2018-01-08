@@ -6,30 +6,19 @@ function getDimmerSettings() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 
             var data = JSON.parse(xmlHttp.responseText)
-            console.log(data)
 
             for (pid in data['dimmer0']) {
-                console.log("PID:" + pid)
                 for (component in data['dimmer0'][pid]) {
                     elementName = 'dimmer0.' + pid + "." + component;
-                    console.log(elementName, data['dimmer0'][pid][component]);
                     docElement = document.getElementById(elementName);
                     if (docElement != null) {
                         docElement.value = data['dimmer0'][pid][component];
                         docElement.textContent = data['dimmer0'][pid][component];
                     } else {
-                        console.log("Couldn't find element "+elementName);
+                        // console.log("Couldn't find element "+elementName);
                     }
                 }
             }
-
-            // for (x in data) {
-            //     element = document.getElementById(x);
-            //     if (element != null) {
-            //         element.value = data[x];
-            //     }
-            // }
-
         }
     }
     xmlHttp.open("GET", "/dimmer/settings", true); // true for asynchronous 
