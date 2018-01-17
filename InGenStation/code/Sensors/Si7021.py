@@ -118,10 +118,17 @@ class Si7021:
 
 
     async def _measure_humidity(self, bus, max_loops):
-        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
-        bus.i2c_rdwr(write)
-        read = smbus2.i2c_msg.read(self.address, 2)
         loop = 0
+        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
+        while loop < max_loops:
+            try:
+                bus.i2c_rdwr(write)
+                break
+            except OSError:
+                loop += 1
+                continue
+
+        read = smbus2.i2c_msg.read(self.address, 2)
         while loop < max_loops:
             try:
                 bus.i2c_rdwr(read)
@@ -133,10 +140,17 @@ class Si7021:
 
 
     async def _measure_temperature(self, bus, max_loops):
-        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
-        bus.i2c_rdwr(write)
-        read = smbus2.i2c_msg.read(self.address, 2)
         loop = 0
+        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
+        while loop < max_loops:
+            try:
+                bus.i2c_rdwr(write)
+                break
+            except OSError:
+                loop += 1
+                continue
+
+        read = smbus2.i2c_msg.read(self.address, 2)
         while loop < max_loops:
             try:
                 bus.i2c_rdwr(read)
