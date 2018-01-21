@@ -56,7 +56,7 @@ class Dimmer:
         self.pid = {}
         self.pid[1] = PID(self.p1, self.i1, self.d1)
         if self.i1 != 0:
-            self.pid[1].Integrator = 40/self.i1
+            self.pid[1].Integrator = 30/self.i1
         self.pid[2] = PID(self.p2, self.i2, self.d2)
         self.pid[3] = PID(self.p3, self.i3, self.d3)
         self.pid[4] = PID(self.p4, self.i4, self.d4)
