@@ -8,7 +8,6 @@ import logging
 import base64
 
 from ..CustomLogging import Log
-from ..RoachHab import RoachHab
 
 class SanicMgr:
     from sanic.config import Config
@@ -23,9 +22,11 @@ class SanicMgr:
         SanicMgr.log.debug("Booted with Manager")
 
         if args.purpose == 'dragon':
-            # self.hab = RoachHab(args)
-            raise NotImplementedError("Dragon hab is not yet implemented")
+            from ..DragonHab import DragonHab
+            self.hab = Dragonhab(args)
+            # raise NotImplementedError("Dragon hab is not yet implemented")
         elif  args.purpose == 'bug':
+            from ..RoachHab import RoachHab
             self.hab = RoachHab(args)
         elif  args.purpose == 'test':
             self.hab = RoachHab(args)

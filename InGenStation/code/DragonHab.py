@@ -1,131 +1,203 @@
-#!/usr/bin/env python3
-import json
-import datetime
-import platform
-import logging
-import logstash
-import socket
 import asyncio
-
-# Only here for test code.
-import random
+import logging
 import sanic
-from sanic.response import text
+import time
+import datetime
+from .Sensors import TMP102, TMP106, Si7021
+from .Devices import Heater, Dimmer
+from .CustomLogging import Log
+from .Sql import SQL
 
-from Menu import Screen
+class RoachHab:
 
-if __name__ == '__main__':
-    app = sanic.Sanic(__name__)
+    def __init__(self, args): 
+        self.log = Log()
 
-class DragonHab:
-    report_dict = {
-       "metric": True,
-       "app.name":"DragonHab",
-       "app.version":"1.0.0",
-       "env.domain":"home",
-       "env.infrastructure":"dev",
-       "env.name":"isbe",
-       "env.platform":platform.platform(),
-       }
-    host = '192.168.1.2'
+        self.sql = SQL(args)
+        self.sql.connect()
 
-    """
-        sent_bytes = conv_bytes(match_dict['sent'], match_dict['sent_units'])
-        sent_dict = report_dict.copy()
-        sent_dict.update({"name":"bytes_sent","bytes":sent_bytes,"unit":"bytes"})
-        test_logger.info(json.dumps(sent_dict))
-    """
+        self.args = args
+        self.sensors = {}
+        # self.sensors['t0'] = TMP102(0x48, args)
+        # self.sensors['t1'] = TMP106(0x41, args)
+        # self.sensors['t2'] = TMP106(0b1000101, args)
+        # self.sensors['h1'] = Si7021(0x40, args)
 
-    def __init__(self):
-        # Setup Log
-        self.log = logging.getLogger('DragonHab')
+        self.devices = {}
+        # self.devices['heater0'] = Heater("heater0", args, self.sensors['h1'])
+        # Check this in under the test group
+        # self.devices['dimmer0'] = Dimmer("dimmer0", 0x27, args, (self.sensors['h1'], None, None, None)) 
 
-        self.log.info(f'DragonHab booted on {socket.gethostname()}')
-        self.last_updates = {}
-        self.last_updates['LCD'] = datetime.datetime.now()
-        
-        self.readings = {}
-        self.readings['t0'] = -1
-        self.readings['t1'] = -1
-        self.readings['t2'] = -1
+        self.last_metric_log = datetime.datetime.min
+        addresses = set()
+        for sensor in self.sensors:
+            if self.sensors[sensor].address in addresses:
+                raise KeyError("Two sensors cannot share the same address")
+            addresses.add(self.sensors[sensor].address)
 
-        # Construct menus for use
-        self.screen = Screen(self,"Menu/dragonhub.json")
+        self.update_in_progress = False
+        # TODO: Check to see if a settings file exists
 
 
     async def run(self):
-        self.log.info(f'Begin main loop')
-        self.log.debug(f"Running debug loop for testing")
         while True:
-            await asyncio.sleep(1/10.)
-            self.log.debug(self.screen)
-            self.log.debug("What key do you want to simulate?")
-            key = input("> ")
-            if key == "u":
-                self.screen.up()
-            elif key == "d":
-                self.screen.down()
-            elif key == "l":
-                self.screen.left()
-            elif key == "r":
-                self.screen.right()
-            elif key == "e":
-                self.screen.enter()
-            elif key == "c":
-                self.screen.cancel()
-            elif key == "h":
-                self.screen.home()
-            elif key == "q":
-                break
-            self.update_readings()
-        return
+            try:
+                t = time.time()
 
-        while True:
-            self.log.debug("Check LCD")
-            self.log.debug(f"Last update was {datetime.datetime.now() - self.last_updates['LCD']} ago")
-            if (datetime.datetime.now() - self.last_updates['LCD']).total_seconds() > 1/60.0:
-                self.log.debug("Update the LCD")
-                # Read LCD keys, and act as needed
-                break
-            self.log.debug("Check timers")
-            self.update_readings()
-            break
-        self.log.info(f'Main loop ended, shutdown complete')
+                await self.update()
+
+                if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_freq):
+                    # self.log.debug("Log sensor data")
+                    await self.log_sensors()
+                    self.last_metric_log = datetime.datetime.now()
+
+                t_sleep = self.args.update_freq - (time.time() - t)
+                t_sleep = max(0, t_sleep)
+                # self.log.debug(f"Sleep for {t_sleep:.3f} s")
+                await asyncio.sleep(t_sleep)
+            except KeyboardInterrupt:
+                raise
+            except Exception as e:
+                self.log.exception("Caught an exception")
+                self.log.info("Sleeping for 10 seconds before we continue")
+                await asyncio.sleep(10)
+                self.log.info("Sleep complete, continue")
 
 
-    def update_readings(self):
-            self.log.debug("Check temperature")
-            self.readings['t0'] = random.random()*20
-            self.readings['t1'] = random.random()*20
-            self.readings['t2'] = random.random()*20
-            self.log.debug("Check humidity")
+    ### TEMPERATURE READINGS ###
+    async def update(self):
+        # self.log.debug("Update sensors")
+        t = time.time()
+        if self.update_in_progress:
+            self.log.warning("Cannot start an update when we are already doing one.")
+            return
+        try:
+            self.update_in_progress = True   
+            for sensor in self.sensors:
+                await self.sensors[sensor].update()
+            for element in self.devices:
+                await self.devices[element].update()
+        finally:
+            self.update_in_progress = False
+            # self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
 
 
-@app.route("/")
-async def test(request):
-    # self.log.info("Root")
-    global hab
-    hab.log.info("root!")
-    return text("hello world")
+    async def log_sensors(self):
+        # self.log.debug("Run metrics logging")
+        # self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
+        # self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
+        # self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
+        if "dimmer0" in self.devices:
+            self.log.metric(name="dimmer0.value1", generic_int=self.devices["dimmer0"].values[1])
+            self.log.metric(name="dimmer0.pid1.p1", generic_float=self.devices["dimmer0"].components[1]['p'])
+            self.log.metric(name="dimmer0.pid1.i1", generic_float=self.devices["dimmer0"].components[1]['i'])
+            self.log.metric(name="dimmer0.pid1.d1", generic_float=self.devices["dimmer0"].components[1]['d'])
 
 
-if __name__ == '__main__':
 
-    log = logging.getLogger('DragonHab')
-    log.setLevel(logging.DEBUG)
-    log.addHandler(logstash.LogstashHandler(DragonHab.host, 5002, version=1))
-    formatter = logging.Formatter('%(asctime)s %(process)d %(levelname)s %(filename)s %(message)s')
-    ch = logging.StreamHandler()
-    ch.setFormatter(formatter)
-    log.addHandler(ch)
+    async def temperature_handler(self, request, sensor_id):
+        # TODO: These really should just respond with data, and let a sanic
+        # manager do the actual http stuff...
+        self.log.info(f"Request for temperature received against id {sensor_id}")
+        return sanic.response.json({sensor_id: self.sensors[sensor_id].data})
 
-    hab = DragonHab()
 
-    app.add_task(hab.run)
+    async def all_temperature_handler(self, request):
+        # TODO: These really should just respond with data, and let a sanic
+        # manager do the actual http stuff...
+        self.log.info(f"Request for temperature received against all sensors")
+        data = {}
+        for key in self.sensors:
+            data[key] = self.sensors[key].data
+        return sanic.response.json(data)
 
-    app.run(port=8000)
-    # try:
-    #     x = DragonHab()
-    #     x.run()
-    # except:
-    #     log.exception("Something died")
+
+    async def heater_state(self, request, state=None):
+        # TODO: add a 'id' paramter to target different heaters
+        if state == 'on':
+            self.log.info(f"Request to turn heater on")
+            self.devices['heater0'].on(override=True)
+            return sanic.response.text("Heater on")
+
+        elif state == 'off':
+            self.log.info(f"Request to turn heater off")
+            self.devices['heater0'].off(override=True)
+            return sanic.response.text("Heater off")
+
+        elif state == 'disable':
+            self.log.info(f"Request to disable heater")
+            self.devices['heater0'].disable(override=True)
+            return sanic.response.text("Heater disabled")
+
+        return sanic.response.text("Heater function")
+
+
+    async def heater_settings(self, request):
+        if request.method == 'GET':
+            ret_json = {}
+            ret_json['max_on'] = self.devices['heater0'].max_on.total_seconds()
+            ret_json['max_off'] = self.devices['heater0'].max_off.total_seconds()
+            ret_json['min_on'] = self.devices['heater0'].min_on.total_seconds()
+            ret_json['min_off'] = self.devices['heater0'].min_off.total_seconds()
+            ret_json['temperature_limit_max'] = self.devices['heater0'].temperature_limit_max
+            ret_json['temperature_limit_min'] = self.devices['heater0'].temperature_limit_min
+            self.log.debug(ret_json)
+            return sanic.response.json(ret_json)
+        elif request.method == 'POST':
+            self.log.debug(f"Request given with form: {request.form}")
+            for key in request.form:
+                val = request.form[key][0]
+                
+                try:
+                    val = int(val)
+                except ValueError:
+                    try:
+                        val = float(val)
+                    except ValueError:
+                        pass
+                self.sql.set_setting("heater0",key,val)
+            self.devices['heater0'].load_from_sql()
+
+            return sanic.response.text("POST")
+        else:
+            self.log.error(f"How did we even get here? Invalid method {request.method}")
+
+
+    async def dimmer_settings(self, request):
+        if request.method == 'GET':
+            ret_json = {}
+            ret_json['dimmer0'] = {}
+            for idx in [1,2,3,4]:            
+                ret_json['dimmer0'][f'pid{idx}'] = {}
+                ret_json['dimmer0'][f'pid{idx}']['p'] = self.devices['dimmer0'].pid[idx].Kp
+                ret_json['dimmer0'][f'pid{idx}']['i'] = self.devices['dimmer0'].pid[idx].Ki
+                ret_json['dimmer0'][f'pid{idx}']['d'] = self.devices['dimmer0'].pid[idx].Kd
+                ret_json['dimmer0'][f'pid{idx}']['set_point'] = self.devices['dimmer0'].pid[idx].set_point
+                ret_json['dimmer0'][f'pid{idx}']['p_value'] = self.devices['dimmer0'].pid[idx].P_value
+                ret_json['dimmer0'][f'pid{idx}']['i_value'] = self.devices['dimmer0'].pid[idx].I_value
+                ret_json['dimmer0'][f'pid{idx}']['d_value'] = self.devices['dimmer0'].pid[idx].D_value
+                ret_json['dimmer0'][f'pid{idx}']['output'] = self.devices['dimmer0'].pid[idx].output
+                if self.devices['dimmer0'].devices[idx] is not None:
+                    ret_json['dimmer0'][f'device{idx}'] = {}
+                    ret_json['dimmer0'][f'device{idx}']['temperature'] = self.devices['dimmer0'].devices[idx].temperature
+            self.log.debug(ret_json)
+            return sanic.response.json(ret_json)
+        elif request.method == 'POST':
+            self.log.debug(request.form)
+
+            for keyString in request.form:
+                newValue = request.form[keyString][0]
+
+                keys = keyString.split(".")
+                device = keys[0]
+                pidNum = int(keys[1][-1])
+                key = keys[2]
+
+                self.log.debug(f"Set device {device}, key {key}{pidNum} to {newValue}")
+
+                self.sql.set_setting(device, f"{key}{pidNum}", newValue)
+
+            return sanic.response.text("Updated")
+        else:
+            self.log.error(f"How did we even get here? Invalid method {request.method}")
+            raise sanic.exceptions.ServerError
