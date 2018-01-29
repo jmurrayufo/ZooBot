@@ -88,6 +88,7 @@ class Si7021:
             h_list = []
             for i in range(3):
                 h_list.append(await self._measure_humidity(bus, 50))
+                # Sleep to let noise clear out
                 time.sleep(0.01)
             h_list = sorted(h_list)
             self._humidity = h_list[2]
