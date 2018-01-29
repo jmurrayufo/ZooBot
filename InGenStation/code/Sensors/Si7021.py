@@ -86,7 +86,7 @@ class Si7021:
 
         with smbus2.SMBusWrapper(1) as bus:
             h_list = []
-            for i in range(5):
+            for i in range(9):
                 h_list.append(await self._measure_humidity(bus, 50))
             h_list = sorted(h_list)
             self._humidity = h_list[2]
