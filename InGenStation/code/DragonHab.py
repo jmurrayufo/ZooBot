@@ -68,22 +68,22 @@ class RoachHab:
             return
         try:
             self.update_in_progress = True   
-	    l = Location()
-	    l.name = 'Home'
-	    l.region = 'region'
+            l = Location()
+            l.name = 'Home'
+            l.region = 'region'
 
-	    l.latitude = "35°18'N"
-	    l.longitude = "105°06'W"
-	    l.timezone = 'America/Denver'
-	    l.elevation = 0
-	    offset = datetime.timedelta(hours=1)
+            l.latitude = "35°18'N"
+            l.longitude = "105°06'W"
+            l.timezone = 'America/Denver'
+            l.elevation = 0
+            offset = datetime.timedelta(hours=1)
 
-	    sun = l.sun(date=datetime.date.today())
+            sun = l.sun(date=datetime.date.today())
 
-	    dawn = (sun['dawn'] + offset).replace(tzinfo=None)
-	    sunrise = (sun['sunrise'] + offset).replace(tzinfo=None)
-	    sunset = (sun['sunset'] + offset).replace(tzinfo=None)
-	    dusk = (sun['dusk'] + offset).replace(tzinfo=None)
+            dawn = (sun['dawn'] + offset).replace(tzinfo=None)
+            sunrise = (sun['sunrise'] + offset).replace(tzinfo=None)
+            sunset = (sun['sunset'] + offset).replace(tzinfo=None)
+            dusk = (sun['dusk'] + offset).replace(tzinfo=None)
 
             now = datetime.datetime.now()
 
