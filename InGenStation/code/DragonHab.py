@@ -106,8 +106,8 @@ class DragonHab:
             elif now > dusk:
                 setting = 0
 
-            self.devices['dimmer0'].setOutput(1,setting)
-            self.devices['dimmer0'].setOutput(2,setting)
+            await self.devices['dimmer0'].setOutput(1,setting)
+            await self.devices['dimmer0'].setOutput(2,setting)
             self.log.info(f"Setting dimmers to {setting}")
                 
 
