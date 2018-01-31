@@ -11,7 +11,7 @@ import numpy as np
 import sanic
 import time
 
-class RoachHab:
+class DragonHab:
 
     def __init__(self, args): 
         self.log = Log()
