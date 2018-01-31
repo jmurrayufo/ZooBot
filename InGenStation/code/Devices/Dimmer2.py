@@ -42,8 +42,7 @@ class Dimmer2:
         pass
 
     async def setOutput(self, channel, value):
-        value = np.clip(value, 0, 100)
-        value = int(100-value)
+        value = int(np.clip(100-value, 0, 100))
         channel = 0x7F+channel
         with smbus2.SMBusWrapper(1) as bus:
             msg = smbus2.i2c_msg.write(self.address, [channel, value])
