@@ -39,6 +39,7 @@ class DragonHab:
             addresses.add(self.sensors[sensor].address)
 
         self.update_in_progress = False
+        self.today = None
         # TODO: Check to see if a settings file exists
 
 
@@ -84,10 +85,14 @@ class DragonHab:
             sunrise = (sun['sunrise'] + offset).replace(tzinfo=None)
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
             dusk = (sun['dusk'] + offset).replace(tzinfo=None)
-            dawn = datetime.datetime(2018, 1, 30, 12+9, 28)
-            sunrise = datetime.datetime(2018, 1, 30, 12+9, 35)
-            sunset = datetime.datetime(2018, 1, 30, 12+9, 46)
-            dusk = datetime.datetime(2018, 1, 30, 12+9, 50)
+
+            if datetime.date.today() != self.today:
+                self.log.info("Todays times are as follows!")
+                self.log.info(f"Dawn: {dawn}")
+                self.log.info(f"Sunrise: {sunrise}")
+                self.log.info(f"Sunset: {Sunset}")
+                self.log.info(f"Dusk: {dusk}")
+
 
             now = datetime.datetime.now()
 
