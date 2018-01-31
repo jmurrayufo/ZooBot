@@ -108,6 +108,7 @@ class DragonHab:
 
             self.devices['dimmer0'].setOutput(1,setting)
             self.devices['dimmer0'].setOutput(2,setting)
+            self.log.info(f"Setting dimmers to {setting}")
                 
 
 
