@@ -25,7 +25,7 @@ class SanicMgr:
 
         if args.purpose == 'dragon':
             from ..DragonHab import DragonHab
-            self.hab = Dragonhab(args)
+            self.hab = DragonHab(args)
             # raise NotImplementedError("Dragon hab is not yet implemented")
 
         elif  args.purpose == 'bug':
