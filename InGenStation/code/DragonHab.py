@@ -86,8 +86,8 @@ class DragonHab:
             dusk = (sun['dusk'] + offset).replace(tzinfo=None)
             dawn = datetime.datetime(2018, 1, 30, 12+9, 28)
             sunrise = datetime.datetime(2018, 1, 30, 12+9, 35)
-            sunset = datetime.datetime(2018, 1, 30, 12+9, 41)
-            dusk = datetime.datetime(2018, 1, 30, 12+9, 42)
+            sunset = datetime.datetime(2018, 1, 30, 12+9, 43)
+            dusk = datetime.datetime(2018, 1, 30, 12+9, 44)
 
             now = datetime.datetime.now()
 
