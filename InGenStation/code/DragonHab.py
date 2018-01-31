@@ -90,7 +90,7 @@ class DragonHab:
                 self.log.info("Todays times are as follows!")
                 self.log.info(f"Dawn: {dawn}")
                 self.log.info(f"Sunrise: {sunrise}")
-                self.log.info(f"Sunset: {Sunset}")
+                self.log.info(f"Sunset: {sunset}")
                 self.log.info(f"Dusk: {dusk}")
 
 
