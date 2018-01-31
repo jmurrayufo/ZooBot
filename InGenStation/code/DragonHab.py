@@ -90,23 +90,29 @@ class DragonHab:
             now = datetime.datetime.now()
 
             if now <= dawn: 
+                self.debug("Pre dawn")
                 setting = 0
 
             elif now > dawn and now <= sunrise:
+                self.debug("dawn")
                 setting = (now - dawn)/(sunrise - dawn) 
                 setting *= 100 
                 setting = int(setting)
 
             elif now > sunrise and now <= sunset:
+                self.debug("Day")
                 setting = 100
 
             elif now > sunset and now <= dusk:
+                self.debug("Sunset")
                 setting = (now - sunset)/(dusk - sunset) 
                 setting *= 100 
                 setting = int(setting)
 
             elif now > dusk:
+                self.debug("Dask")
                 setting = 0
+            self.debug(f"Setting was: {setting}")
 
             await self.devices['dimmer0'].setOutput(1,setting)
             await self.devices['dimmer0'].setOutput(2,setting)
