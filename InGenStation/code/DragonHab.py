@@ -92,6 +92,7 @@ class DragonHab:
                 self.log.info(f"Sunrise: {sunrise}")
                 self.log.info(f"Sunset: {sunset}")
                 self.log.info(f"Dusk: {dusk}")
+                self.today = datetime.date.today()
 
 
             now = datetime.datetime.now()
