@@ -84,6 +84,8 @@ class DragonHab:
             sunrise = (sun['sunrise'] + offset).replace(tzinfo=None)
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
             dusk = (sun['dusk'] + offset).replace(tzinfo=None)
+            dawn = datetime.datetime(2017, 1, 30, 9, 25)
+            sunrise = datetime.datetime(2017, 1, 30, 10, 00)
 
             now = datetime.datetime.now()
 
@@ -108,7 +110,6 @@ class DragonHab:
 
             await self.devices['dimmer0'].setOutput(1,setting)
             await self.devices['dimmer0'].setOutput(2,setting)
-            self.log.info(f"Setting dimmers to {setting}")
                 
 
 
