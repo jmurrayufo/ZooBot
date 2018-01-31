@@ -45,7 +45,7 @@ class Dimmer2:
         value = np.clip(value, 0, 100)
         value = int(value)
         channel = 0x7F+channel
-        self.log.debug("Setting output on device {self.address}, channel {channel} to {value}")
+        self.log.debug(f"Setting output on device {self.address}, channel {channel} to {value}")
         with smbus2.SMBusWrapper(1) as bus:
             msg = smbus2.i2c_msg.write(self.address, [0x7F+channel, 100-value])
             bus.i2c_rdwr(msg)
