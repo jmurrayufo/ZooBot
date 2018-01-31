@@ -36,6 +36,7 @@ class SanicMgr:
             self.hab = RoachHab(args)
 
         if  args.purpose in ['dragon', 'test']:
+            SanicMgr.app.add_task(self.hab.run)
             pass
 
         if  args.purpose in ['bug', 'test']:
