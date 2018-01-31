@@ -21,17 +21,24 @@ class SanicMgr:
 
         SanicMgr.log.debug("Booted with Manager")
 
+        self.args = args
+
         if args.purpose == 'dragon':
             from ..DragonHab import DragonHab
             self.hab = Dragonhab(args)
             # raise NotImplementedError("Dragon hab is not yet implemented")
+
         elif  args.purpose == 'bug':
             from ..RoachHab import RoachHab
             self.hab = RoachHab(args)
+
         elif  args.purpose == 'test':
             self.hab = RoachHab(args)
 
-        if  args.purpose in ['test', 'bug']:
+        if  args.purpose in ['dragon', 'test']:
+            pass
+
+        if  args.purpose in ['bug', 'test']:
             view = CompositionView()
             view.add(['GET'], self.hab.all_temperature_handler)
             SanicMgr.app.add_route(view, '/temp/')
