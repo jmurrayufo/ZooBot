@@ -103,7 +103,7 @@ class DragonHab:
                 setting = 100
 
             elif now > sunset and now <= dusk:
-                setting = (now - sunset)/(dusk - sunset) 
+                setting = 1 - (now - sunset)/(dusk - sunset) 
                 setting *= 100 
                 setting = int(setting)
 
