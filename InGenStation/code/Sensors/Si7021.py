@@ -134,6 +134,7 @@ class Si7021:
         while loop < max_loops:
             try:
                 bus.i2c_rdwr(read)
+                crc = self._CRC_calc(list(read))
                 if crc != list(read)[2]:
                     self.log.warning("CRC Error seen while reading the Si7021 sensor.")
                     self.log.warning(f"Values seen were {list(read)}, calculated crc was {crc}")
@@ -143,7 +144,9 @@ class Si7021:
             except OSError:
                 loop += 1
                 continue
-        crc = self._CRC_calc(list(read))
+
+        if loop >= max_loops:
+            raise OSError("Max loops exceeded attemping to read humidity")
 
         return (list(read)[0] << 8) + list(read)[1]
 
