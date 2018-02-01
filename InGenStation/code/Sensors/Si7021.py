@@ -130,10 +130,11 @@ class Si7021:
                 loop += 1
                 continue
 
-        read = smbus2.i2c_msg.read(self.address, 2)
+        read = smbus2.i2c_msg.read(self.address, 3)
         while loop < max_loops:
             try:
                 bus.i2c_rdwr(read)
+                print(f"Checksum?: {list(read)[2]}")
                 break
             except OSError:
                 loop += 1
