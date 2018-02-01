@@ -134,11 +134,24 @@ class Si7021:
         while loop < max_loops:
             try:
                 bus.i2c_rdwr(read)
-                print(f"Checksum?: {list(read)}")
                 break
             except OSError:
                 loop += 1
                 continue
+        # Checksum test
+        h = list(read)[0]
+        l = list(read)[1]
+        data = [h,l]
+        crc = 0x00
+        for i in range(2):
+            crc ^= data[i]
+            for n in range(8):
+                if crc & 0x80:
+                    crc = (crc << 1) ^ 0x131
+                else:
+                    crc <<= 1
+        print(h,l,crc)
+
         return (list(read)[0] << 8) + list(read)[1]
 
 
