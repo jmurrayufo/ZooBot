@@ -150,7 +150,7 @@ class Si7021:
                     crc = (crc << 1) ^ 0x131
                 else:
                     crc <<= 1
-        print(h,l,crc)
+        print(h,l,list(read)[2],crc)
 
         return (list(read)[0] << 8) + list(read)[1]
 
