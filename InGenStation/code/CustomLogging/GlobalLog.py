@@ -31,7 +31,7 @@ class Log:
         self._metric_log = logging.getLogger(self.name+"_metric")
         # ch2 = logging.StreamHandler(stream=None)
         # self._metric_log.addHandler(ch2)
-        self._metric_log.addHandler(logstash.LogstashHandler('192.168.1.2', 5002, version=1))
+        self._metric_log.addHandler(logstash.TCPLogstashHandler('192.168.1.2', 5002, version=1))
         self._metric_log.setLevel(logging.DEBUG)
         self._metric_log.propagate = True
 
