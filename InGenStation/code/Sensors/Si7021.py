@@ -146,7 +146,7 @@ class Si7021:
                 continue
 
         if loop >= max_loops:
-            raise OSError("Max loops exceeded attemping to read humidity")
+            raise IOError("Max loops exceeded attemping to read humidity")
 
         return (list(read)[0] << 8) + list(read)[1]
 
