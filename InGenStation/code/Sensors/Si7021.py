@@ -169,6 +169,7 @@ class Si7021:
 
 
     def _CRC_calc(self, data):
+        # TODO: This can just use the crcmod tool with this example: x = crcmod.Crc(0b100110001,initCrc=0, rev=False, xorOut=0)
 
         crc = 0x00
 
