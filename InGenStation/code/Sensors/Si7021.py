@@ -138,9 +138,10 @@ class Si7021:
             except OSError:
                 loop += 1
                 continue
-        if not self._CRC_is_valid(list(read)):
+        crc = self._CRC_calc(list(read))
+        if crc != list(read)[2]:
             self.log.warning("CRC Error seen while reading the Si7021 sensor.")
-            self.log.warning(f"Values seen were {list(read)}")
+            self.log.warning(f"Values seen were {list(read)}, calculated crc was {crc}")
 
         return (list(read)[0] << 8) + list(read)[1]
 
@@ -166,7 +167,7 @@ class Si7021:
                 continue
         return (list(read)[0] << 8) + list(read)[1]
 
-    def _CRC_is_valid(self, data):
+    def _CRC_calc(self, data):
 
         crc = 0x00
 
@@ -178,4 +179,4 @@ class Si7021:
                 else:
                     crc <<= 1
 
-        return data[-1] == crc
+        return  crc
