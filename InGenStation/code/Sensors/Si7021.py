@@ -167,6 +167,7 @@ class Si7021:
                 continue
         return (list(read)[0] << 8) + list(read)[1]
 
+
     def _CRC_calc(self, data):
 
         crc = 0x00
