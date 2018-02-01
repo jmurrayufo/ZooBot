@@ -134,7 +134,7 @@ class Si7021:
         while loop < max_loops:
             try:
                 bus.i2c_rdwr(read)
-                print(f"Checksum?: {list(read)[2]}")
+                print(f"Checksum?: {list(read)}")
                 break
             except OSError:
                 loop += 1
