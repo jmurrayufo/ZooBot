@@ -138,19 +138,9 @@ class Si7021:
             except OSError:
                 loop += 1
                 continue
-        # Checksum test
-        h = list(read)[0]
-        l = list(read)[1]
-        data = [h,l]
-        crc = 0x00
-        for i in range(2):
-            crc ^= data[i]
-            for n in range(8):
-                if crc & 0x80:
-                    crc = (crc << 1) ^ 0x131
-                else:
-                    crc <<= 1
-        print(h,l,list(read)[2],crc)
+        if not self._CRC_is_valid(list(read)):
+            self.log.warning("CRC Error seen while reading the Si7021 sensor.")
+            self.log.warning(f"Values seen were {list(read)}")
 
         return (list(read)[0] << 8) + list(read)[1]
 
@@ -175,3 +165,17 @@ class Si7021:
                 loop += 1
                 continue
         return (list(read)[0] << 8) + list(read)[1]
+
+    def _CRC_is_valid(data):
+
+        crc = 0x00
+
+        for i in range(len(data)-1):
+            crc ^= data[i]
+            for n in range(8):
+                if crc & 0x80:
+                    crc = (crc << 1) ^ 0x131
+                else:
+                    crc <<= 1
+
+        return data[-1] == crc
