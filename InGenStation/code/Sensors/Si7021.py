@@ -123,15 +123,16 @@ class Si7021:
         loop = 0
         write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
         while loop < max_loops:
+            loop += 1
             try:
                 bus.i2c_rdwr(write)
                 break
             except OSError:
-                loop += 1
                 continue
 
         read = smbus2.i2c_msg.read(self.address, 3)
         while loop < max_loops:
+            loop += 1
             try:
                 bus.i2c_rdwr(read)
                 crc = self._CRC_calc(list(read))
@@ -139,10 +140,10 @@ class Si7021:
                     self.log.warning("CRC Error seen while reading the Si7021 sensor.")
                     self.log.warning(f"Values seen were {list(read)}, calculated crc was {crc}")
                     self.log.warning(f"Repolling sensor...")
+                    time.sleep(0.01)
                     continue
                 break
             except OSError:
-                loop += 1
                 continue
 
         if loop >= max_loops:
