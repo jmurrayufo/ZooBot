@@ -122,6 +122,7 @@ class Si7021:
     async def _measure_humidity(self, bus, max_loops):
         loop = 0
         write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
+        reset = smbus2.i2c_msg.write(self.address, [self.RESET])
         while loop < max_loops:
             loop += 1
             try:
@@ -139,9 +140,11 @@ class Si7021:
                 if crc != list(read)[2]:
                     self.log.warning("CRC Error seen while reading the Si7021 sensor.")
                     self.log.warning(f"Values seen were {list(read)}, calculated crc was {crc}")
-                    time.sleep(0.1 + 0.01*loop)
+                    bus.i2c_rdwr(reset)
+                    time.sleep(0.015)
+                    bus.i2c_rdwr(write)
+                    time.sleep(0.012)
                     self.log.warning(f"Repolling sensor...")
-                    # Consider a reset here?
                     continue
                 break
             except OSError:
