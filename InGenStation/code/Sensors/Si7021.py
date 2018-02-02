@@ -87,12 +87,12 @@ class Si7021:
         with smbus2.SMBusWrapper(1) as bus:
             h_list = []
             for i in range(3):
-                h_list.append(await self._measure_humidity(bus, 10))
+                h_list.append(await self._measure_humidity(bus, 20))
                 # Sleep to let noise clear out
                 time.sleep(0.01)
             h_list = sorted(h_list)
             self._humidity = h_list[2]
-            measured_temperature = await self._measure_temperature(bus, 10)
+            measured_temperature = await self._measure_temperature(bus, 20)
 
             # Handle boot loop!
             if not hasattr(self,"_temperature"): self._temperature = measured_temperature
