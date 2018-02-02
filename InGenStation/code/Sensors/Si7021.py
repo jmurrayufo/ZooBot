@@ -87,12 +87,12 @@ class Si7021:
         with smbus2.SMBusWrapper(1) as bus:
             h_list = []
             for i in range(3):
-                h_list.append(await self._measure_humidity(bus, 50))
+                h_list.append(await self._measure_humidity(bus, 10))
                 # Sleep to let noise clear out
                 time.sleep(0.01)
             h_list = sorted(h_list)
             self._humidity = h_list[2]
-            measured_temperature = await self._measure_temperature(bus, 50)
+            measured_temperature = await self._measure_temperature(bus, 10)
 
             # Handle boot loop!
             if not hasattr(self,"_temperature"): self._temperature = measured_temperature
@@ -139,7 +139,7 @@ class Si7021:
                 if crc != list(read)[2]:
                     self.log.warning("CRC Error seen while reading the Si7021 sensor.")
                     self.log.warning(f"Values seen were {list(read)}, calculated crc was {crc}")
-                    time.sleep(0.01)
+                    time.sleep(0.01*loop)
                     self.log.warning(f"Repolling sensor...")
                     continue
                 break
