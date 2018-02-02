@@ -139,8 +139,9 @@ class Si7021:
                 if crc != list(read)[2]:
                     self.log.warning("CRC Error seen while reading the Si7021 sensor.")
                     self.log.warning(f"Values seen were {list(read)}, calculated crc was {crc}")
-                    time.sleep(0.01*loop)
+                    time.sleep(0.1 + 0.01*loop)
                     self.log.warning(f"Repolling sensor...")
+                    # Consider a reset here?
                     continue
                 break
             except OSError:
