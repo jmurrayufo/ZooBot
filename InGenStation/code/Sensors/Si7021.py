@@ -44,6 +44,18 @@ class Si7021:
         pass
 
 
+    def reset(self, bus=None):
+        time.sleep(0.015)
+        reset = smbus2.i2c_msg.write(self.address, [self.RESET])
+        if bus:
+            bus.i2c_rdwr(reset)
+        else:
+            with smbus2.SMBusWrapper(1) as bus:
+                bus.i2c_rdwr(reset)
+        time.sleep(0.015)
+
+
+
     def __str__(self):
         return f"VEML(a=0x{self.address:_x}, t_obj={self.temperature:8.3f}, t_a={self.temperature_a:8.3f})"
 
@@ -88,10 +100,8 @@ class Si7021:
             h_list = []
             for i in range(3):
                 h_list.append(await self._measure_humidity(bus, 20))
-                # Sleep to let noise clear out
-                time.sleep(0.01)
             h_list = sorted(h_list)
-            self._humidity = h_list[2]
+            self._humidity = h_list[1]
             measured_temperature = await self._measure_temperature(bus, 20)
 
             # Handle boot loop!
@@ -108,6 +118,7 @@ class Si7021:
                 # self.log.warning(f"This event was triggered from a temperature of {self._conv_temp(measured_temperature):.3f} C")
                 t_list = []
                 for i in range(5):
+                    self.reset()
                     t_list.append(await self._measure_temperature(bus, 50))
                 t_list = sorted(t_list)
                 measured_temperature = t_list[2]
@@ -122,11 +133,11 @@ class Si7021:
     async def _measure_humidity(self, bus, max_loops):
         loop = 0
         write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
-        reset = smbus2.i2c_msg.write(self.address, [self.RESET])
         while loop < max_loops:
             loop += 1
             try:
                 bus.i2c_rdwr(write)
+                time.sleep(0.012)
                 break
             except OSError:
                 continue
@@ -138,13 +149,10 @@ class Si7021:
                 bus.i2c_rdwr(read)
                 crc = self._CRC_calc(list(read))
                 if crc != list(read)[2]:
-                    self.log.warning("CRC Error seen while reading the Si7021 sensor.")
-                    self.log.warning(f"Values seen were {list(read)}, calculated crc was {crc}")
-                    bus.i2c_rdwr(reset)
-                    time.sleep(0.015)
+                    self.log.warning(f"CRC Error. Values seen were {list(read)}, calculated crc was {crc}.")
+                    self.reset(bus)
                     bus.i2c_rdwr(write)
                     time.sleep(0.012)
-                    self.log.warning(f"Repolling sensor...")
                     continue
                 break
             except OSError:
