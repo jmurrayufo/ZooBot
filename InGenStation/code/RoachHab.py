@@ -18,7 +18,7 @@ class RoachHab:
 
         self.args = args
         self.sensors = {}
-        self.sensors['t0'] = TMP102(0x48, args)
+        #self.sensors['t0'] = TMP102(0x48, args)
         # self.sensors['t1'] = TMP106(0x41, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
         self.sensors['h1'] = Si7021(0x40, args)
@@ -84,7 +84,7 @@ class RoachHab:
 
     async def log_sensors(self):
         # self.log.debug("Run metrics logging")
-        self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
+        #self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
         self.log.metric(name="h1.temp", generic_float=self.sensors["h1"].temperature)
         self.log.metric(name="h1.humidity", generic_float=self.sensors["h1"].humidity)
         if "dimmer0" in self.devices:
