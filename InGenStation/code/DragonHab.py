@@ -92,9 +92,10 @@ class DragonHab:
                 sunrise = datetime.datetime.now().replace(hour=6, minute=45, second=54)
                 sunset = datetime.datetime.now().replace(hour=21, minute=18, second=15)
                 dusk = datetime.datetime.now().replace(hour=21, minute=48, second=9)
-                self.log.info("New dragon overide protocall is in effect.")
 
             if datetime.date.today() != self.today:
+                if datetime.date.today() < datetime.date(2018,6,20):
+                    self.log.info("New dragon overide protocall is in effect.")
                 self.log.info("Todays times are as follows!")
                 self.log.info(f"Dawn: {dawn}")
                 self.log.info(f"Sunrise: {sunrise}")
