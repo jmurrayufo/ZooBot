@@ -86,7 +86,7 @@ class DragonHab:
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
             dusk = (sun['dusk'] + offset).replace(tzinfo=None)
 
-            if datetime.date.today() < datetime.date(2018,06,20):
+            if datetime.date.today() < datetime.date(2018,6,20):
                 # Overide for baby dragon
                 dawn = datetime.datetime.now().replace(hour=6, minute=16, second=00)
                 sunrise = datetime.datetime.now().replace(hour=6, minute=45, second=54)
