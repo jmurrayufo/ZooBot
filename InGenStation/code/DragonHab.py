@@ -86,6 +86,14 @@ class DragonHab:
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
             dusk = (sun['dusk'] + offset).replace(tzinfo=None)
 
+            if datetime.date.today() < datetime.date(2018,06,20):
+                # Overide for baby dragon
+                dawn = datetime.datetime.now().replace(hour=6, minute=16, second=00)
+                sunrise = datetime.datetime.now().replace(hour=6, minute=45, second=54)
+                sunset = datetime.datetime.now().replace(hour=21, minute=18, second=15)
+                dusk = datetime.datetime.now().replace(hour=21, minute=48, second=9)
+                self.log.info("New dragon overide protocall is in effect.")
+
             if datetime.date.today() != self.today:
                 self.log.info("Todays times are as follows!")
                 self.log.info(f"Dawn: {dawn}")
