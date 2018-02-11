@@ -130,7 +130,7 @@ class DragonHab:
             await self.devices['dimmer0'].setOutput(2,setting)
             
             if self.setting != setting:
-                self.setting = setting:
+                self.setting = setting
                 self.log.debug(f"Setting changed to {setting}")
 
 
