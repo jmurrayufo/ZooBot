@@ -40,6 +40,7 @@ class DragonHab:
 
         self.update_in_progress = False
         self.today = None
+        self.setting = 0
         # TODO: Check to see if a settings file exists
 
 
@@ -127,7 +128,10 @@ class DragonHab:
 
             await self.devices['dimmer0'].setOutput(1,setting)
             await self.devices['dimmer0'].setOutput(2,setting)
-                
+            
+            if self.setting != setting:
+                self.setting = setting:
+                self.log.debug(f"Setting changed to {setting}")
 
 
         finally:
