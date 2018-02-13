@@ -7,7 +7,7 @@ import numpy
 
 from ..CustomLogging import Log
 
-class TMP106:
+class TMP006:
 
     valid_addresses = [0b1000000, 
                        0b1000001,
@@ -42,7 +42,7 @@ class TMP106:
 
 
     def __str__(self):
-        return f"TMP106(a=0x{self.address:_x}, t_obj={self.temperature:8.3f}, t_a={self.temperature_a:8.3f})"
+        return f"TMP006(a=0x{self.address:_x}, t_obj={self.temperature:8.3f}, t_a={self.temperature_a:8.3f})"
 
 
     @property
@@ -79,11 +79,11 @@ class TMP106:
         b2 = 4.63e-9
         c2 = 13.4
         t_start = time.time()
-        # self.log.debug(f"Updating TMP106 sensor 0x{self.address:02x}")
+        # self.log.debug(f"Updating TMP006 sensor 0x{self.address:02x}")
 
         if self.args.purpose == 'test':
             import random
-            self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+            self.log.debug(f"Updated TMP006 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
             return
         
         with smbus2.SMBusWrapper(1) as bus:
@@ -146,7 +146,7 @@ class TMP106:
             await self.power_crtl(bus, False)
 
 
-        # self.log.debug(f"Updated TMP106 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
+        # self.log.debug(f"Updated TMP006 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
 
 
     def basic_setup(self, bus, reset=False, power_on=True, conv_rate=4,

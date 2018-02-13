@@ -3,7 +3,7 @@ import logging
 import sanic
 import time
 import datetime
-from .Sensors import TMP102, TMP106, Si7021
+from .Sensors import TMP102, TMP006, Si7021
 from .Devices import Heater, Dimmer
 from .CustomLogging import Log
 from .Sql import SQL

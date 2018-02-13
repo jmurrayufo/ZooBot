@@ -1,6 +1,6 @@
 from .CustomLogging import Log
 from .Devices import Heater, Dimmer2
-from .Sensors import TMP102, TMP106, Si7021
+from .Sensors import TMP102, TMP006, Si7021
 from .Sql import SQL
 from astral import Location
 import asyncio
@@ -22,7 +22,7 @@ class DragonHab:
         self.args = args
         self.sensors = {}
         # self.sensors['t0'] = TMP102(0x48, args)
-        # self.sensors['t1'] = TMP106(0x41, args)
+        self.sensors['t_ir1'] = TMP006(0x41, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
         # self.sensors['h1'] = Si7021(0x40, args)
 
@@ -135,6 +135,8 @@ class DragonHab:
             if self.setting != setting:
                 self.setting = setting
                 self.log.debug(f"Setting changed to {setting}")
+
+            await self.sensors['t_ir1'].update()
 
 
         finally:
