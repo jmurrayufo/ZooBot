@@ -48,13 +48,3 @@ class Dimmer3:
 
     async def update(self):
         pass
-
-    async def setOutput(self, channel, value):
-        value = int(np.clip(100-value, 0, 100))
-        channel = 0x7F+channel
-        # We must not attempt to write more than once every 10 ms, or the device will not accept the commands!
-        if time.time() - self.last_write < 0.01:
-            time.sleep(0.01)
-        with smbus2.SMBusWrapper(1) as bus:
-            bus.write_word_data(self.address, channel, value)
-        self.last_write = time.time()
