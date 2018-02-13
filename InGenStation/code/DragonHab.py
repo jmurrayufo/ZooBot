@@ -41,6 +41,9 @@ class DragonHab:
         self.update_in_progress = False
         self.today = None
         self.setting = 0
+
+        self.log.debug("Adjust update freq for debug to 10s")
+        self.args.update_freq = 10
         # TODO: Check to see if a settings file exists
 
 

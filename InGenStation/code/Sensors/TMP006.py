@@ -111,7 +111,7 @@ class TMP006:
                 vObj = (vObj - (1 << 16))
             vObj = vObj/2**15 * 5.12e-3 
 
-            tDie = data[1]    
+            tDie = data[1]
             if tDie & 0x8000:
                 tDie = (tDie - (1 << 16))
                 tDie >>= 2
@@ -122,7 +122,7 @@ class TMP006:
             self.log.debug(f"Config: {config:X}")
             self.log.debug(f"  vObj: {vObj:8.3e} (0x{data[0]:04X})")
             self.log.debug(f"  tDie: {tDie-273.15:8.3f}/{tDie:8.3f} (0x{data[1]:04X})")
-            S0 = 1.5e-14
+            S0 = 3.75e-14
 
             S = S0 * ( 1 + a1*(tDie - tRef) + a2*(tDie - tRef)**2 )
             self.log.debug(f"   d-r: {(tDie - tRef):8.3f}")
