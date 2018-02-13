@@ -122,7 +122,7 @@ class TMP006:
             self.log.debug(f"Config: {config:X}")
             self.log.debug(f"  vObj: {vObj:8.3e} (0x{data[0]:04X})")
             self.log.debug(f"  tDie: {tDie-273.15:8.3f}/{tDie:8.3f} (0x{data[1]:04X})")
-            S0 = 6e-14
+            S0 = 8.875e-14
 
             S = S0 * ( 1 + a1*(tDie - tRef) + a2*(tDie - tRef)**2 )
             self.log.debug(f"   d-r: {(tDie - tRef):8.3f}")
