@@ -39,6 +39,7 @@ class TMP006:
         self.last_update = datetime.datetime.min
         with smbus2.SMBusWrapper(1) as bus:
             self.basic_setup(bus, power_on=False, conv_rate=4)
+        self.args = args
 
 
     def __str__(self):
