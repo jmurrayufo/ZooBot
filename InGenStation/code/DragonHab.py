@@ -22,7 +22,7 @@ class DragonHab:
         self.args = args
         self.sensors = {}
         # self.sensors['t0'] = TMP102(0x48, args)
-        self.sensors['t_ir1'] = TMP006(0x41, args)
+        # self.sensors['t_ir1'] = TMP006(0x41, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
         # self.sensors['h1'] = Si7021(0x40, args)
 
@@ -130,7 +130,7 @@ class DragonHab:
                 setting = 0
 
             # Debug override
-            setting = 100
+            # setting = 100
 
             await self.devices['dimmer0'].setOutput(1,setting)
             await self.devices['dimmer0'].setOutput(2,setting)
@@ -139,7 +139,7 @@ class DragonHab:
                 self.setting = setting
                 self.log.debug(f"Setting changed to {setting}")
 
-            await self.sensors['t_ir1'].update()
+            # await self.sensors['t_ir1'].update()
 
 
         finally:
