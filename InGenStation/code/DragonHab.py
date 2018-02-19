@@ -22,7 +22,7 @@ class DragonHab:
 
         self.args = args
         self.sensors = {}
-        # self.sensors['t0'] = TMP102(0x48, args)
+        self.sensors['t0'] = TMP102(0x48, args)
         # self.sensors['t_ir1'] = TMP006(0x41, args)
         # self.sensors['t2'] = TMP106(0b1000101, args)
         # self.sensors['h1'] = Si7021(0x40, args)
@@ -47,7 +47,7 @@ class DragonHab:
         self.setting = 0
 
         # self.log.debug("Adjust update freq for debug to 10s")
-        # self.args.update_freq = 10
+        # self.args.update_delay = 10
         # TODO: Check to see if a settings file exists
 
 
@@ -58,7 +58,7 @@ class DragonHab:
 
                 await self.update()
 
-                t_sleep = self.args.update_freq - (time.time() - t)
+                t_sleep = self.args.update_delay - (time.time() - t)
                 t_sleep = max(0, t_sleep)
                 await asyncio.sleep(t_sleep)
             except KeyboardInterrupt:
@@ -77,6 +77,12 @@ class DragonHab:
             return
         try:
             await self.devices['dimmer0'].update()
+
+            for sensor in self.sensors:
+                await sensor.update()
+
+            if 't0' in self.sensors:
+                self.log.debug(f"Temperature is {self.sensors['t0'].temperature} C")
 
         finally:
             self.update_in_progress = False

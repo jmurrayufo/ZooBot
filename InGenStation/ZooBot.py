@@ -31,12 +31,12 @@ parser.add_argument('--host', metavar='addr', type=str, default='0.0.0.0',
 parser.add_argument('--__version__', default=__version__,
                     help=argparse.SUPPRESS)
 
-parser.add_argument('--update-freq', 
+parser.add_argument('--update-delay', 
                     type=float,
                     default=1.0,
                     help='Minumum time between sensor updates')
 
-parser.add_argument('--log-freq', 
+parser.add_argument('--log-delay', 
                     type=float,
                     default=60.0,
                     help='Minumum time between metric logging')

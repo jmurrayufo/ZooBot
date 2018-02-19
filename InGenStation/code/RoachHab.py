@@ -46,12 +46,12 @@ class RoachHab:
 
                 await self.update()
 
-                if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_freq):
+                if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_delay):
                     # self.log.debug("Log sensor data")
                     await self.log_sensors()
                     self.last_metric_log = datetime.datetime.now()
 
-                t_sleep = self.args.update_freq - (time.time() - t)
+                t_sleep = self.args.update_delay - (time.time() - t)
                 t_sleep = max(0, t_sleep)
                 # self.log.debug(f"Sleep for {t_sleep:.3f} s")
                 await asyncio.sleep(t_sleep)
