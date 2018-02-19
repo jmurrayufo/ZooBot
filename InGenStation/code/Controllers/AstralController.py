@@ -31,6 +31,7 @@ class AstralController(Controller):
         self.state = State.INITIALIZED
         self.update_in_progress = False
         self.today = None
+        self.setting = None
 
 
     async def update(self):
