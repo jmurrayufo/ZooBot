@@ -64,6 +64,8 @@ class Dimmer3:
 
             await self.channels[i]['controller'].update()
             val = await self.channels[i]['controller'].get_value()
+            if type(val) == tuple:
+                val = sum(val)
             await self.setOutput(i,val)
 
 
