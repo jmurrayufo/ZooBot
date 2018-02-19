@@ -26,6 +26,12 @@ class Dimmer3:
         if address not in self.valid_addresses: 
             raise ValueError("Address not in value addresses")
 
+        self.channels = {}
+        self.channels[1] = {}
+        self.channels[2] = {}
+        self.channels[3] = {}
+        self.channels[4] = {}
+
         self.address = address
         self.last_update = datetime.datetime.min
         self.last_write = 0
@@ -39,7 +45,8 @@ class Dimmer3:
         """Given a valid Controller instance, bind it to controlling a given 
         channel.
         """
-        pass
+        self.log.info(f"Binding controller {controller} to channel {channel} on {self}")
+        self.channels[channel]['controller'] = controller
 
 
     def overide(self, channel, setting, duration=None):
@@ -50,9 +57,29 @@ class Dimmer3:
         pass
 
 
-    def __str__(self):
-        return f"Dimmer(a=0x{self.address:_x}, Values: {self.values[1]}, {self.values[2]}, {self.values[3]}, {self.values[4]})"
-
-
     async def update(self):
-        pass
+        for i in range(1,4+1):
+            if ['controller'] not in self.channels[i]:
+                continue
+
+            await self.channels[i]['controller'].update()
+            val = await self.channels[i]['controller'].get_value()
+            await self.setOutput(i,val)
+
+
+    async def setOutput(self, channel, value):
+        if value > 100 or value < 0:
+            self.log.warning(f"{self} saw setOutput value of {value}, outside range [0,100]!")
+        value = int(np.clip(100-value, 0, 100))
+        channel = 0x7F+channel
+        # We must not attempt to write more than once every 10 ms, or the device will not accept the commands!
+        if time.time() - self.last_write < 0.01:
+            time.sleep(0.01)
+        with smbus2.SMBusWrapper(1) as bus:
+            bus.write_word_data(self.address, channel, value)
+        self.last_write = time.time()
+
+
+    def __str__(self):
+        return f"Dimmer3(addrs=0x{self.address:_x})"
+
