@@ -42,6 +42,14 @@ class Dimmer3:
         pass
 
 
+    def overide(self, channel, setting, duration=None):
+        """Given a valid channel and setting, override the current state to the 
+        desired setting. If a duration is given, remove the override after 
+        duration time. 
+        """
+        pass
+
+
     def __str__(self):
         return f"Dimmer(a=0x{self.address:_x}, Values: {self.values[1]}, {self.values[2]}, {self.values[3]}, {self.values[4]})"
 
