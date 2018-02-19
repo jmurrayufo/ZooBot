@@ -1,7 +1,7 @@
 
 from ..State import State
 
-class Controller
+class Controller:
 
     def __init__(self):
         self.state = State.STARTUP
