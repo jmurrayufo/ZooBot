@@ -83,6 +83,7 @@ class DragonHab:
 
 
             if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_delay):
+                print(datetime.datetime.now() - self.last_metric_log)
                 # self.log.debug("Log sensor data")
                 # await self.log_sensors()
                 # self.last_metric_log = datetime.datetime.now()
