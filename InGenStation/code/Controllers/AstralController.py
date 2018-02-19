@@ -64,8 +64,6 @@ class AstralController(Controller):
                 sunrise = datetime.datetime.now().replace(hour=6, minute=45, second=54)
                 sunset = datetime.datetime.now().replace(hour=21, minute=18, second=15)
                 dusk = datetime.datetime.now().replace(hour=21, minute=48, second=9)
-                sunset = datetime.datetime.now().replace(hour=14, minute=40, second=15)
-                dusk = datetime.datetime.now().replace(hour=15, minute=0, second=9)
 
             if datetime.date.today() != self.today:
                 if datetime.date.today() < datetime.date(2018,6,20):
