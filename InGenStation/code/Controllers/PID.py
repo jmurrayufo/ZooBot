@@ -24,7 +24,7 @@ class PID(Controller):
         self.Ki = I
         self.Kd = D
         self.sensor = sensor
-        self.sensor_attrib
+        self.sensor_attrib = sensor_attrib
         self.Derivator = Derivator
         self.Integrator = Integrator
         self.Integrator_max = Integrator_max
