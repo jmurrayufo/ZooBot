@@ -79,7 +79,7 @@ class DragonHab:
             await self.devices['dimmer0'].update()
 
             for sensor in self.sensors:
-                await sensor.update()
+                await self.sensors[sensor].update()
 
             if 't0' in self.sensors:
                 self.log.debug(f"Temperature is {self.sensors['t0'].temperature} C")
