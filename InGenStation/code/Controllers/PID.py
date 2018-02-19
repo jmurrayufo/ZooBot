@@ -74,7 +74,7 @@ class PID(Controller):
         # print(f"P: {self.P_value} I: {self.I_value}")
         # print(f"PID: {self.P_value + self.I_value + self.D_value}")
         self.output = self.P_value + self.I_value + self.D_value
-        self.log.debug(f"C: {current_value} P: {self.P_value} I: {self.I_value} D:{self.D_value}")
+        self.log.debug(f"C: {current_value} S: {self.set_point} P: {self.P_value} I: {self.I_value} D:{self.D_value}")
         return (self.P_value, self.I_value, self.D_value)
 
     async def get_value(self, setting=None):
