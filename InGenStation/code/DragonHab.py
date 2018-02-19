@@ -77,7 +77,7 @@ class DragonHab:
             self.log.warning("Cannot start an update when we are already doing one.")
             return
         try:
-            self.devices['dimmer0'].update()
+            await self.devices['dimmer0'].update()
 
         finally:
             self.update_in_progress = False
