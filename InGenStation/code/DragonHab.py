@@ -92,7 +92,7 @@ class DragonHab:
                 pid = self.devices['dimmer0'].channels[2]['controller']
 
                 val = await pid.get_value()
-                self.log.debug(f"PID Settings: P: {pid[0]} I: {pid[1]}"
+                self.log.debug(f"PID Settings: P: {pid[0]} I: {pid[1]}")
                 
 
         finally:
