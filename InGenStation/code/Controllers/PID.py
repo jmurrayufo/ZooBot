@@ -74,7 +74,7 @@ class PID(Controller):
         # print(f"P: {self.P_value} I: {self.I_value}")
         # print(f"PID: {self.P_value + self.I_value + self.D_value}")
         self.output = self.P_value + self.I_value + self.D_value
-        self.log.debug(f"C: {current_value} S: {self.set_point} P: {self.P_value} I: {self.I_value} D:{self.D_value}")
+        # self.log.debug(f"C: {current_value} S: {self.set_point} P: {self.P_value} I: {self.I_value} D:{self.D_value}")
         return (self.P_value, self.I_value, self.D_value)
 
     async def get_value(self, setting=None):
@@ -89,5 +89,3 @@ class PID(Controller):
         except AttributeError:
             self.log.warning(f"A value is being set for this object that didn't exist before now! Setting '{setting}' being set to value '{value}'")
         setattr(self, setting, value)
-        self.log.debug(f"Setting value {setting} to {value}")
-        self.log.debug(getattr(self,setting))
