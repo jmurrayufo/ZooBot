@@ -77,10 +77,10 @@ class PID(Controller):
         self.log.debug(f"C: {current_value} S: {self.set_point} P: {self.P_value} I: {self.I_value} D:{self.D_value}")
         return (self.P_value, self.I_value, self.D_value)
 
-    def get_value(self, setting=None):
+    async def get_value(self, setting=None):
         return (self.P_value, self.I_value, self.D_value)
 
-    def set_value(self, setting, value):
+    async def set_value(self, setting, value):
         """
         Initilize the setpoint of PID
         """
