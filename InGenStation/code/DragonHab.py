@@ -32,9 +32,12 @@ class DragonHab:
         self.devices['dimmer0'] = Dimmer3("dimmer0", 0x3F, args) 
 
         tmp_controller = AstralController(args, 'astr0', "35°18'N", "105°06'W", 0)
-
         self.devices['dimmer0'].bind(tmp_controller,1)
-        self.devices['dimmer0'].bind(DummyController(args, 'dummy0'),2) # Just always be on
+
+        tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
+            'temperature', P=1.0, I=0.001)
+        tmp_controller.set_value('set_point', 23.8889):
+        self.devices['dimmer0'].bind(tmp_controller,2)
 
         self.last_metric_log = datetime.datetime.min
         addresses = set()
@@ -45,10 +48,6 @@ class DragonHab:
 
         self.update_in_progress = False
         self.setting = 0
-
-        # self.log.debug("Adjust update freq for debug to 10s")
-        # self.args.update_delay = 10
-        # TODO: Check to see if a settings file exists
 
 
     async def run(self):
