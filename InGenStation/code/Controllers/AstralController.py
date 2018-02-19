@@ -26,6 +26,7 @@ class AstralController(Controller):
         self.elivation = elivation
         self.max_value = max_value
         self.state = State.INITIALIZED
+        self.update_in_progress = False
 
 
     async def update(self):
