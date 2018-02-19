@@ -1,7 +1,7 @@
+from .Controllers import AstralController, PID, DummyController
 from .CustomLogging import Log
 from .Devices import Heater, Dimmer2, Dimmer3
 from .Sensors import TMP102, TMP006, Si7021
-from .Controllers import AstralController, PID
 from .Sql import SQL
 from astral import Location
 import asyncio
@@ -34,7 +34,7 @@ class DragonHab:
         tmp_controller = AstralController(args, 'astr0', "35°18'N", "105°06'W", 0)
 
         self.devices['dimmer0'].bind(tmp_controller,1)
-        self.devices['dimmer0'].bind(tmp_controller,2)
+        self.devices['dimmer0'].bind(DummyController(),2) # Just always be on
 
         self.last_metric_log = datetime.datetime.min
         addresses = set()
