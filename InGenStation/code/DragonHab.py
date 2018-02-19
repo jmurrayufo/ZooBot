@@ -44,7 +44,6 @@ class DragonHab:
             addresses.add(self.sensors[sensor].address)
 
         self.update_in_progress = False
-        self.today = None
         self.setting = 0
 
         # self.log.debug("Adjust update freq for debug to 10s")
