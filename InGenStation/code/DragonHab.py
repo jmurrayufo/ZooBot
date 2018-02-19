@@ -82,7 +82,8 @@ class DragonHab:
                 await self.sensors[sensor].update()
 
             if 't0' in self.sensors:
-                self.log.debug(f"Temperature is {self.sensors['t0'].temperature} C")
+                t = self.sensors['t0'].temperature
+                self.log.debug(f"Temperature is {t} C ({t * 9 / 5 + 32} F)")
 
         finally:
             self.update_in_progress = False
