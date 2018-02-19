@@ -10,7 +10,7 @@ class PID(Controller):
     Discrete PID control
     """
 
-    def __init__(self, args, name, sensor, sensor_attrib
+    def __init__(self, args, name, sensor, sensor_attrib,
         P=1.0, I=0.0, D=0.0, 
         Derivator=0, 
         Integrator=0, Integrator_max=100, Integrator_min=-100):
