@@ -18,7 +18,7 @@ class AstralController(Controller):
 
     def __init__(self, args, name, lat, lon, elivation, max_value=100):
 
-        super.__init__()
+        super().__init__()
         self.args = args
         self.name = name
         self.lat = lat
