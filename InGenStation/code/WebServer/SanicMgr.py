@@ -20,6 +20,7 @@ class SanicMgr:
         SanicMgr.log = Log(args)
 
         SanicMgr.log.debug("Booted with Manager")
+        SanicMgr.log.info(f"Args are: {args}")
 
         self.args = args
 
