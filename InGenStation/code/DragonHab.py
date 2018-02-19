@@ -81,9 +81,14 @@ class DragonHab:
             for sensor in self.sensors:
                 await self.sensors[sensor].update()
 
-            if 't0' in self.sensors:
-                t = self.sensors['t0'].temperature
-                self.log.debug(f"Temperature is {t} C ({t * 9 / 5 + 32} F)")
+
+            if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_delay):
+                # self.log.debug("Log sensor data")
+                # await self.log_sensors()
+                # self.last_metric_log = datetime.datetime.now()
+                if 't0' in self.sensors:
+                    t = self.sensors['t0'].temperature
+                    self.log.debug(f"Temperature is {t} C ({t * 9 / 5 + 32} F)")
 
         finally:
             self.update_in_progress = False
