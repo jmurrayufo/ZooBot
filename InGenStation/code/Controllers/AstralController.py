@@ -45,11 +45,11 @@ class AstralController(Controller):
             l.name = 'Home'
             l.region = 'region'
 
-            l.latitude = "35°18'N"
-            l.longitude = "105°06'W"
+            l.latitude = self.lat
+            l.longitude = self.lon
             l.timezone = 'America/Denver'
             l.elevation = 0
-            offset = datetime.timedelta(hours=1)
+            offset = datetime.timedelta(hours=1) # Offset to handle work better
 
             sun = l.sun(date=datetime.date.today())
 
@@ -58,7 +58,7 @@ class AstralController(Controller):
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
             dusk = (sun['dusk'] + offset).replace(tzinfo=None)
 
-            if datetime.date.today() < datetime.date(2018,6,20):
+            if False and datetime.date.today() < datetime.date(2018,6,20):
                 # Overide for baby dragon
                 dawn = datetime.datetime.now().replace(hour=6, minute=16, second=00)
                 sunrise = datetime.datetime.now().replace(hour=6, minute=45, second=54)
