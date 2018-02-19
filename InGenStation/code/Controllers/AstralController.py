@@ -4,6 +4,7 @@ import time
 
 from .Controller import Controller
 from ..State import State
+from ..CustomLogging import Log
 
 class AstralController(Controller):
     """Timer controller for various devices.
@@ -19,6 +20,7 @@ class AstralController(Controller):
     def __init__(self, args, name, lat, lon, elivation, max_value=100):
 
         super().__init__()
+        self.log = Log()
         self.args = args
         self.name = name
         self.lat = lat
