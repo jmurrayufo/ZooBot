@@ -59,7 +59,7 @@ class Dimmer3:
 
     async def update(self):
         for i in range(1,4+1):
-            if ['controller'] not in self.channels[i]:
+            if 'controller' not in self.channels[i]:
                 continue
 
             await self.channels[i]['controller'].update()
