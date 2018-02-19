@@ -89,3 +89,5 @@ class PID(Controller):
         except AttributeError:
             self.log.warning(f"A value is being set for this object that didn't exist before now! Setting '{setting}' being set to value '{value}'")
         setattr(self, setting, value)
+        self.log.debug(f"Setting value {setting} to {value}")
+        self.log.debug(getattr(self,setting))
