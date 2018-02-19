@@ -34,7 +34,6 @@ class Dimmer3:
 
         self.address = address
         self.last_update = datetime.datetime.min
-        self.today = None
         self.last_write = 0
 
 

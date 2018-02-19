@@ -30,6 +30,7 @@ class AstralController(Controller):
         self.max_value = max_value
         self.state = State.INITIALIZED
         self.update_in_progress = False
+        self.today = None
 
 
     async def update(self):
