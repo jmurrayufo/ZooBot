@@ -95,6 +95,7 @@ class TMP006:
                     break
                 self.log.debug("Waiting on converstion...")
                 await asyncio.sleep(1)
+            await self.power_crtl(bus, False)
 
 
             self.log.debug(f"Config: {config:X}")
@@ -195,5 +196,5 @@ class TMP006:
         write = smbus2.i2c_msg.write(self.address, [0x02, config_msb, config_lsb]) 
         bus.i2c_rdwr(write)
 
-        config_post = await self.get_config_reg(bus)
+        # config_post = await self.get_config_reg(bus)
         # self.log.debug(f"Wrote 0x{config:04X} and then read back 0x{config_post:04X}")
