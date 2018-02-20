@@ -85,9 +85,8 @@ class DragonHab:
             if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_delay):
                 # self.log.debug("Log sensor data")
                 # await self.log_sensors()
-                temp_sensor = self.devices
                 self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
-                pid = channels[1]['controller']
+                pid = self.devices['dimmer0'].channels[1]['controller']
                 values = await pid.get_value(self)
                 self.log.metric(name="dimmer0.pid2.total", generic_int=sum(values))
                 self.log.metric(name="dimmer0.pid2.p1", generic_float=values[0])
