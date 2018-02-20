@@ -78,6 +78,10 @@ class Dimmer3:
             pass
         value = int(np.clip(100-value, 0, 100))
         channel = 0x7F+channel
+
+        if channel not in [CH_1, CH_2, CH_3, CH_4]:
+            self.log.critical(f"Attempted to write to channel 0x{channel:0X}, which is invalid!")
+            raise IndexError(f"Channel 0x{channel:0X} is not a valid channel.")
         # We must not attempt to write more than once every 10 ms, or the device will not accept the commands!
         if time.time() - self.last_write < 0.01:
             time.sleep(0.01)
