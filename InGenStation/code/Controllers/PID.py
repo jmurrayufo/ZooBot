@@ -51,6 +51,10 @@ class PID(Controller):
         else:
             dt = datetime.datetime.now() - self.last_update
             dt = dt.total_seconds()
+
+            if dt < 1.0:
+                return
+
             self.last_update = datetime.datetime.now()
 
             self.D_value = self.Kd * (self.error - self.Derivator)/dt
@@ -75,7 +79,7 @@ class PID(Controller):
         # print(f"PID: {self.P_value + self.I_value + self.D_value}")
         self.output = self.P_value + self.I_value + self.D_value
         # self.log.debug(f"C: {current_value} S: {self.set_point} P: {self.P_value} I: {self.I_value} D:{self.D_value}")
-        return (self.P_value, self.I_value, self.D_value)
+        return
 
     async def get_value(self, setting=None):
         return (self.P_value, self.I_value, self.D_value)
