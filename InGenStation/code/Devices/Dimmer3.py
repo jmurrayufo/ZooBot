@@ -36,6 +36,9 @@ class Dimmer3:
         self.last_update = datetime.datetime.min
         self.last_write = 0
 
+        if not args.purpose == 'test':
+            atexit.register(_exit_function, address=self.address)
+
 
     def configure(self):
         pass
@@ -86,3 +89,10 @@ class Dimmer3:
     def __str__(self):
         return f"Dimmer3(addrs=0x{self.address:_x})"
 
+
+def _exit_function(address):
+    Log().info("Exiting, set power to 100 (full closed)")
+    with smbus2.SMBusWrapper(1) as bus:
+        for ch in [CH_1, CH_2, CH_3, CH_4]:
+            msg = smbus2.i2c_msg.write(address, [ch, 100])
+            bus.i2c_rdwr(msg)
