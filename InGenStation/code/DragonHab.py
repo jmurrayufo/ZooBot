@@ -35,7 +35,7 @@ class DragonHab:
         self.devices['dimmer0'].bind(tmp_controller,1)
 
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
-            'temperature', P=1.0, I=0.1)
+            'temperature', P=10.0, I=0.01)
         tmp_controller.set_point= 23.8889
         self.devices['dimmer0'].bind(tmp_controller,2)
 
@@ -92,7 +92,7 @@ class DragonHab:
                 pid = self.devices['dimmer0'].channels[2]['controller']
 
                 val = await pid.get_value()
-                self.log.debug(f"PID Settings: P: {val[0]:.3} I: {val[1]:.3} E: {pid.error:.3}")
+                self.log.debug(f"PID Settings: P: {val[0]:0.3} I: {val[1]:0.3} T: {sum(val):0.3} E: {pid.error:0.3}")
                 
 
         finally:
