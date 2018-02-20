@@ -89,7 +89,7 @@ class DragonHab:
                 pid = self.devices['dimmer0'].channels[2]['controller']
                 values = await pid.get_value()
                 # self.log.debug(f"Values were {values}")
-                self.log.metric(name="dimmer0.pid2.total", generic_int=sum(values))
+                self.log.metric(name="dimmer0.pid2.total", generic_int=int(np.clip(sum(values),0,100)))
                 self.log.metric(name="dimmer0.pid2.p1", generic_float=values[0])
                 self.log.metric(name="dimmer0.pid2.i1", generic_float=values[1])
                 self.log.metric(name="dimmer0.pid2.d1", generic_float=values[2])
