@@ -77,6 +77,9 @@ class Dimmer3:
             self.log.warning(f"{self} saw setOutput value of {value}, outside range [0,100]!")
             pass
         value = int(np.clip(100-value, 0, 100))
+
+        self.channels[channel]['setting'] = value
+
         channel = 0x7F+channel
 
         if channel not in [CH_1, CH_2, CH_3, CH_4]:
