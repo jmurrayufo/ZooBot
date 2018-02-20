@@ -93,6 +93,12 @@ class DragonHab:
                 self.log.metric(name="dimmer0.pid2.p1", generic_float=values[0])
                 self.log.metric(name="dimmer0.pid2.i1", generic_float=values[1])
                 self.log.metric(name="dimmer0.pid2.d1", generic_float=values[2])
+                
+                # Record current lamp settings
+                value = await self.devices['dimmer0'].channels[1]['controller'].get_value()
+                self.log.metric(name="dimmer0.astral1.setting", generic_int=int(np.clip(sum(values),0,100)))
+
+
                 self.last_metric_log = datetime.datetime.now()
                 
 
