@@ -82,6 +82,7 @@ class PID(Controller):
         return
 
     async def get_value(self, setting=None):
+        self.log.debug("Pulling values")
         return (self.P_value, self.I_value, self.D_value)
 
     async def set_value(self, setting, value):
