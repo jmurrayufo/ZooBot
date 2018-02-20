@@ -93,6 +93,6 @@ class Dimmer3:
 def _exit_function(address):
     Log().info("Exiting, set power to 100 (full closed)")
     with smbus2.SMBusWrapper(1) as bus:
-        for ch in [CH_1, CH_2, CH_3, CH_4]:
+        for ch in [0x80, 0x81, 0x82, 0x83]:
             msg = smbus2.i2c_msg.write(address, [ch, 100])
             bus.i2c_rdwr(msg)
