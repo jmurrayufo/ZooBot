@@ -58,7 +58,6 @@ while 1:
     path = pathlib.Path(file_name)
 
     cpt.run(path)
-    break
 
 
 
