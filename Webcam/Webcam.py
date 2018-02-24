@@ -6,7 +6,7 @@ import pathlib
 import time
 
 import numpy as np
-import cv2
+from SimpleCV import Camera
 
 from __version__ import __version__
 from code.Capture import Capture
@@ -55,7 +55,7 @@ camera.config_manual()
 camera.push_settings()
 camera.log_settings()
 
-cap = cv2.VideoCapture(0)
+cap = Camera()
 
 while 1:
     camera.get_settings()
@@ -73,8 +73,8 @@ while 1:
 
     path = pathlib.Path(file_name)
 
-    ret, frame = cap.read()
-    cv2.imwrite(path, frame)
+    img = cap.getImage()
+    img.save(path)
     break
 
     # cpt.run(path)
