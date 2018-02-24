@@ -17,12 +17,13 @@ class Capture:
 
     def run(self, file_name, size="1920x1080", quality=75):
         with DelayedKeyboardInterrupt():
-            self.log.debug(f"Run with filename {file_name}")
+            # self.log.debug(f"Run with filename {file_name}")
             if not file_name.parent.exists():
                 self.log.info(f"Creating path {file_name.parent}")
                 os.makedirs(file_name.parent)
 
             # Now capture an image
+            cmd = f"streamer -f jpeg -s {size} -o {file_name}"
             t0 = time.time()
             ps = subprocess.run(shlex.split(cmd), 
                                 preexec_fn = preexec_function,
