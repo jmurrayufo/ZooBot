@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import datetime
 
 from code.CustomLogging import Log
 from __version__ import __version__
@@ -43,7 +44,10 @@ cpt = Capture()
 
 while 1:
 
-    cpt.run("test")
+    dt = datetime.datetime.now()
+    file_name = dt.strftime("test %Y/%m/%d/%H_%M_%S.jpeg")
+
+    cpt.run(file_name)
 
     log.debug("Demo break")
     break
