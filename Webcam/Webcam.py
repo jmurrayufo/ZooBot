@@ -66,6 +66,7 @@ while 1:
 
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
+        log.debug(dt)
         time.sleep(dt)
     next_capture += datetime.timedelta(seconds = args.frame_delay)
 
