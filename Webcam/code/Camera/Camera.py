@@ -58,8 +58,7 @@ class Camera:
 
         for setting in settings:
             self.log.debug(f"Checking setting {setting}")
-            cmd = "uvcdynctrl -d /dev/video0 -g \"{setting}\""
-            self.log.debug(cmd)
+            cmd = f"uvcdynctrl -d /dev/video0 -g \"{setting}\""
             ps = subprocess.run(shlex.split(cmd), 
                                 stdout=subprocess.PIPE, 
                                 stderr=subprocess.PIPE)
