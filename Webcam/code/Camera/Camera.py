@@ -81,10 +81,10 @@ class Camera:
         self.settings["Brightness"] = 128
         self.settings["Contrast"] = 128
         self.settings["Saturation"] = 128
-        self.settings["White Balance Temperature, Auto"] = 1
+        self.settings["White Balance Temperature, Auto"] = 0
         self.settings["Gain"] = 179
         self.settings["Power Line Frequency"] = 2
-        # self.settings["White Balance Temperature"] = 4000
+        self.settings["White Balance Temperature"] = 4218
         self.settings["Sharpness"] = 128
         self.settings["Backlight Compensation"] = 0
         self.settings["Exposure, Auto"] = 3
