@@ -79,6 +79,7 @@ while 1:
     cam.start()
     img = cam.get_image()
     pygame.image.save(img,path)
+    log.debug(f"Saved {path}")
     # break
 
     # cpt.run(path)
