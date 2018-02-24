@@ -9,6 +9,7 @@ from __version__ import __version__
 from code.Capture import Capture
 from code.CustomLogging import Log
 from code.Mount import Mount
+from code.Camera import Camera
 
 
 
@@ -44,22 +45,26 @@ log.info("Begin main loop")
 cpt = Capture()
 next_capture = datetime.datetime.now()
 
-while 1:
-
-    dt = (next_capture - datetime.datetime.now()).total_seconds()
-    if dt > 0:
-        time.sleep(dt)
-    next_capture += datetime.timedelta(seconds = args.frame_delay)
-
-    dt = datetime.datetime.now()
-
-    file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
-
-    path = pathlib.Path(file_name)
-
-    cpt.run(path)
+# while 1:
 
 
+#     if datetime.datetime.now() < next_capture:
+#         dt = (next_capture - datetime.datetime.now()).total_seconds()
+#         time.sleep(dt)
+#         next_capture += datetime.timedelta(seconds = args.frame_delay)
+
+
+#     dt = datetime.datetime.now()
+
+#     file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
+
+#     path = pathlib.Path(file_name)
+
+#     cpt.run(path)
+
+
+camera = Camera(args,"/dev/video0")
+camera.get_settings()
 
 
 log.info("Fin")
