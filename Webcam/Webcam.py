@@ -61,7 +61,7 @@ camera.push_settings()
 camera.log_settings()
 loop = 0
 while loop < 1000:
-    loop += 1
+    loop += 5
 
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
