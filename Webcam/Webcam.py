@@ -27,4 +27,4 @@ log.info("Booting Webcam.py")
 log.info(args)
 
 x = Mount()
-x.is_mounted()
+x.is_mounted(None)
