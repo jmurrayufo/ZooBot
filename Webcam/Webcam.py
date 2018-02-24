@@ -65,6 +65,8 @@ next_capture = datetime.datetime.now()
 
 camera = Camera(args,"/dev/video0")
 camera.get_settings()
+camera.config_manual()
+camera.push_settings()
 
 
 log.info("Fin")
