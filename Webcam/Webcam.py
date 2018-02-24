@@ -79,8 +79,8 @@ while 1:
 
     img = cam.get_image()
     log.info(img)
-    pygame.image.save(img,path)
-    log.debug(f"Saved {path}")
+    pygame.image.save(img,str(path))
+    log.debug(f"Saved {str(path)}")
     # break
 
     # cpt.run(path)
