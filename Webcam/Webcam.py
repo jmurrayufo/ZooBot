@@ -64,6 +64,7 @@ camera.log_settings()
 while 1:
     camera.get_settings()
 
+    log.debug(cam.get_controls())
 
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
