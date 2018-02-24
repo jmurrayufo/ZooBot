@@ -53,6 +53,7 @@ pygame.camera.init()
 pygame.camera.list_cameras() #Camera detected or not
 cam = pygame.camera.Camera("/dev/video0",(1920,1080))
 cam.start()
+cam.set_controls(vflip=True)
 
 camera = Camera(args,"/dev/video0")
 camera.get_settings()
