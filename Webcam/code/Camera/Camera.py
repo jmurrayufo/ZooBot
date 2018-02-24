@@ -87,12 +87,12 @@ class Camera:
         self.settings["White Balance Temperature"] = 4000
         self.settings["Sharpness"] = 128
         self.settings["Backlight Compensation"] = 0
-        self.settings["Exposure, Auto"] = 0
+        self.settings["Exposure, Auto"] = 3
         self.settings["Exposure (Absolute)"] = 333
         self.settings["Exposure, Auto Priority"] = 0
         self.settings["Pan (Absolute)"] = 0
         self.settings["Tilt (Absolute)"] = 0
-        self.settings["Focus (absolute)"] = 50
+        self.settings["Focus (absolute)"] = 128
         self.settings["Focus, Auto"] = 0
         self.settings["Zoom, Absolute"] = 100
 
