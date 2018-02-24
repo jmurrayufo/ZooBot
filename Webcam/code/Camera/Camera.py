@@ -96,4 +96,7 @@ class Camera:
         self.settings["Focus, Auto"] = 0
         self.settings["Zoom, Absolute"] = 100
 
+    def log_settings(self):
 
+        for setting in self.settings:
+            self.log.info(f"Setting {setting} has current value of {self.settings[setting]}")

@@ -45,28 +45,28 @@ log.info("Begin main loop")
 cpt = Capture()
 next_capture = datetime.datetime.now()
 
-# while 1:
+while 1:
 
 
-#     if datetime.datetime.now() < next_capture:
-#         dt = (next_capture - datetime.datetime.now()).total_seconds()
-#         time.sleep(dt)
-#         next_capture += datetime.timedelta(seconds = args.frame_delay)
+    if datetime.datetime.now() < next_capture:
+        dt = (next_capture - datetime.datetime.now()).total_seconds()
+        time.sleep(dt)
+        next_capture += datetime.timedelta(seconds = args.frame_delay)
 
 
-#     dt = datetime.datetime.now()
+    dt = datetime.datetime.now()
 
-#     file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
+    file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
 
-#     path = pathlib.Path(file_name)
+    path = pathlib.Path(file_name)
 
-#     cpt.run(path)
+    cpt.run(path)
 
 
-camera = Camera(args,"/dev/video0")
-camera.get_settings()
-camera.config_manual()
-camera.push_settings()
+# camera = Camera(args,"/dev/video0")
+# camera.get_settings()
+# camera.config_manual()
+# camera.push_settings()
 
 
 log.info("Fin")
