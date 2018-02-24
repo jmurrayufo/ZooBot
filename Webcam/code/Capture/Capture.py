@@ -1,7 +1,8 @@
 
+import os
 import shlex
 import subprocess
-import os
+import time
 
 from ..CustomLogging import Log
 
@@ -21,7 +22,9 @@ class Capture:
 
         # Now capture an image
         cmd = f"streamer -f jpeg -s1920x1080 -o {file_name}"
+        t0 = time.time()
         ps = subprocess.run(shlex.split(cmd), 
                             stdout=subprocess.PIPE, 
                             stderr=subprocess.PIPE)
-        pass
+        t1 = time.time()
+        self.log.debug(f"Capture took {t1-t0}s. Max framerate is {1/(t1-t0)}fps")

@@ -52,12 +52,13 @@ while 1:
         next_capture += datetime.timedelta(seconds = 1/args.fps)
 
     dt = datetime.datetime.now()
-    
+
     file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
 
     path = pathlib.Path(file_name)
 
     cpt.run(path)
+    break
 
 
 
