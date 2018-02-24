@@ -49,17 +49,17 @@ log.info("Begin main loop")
 cpt = Capture()
 next_capture = datetime.datetime.now()
 
-camera = Camera(args,"/dev/video0")
-camera.get_settings()
-camera.config_manual()
-camera.push_settings()
-camera.log_settings()
 
 pygame.camera.init()
 pygame.camera.list_cameras() #Camera detected or not
 cam = pygame.camera.Camera("/dev/video0",(640,480))
 cam.start()
 
+camera = Camera(args,"/dev/video0")
+camera.get_settings()
+camera.config_manual()
+camera.push_settings()
+camera.log_settings()
 
 while 1:
     camera.get_settings()
