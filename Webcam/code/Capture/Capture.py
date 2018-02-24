@@ -17,5 +17,5 @@ class Capture:
         self.log.debug(f"Run with filename {file_name}")
         if not file_name.parent.exists():
             self.log.info(f"Creating path {file_name.parent}")
-            os.mkdirs(file_name.parent)
+            os.makedirs(file_name.parent)
         pass
