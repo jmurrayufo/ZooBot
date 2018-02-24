@@ -14,8 +14,7 @@ class Log:
             return
         self.args = args
 
-        name = {'dragon':'DragonHab','bug':'BugHab','test':'DevHab'}
-        self.name = name[self.args.purpose]
+        self.name = 'Webcam.py'
         self._log = logging.getLogger(self.name)
         self._log.setLevel(logging.DEBUG)
 
