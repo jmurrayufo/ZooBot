@@ -78,6 +78,7 @@ while 1:
 
     path = pathlib.Path(file_name)
 
+    camera.push_settings()
     img = cam.get_image()
     log.info(img)
     pygame.image.save(img,str(path))
