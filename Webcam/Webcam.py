@@ -2,6 +2,7 @@
 
 import argparse
 import datetime
+import pathlib
 
 from code.CustomLogging import Log
 from __version__ import __version__
@@ -45,9 +46,11 @@ cpt = Capture()
 while 1:
 
     dt = datetime.datetime.now()
-    file_name = dt.strftime("test %Y/%m/%d/%H_%M_%S.jpeg")
+    file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
 
-    cpt.run(file_name)
+    path = pathlib.Path(file_name)
+
+    cpt.run(path)
 
     log.debug("Demo break")
     break
