@@ -45,8 +45,12 @@ log.info("Begin main loop")
 cpt = Capture()
 next_capture = datetime.datetime.now()
 
-while 1:
+camera = Camera(args,"/dev/video0")
+camera.get_settings()
+camera.config_manual()
+camera.push_settings()
 
+while 1:
 
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
@@ -63,10 +67,6 @@ while 1:
     cpt.run(path)
 
 
-# camera = Camera(args,"/dev/video0")
-# camera.get_settings()
-# camera.config_manual()
-# camera.push_settings()
 
 
 log.info("Fin")
