@@ -67,7 +67,8 @@ while 1:
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
         time.sleep(dt)
-        log.debug(dt)
+    else:
+        log.warning(f"Cannot keep up! Currently {datetime.datetime.now() - next_capture} behind!")
 
     next_capture += datetime.timedelta(seconds = args.frame_delay)
 
