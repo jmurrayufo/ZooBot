@@ -14,4 +14,5 @@ class Capture:
 
     def run(self, file_name, size="1920x1080", quality=75):
         self.log.debug(f"Run with filename {file_name}")
+        self.log.debug(f"Check if {file_name.parent} exists")
         pass
