@@ -5,11 +5,15 @@ import datetime
 import pathlib
 import time
 
+import numpy as np
+import cv2
+
 from __version__ import __version__
 from code.Capture import Capture
 from code.CustomLogging import Log
 from code.Mount import Mount
 from code.Camera import Camera
+
 
 
 
@@ -51,8 +55,11 @@ camera.config_manual()
 camera.push_settings()
 camera.log_settings()
 
+cap = cv2.VideoCapture(0)
+
 while 1:
     camera.get_settings()
+
 
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
@@ -66,8 +73,12 @@ while 1:
 
     path = pathlib.Path(file_name)
 
-    cpt.run(path)
+    ret, frame = cap.read()
+    cv2.imwrite(path, frame)
+    break
 
+    # cpt.run(path)
+cap.release()
 
 
 
