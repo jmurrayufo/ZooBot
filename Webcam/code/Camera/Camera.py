@@ -62,6 +62,7 @@ class Camera:
             ps = subprocess.run(shlex.split(cmd), 
                                 stdout=subprocess.PIPE, 
                                 stderr=subprocess.PIPE)
-            self.log.debug(f"Got: {str(ps.stdout)}")
+            result = ps.stdout.decode("utf-8") 
+            self.log.debug(f"Got: {result}")
 
 
