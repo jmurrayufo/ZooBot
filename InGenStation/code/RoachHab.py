@@ -74,10 +74,10 @@ class RoachHab:
         try:
             self.update_in_progress = True   
             for sensor in self.sensors:
-                time.sleep(0.01)
+                time.sleep(0.05)
                 await self.sensors[sensor].update()
             for element in self.devices:
-                time.sleep(0.01)
+                time.sleep(0.05)
                 await self.devices[element].update()
         finally:
             self.update_in_progress = False
