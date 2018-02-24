@@ -59,9 +59,9 @@ camera.get_settings()
 camera.config_manual()
 camera.push_settings()
 camera.log_settings()
-
-while 1:
-
+loop = 0
+while loop < 1000:
+    loop += 1
 
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
@@ -74,11 +74,12 @@ while 1:
 
     dt = datetime.datetime.now()
 
-    file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
+    file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S-{loop}.jpeg")
 
     path = pathlib.Path(file_name)
 
     camera.config_manual()
+    camera.settings["Focus (absolute)"] = loop
     camera.push_settings()
     img = cam.get_image()
     camera.get_settings()
