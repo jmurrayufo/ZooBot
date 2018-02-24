@@ -132,12 +132,12 @@ class Si7021:
 
     async def _measure_humidity(self, bus, max_loops):
         loop = 0
-        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_HOLD])
+        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_NO_HOLD])
         while loop < max_loops:
             loop += 1
             try:
                 bus.i2c_rdwr(write)
-                time.sleep(0.012)
+                time.sleep(0.02)
                 break
             except OSError:
                 continue
@@ -152,7 +152,7 @@ class Si7021:
                     self.log.warning(f"CRC Error. Values seen were {list(read)}, calculated crc was {crc}.")
                     self.reset(bus)
                     bus.i2c_rdwr(write)
-                    time.sleep(0.012)
+                    time.sleep(0.02)
                     continue
                 break
             except OSError:
