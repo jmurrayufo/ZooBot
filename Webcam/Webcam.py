@@ -3,11 +3,12 @@
 import argparse
 import datetime
 import pathlib
+import time
 
-from code.CustomLogging import Log
 from __version__ import __version__
-from code.Mount import Mount
 from code.Capture import Capture
+from code.CustomLogging import Log
+from code.Mount import Mount
 
 
 
@@ -18,11 +19,10 @@ parser.add_argument('--__version__', default=__version__,
 
 parser.add_argument('--fps', 
                     type=float,
-                    default=1.0,
+                    default=0.016,
                     help='Frames per second')
 
 args = parser.parse_args()
-
 
 log = Log(args)
 
@@ -42,18 +42,23 @@ else:
 log.info("Begin main loop")
 
 cpt = Capture()
+next_capture = datetime.datetime.now()
 
 while 1:
 
+    if datetime.datetime.now() < next_capture:
+        dt = (next_capture - datetime.datetime.now()).total_seconds()
+        time.sleep(dt)
+        next_capture += datetime.timedelta(seconds = 1/args.fps)
+
     dt = datetime.datetime.now()
+    
     file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
 
     path = pathlib.Path(file_name)
 
     cpt.run(path)
 
-    log.debug("Demo break")
-    break
 
 
 
