@@ -16,6 +16,8 @@ class Mount:
                             stdout=subprocess.PIPE, 
                             stderr=subprocess.PIPE)
         self.log.debug(f"Got: {ps.returncode}")
+        self.log.debug(f"{ps.stdout}")
+        self.log.debug(f"{ps.stderr}")
 
 
         pass
