@@ -46,10 +46,10 @@ next_capture = datetime.datetime.now()
 
 while 1:
 
-    if datetime.datetime.now() < next_capture:
-        dt = (next_capture - datetime.datetime.now()).total_seconds()
+    dt = (next_capture - datetime.datetime.now()).total_seconds()
+    if dt > 0:
         time.sleep(dt)
-        next_capture += datetime.timedelta(seconds = args.frame_delay)
+    next_capture += datetime.timedelta(seconds = args.frame_delay)
 
     dt = datetime.datetime.now()
 
