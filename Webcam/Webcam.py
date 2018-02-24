@@ -79,6 +79,7 @@ while 1:
 
     path = pathlib.Path(file_name)
 
+    camera.config_manual()
     camera.push_settings()
     img = cam.get_image()
     camera.get_settings()
