@@ -79,10 +79,10 @@ while 1:
     cam.start()
     img = cam.get_image()
     pygame.image.save(img,path)
-    break
+    # break
 
     # cpt.run(path)
-cap.release()
+# cap.release()
 
 
 
