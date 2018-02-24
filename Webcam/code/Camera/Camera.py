@@ -92,7 +92,7 @@ class Camera:
         self.settings["Exposure, Auto Priority"] = 0
         self.settings["Pan (Absolute)"] = 0
         self.settings["Tilt (Absolute)"] = 0
-        self.settings["Focus (absolute)"] = 0
+        self.settings["Focus (absolute)"] = 255
         self.settings["Focus, Auto"] = 0
         self.settings["Zoom, Absolute"] = 100
 
