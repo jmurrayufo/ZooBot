@@ -5,7 +5,6 @@ import datetime
 import pathlib
 import time
 
-import numpy as np
 import pygame
 import pygame.camera
 
