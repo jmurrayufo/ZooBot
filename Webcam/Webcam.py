@@ -27,9 +27,13 @@ log.info("Booting Webcam.py")
 log.info(args)
 
 x = Mount()
-if not x.is_mounted("/home/jmurray/ZFS"):
-    x.mount("jmurray@192.168.1.2:/ZFS/Media", "/home/jmurray/ZFS")
-    if not x.is_mounted("/home/jmurray/ZFS"):
+mount_loc = "/home/jmurray/ZFS"
+if not x.is_mounted(mount_loc):
+    log.info(f"Didn't find {mount_loc} to be mounted. Fixing that.")
+    x.mount("jmurray@192.168.1.2:/ZFS/Media", mount_loc)
+    if not x.is_mounted(mount_loc):
         raise OSError("Couldn't mount, oh no!")
+else:
+    log.info(f"Found {mount_loc} to be mounted.")
 
 log.info("Fin")
