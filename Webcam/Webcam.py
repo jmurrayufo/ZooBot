@@ -49,6 +49,7 @@ camera = Camera(args,"/dev/video0")
 camera.get_settings()
 camera.config_manual()
 camera.push_settings()
+camera.log_settings()
 
 while 1:
 
