@@ -18,4 +18,10 @@ class Capture:
         if not file_name.parent.exists():
             self.log.info(f"Creating path {file_name.parent}")
             os.makedirs(file_name.parent)
+
+        # Now capture an image
+        cmd = f"streamer -f jpeg -s1920x1080 -o {file_name}"
+        ps = subprocess.run(shlex.split(cmd), 
+                            stdout=subprocess.PIPE, 
+                            stderr=subprocess.PIPE)
         pass
