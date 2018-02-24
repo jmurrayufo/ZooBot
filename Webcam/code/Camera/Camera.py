@@ -94,7 +94,7 @@ class Camera:
         self.settings["Tilt (Absolute)"] = 0
         # self.settings["Focus (absolute)"] = 20
         self.settings["Focus, Auto"] = 1
-        self.settings["Zoom, Absolute"] = 50
+        self.settings["Zoom, Absolute"] = 100
 
     def log_settings(self):
 
