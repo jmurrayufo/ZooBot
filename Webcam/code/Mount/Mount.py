@@ -12,7 +12,7 @@ class Mount:
 
 
     def is_mounted(self, folder):
-        ps = subprocess.run(shlex.split("mountpoint ~/ZFS"), 
+        ps = subprocess.run(shlex.split("mountpoint /home/jmurray/ZFS"), 
                             stdout=subprocess.PIPE, 
                             stderr=subprocess.PIPE)
         self.log.debug(f"Got: {ps.returncode}")
