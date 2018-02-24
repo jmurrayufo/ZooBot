@@ -6,7 +6,8 @@ import pathlib
 import time
 
 import numpy as np
-from SimpleCV import Camera
+import pygame
+import pygame.camera
 
 from __version__ import __version__
 from code.Capture import Capture
@@ -55,7 +56,10 @@ camera.config_manual()
 camera.push_settings()
 camera.log_settings()
 
-cap = Camera()
+pygame.camera.init()
+pygame.camera.list_camera() #Camera detected or not
+cam = pygame.camera.Camera("/dev/video0",(640,480))
+
 
 while 1:
     camera.get_settings()
@@ -73,8 +77,9 @@ while 1:
 
     path = pathlib.Path(file_name)
 
-    img = cap.getImage()
-    img.save(path)
+    cam.start()
+    img = cam.get_image()
+    pygame.image.save(img,path)
     break
 
     # cpt.run(path)
