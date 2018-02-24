@@ -58,6 +58,7 @@ camera.log_settings()
 pygame.camera.init()
 pygame.camera.list_cameras() #Camera detected or not
 cam = pygame.camera.Camera("/dev/video0",(640,480))
+cam.start()
 
 
 while 1:
@@ -66,7 +67,6 @@ while 1:
 
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
-        log.debug(dt)
         time.sleep(dt)
     next_capture += datetime.timedelta(seconds = args.frame_delay)
 
@@ -77,8 +77,8 @@ while 1:
 
     path = pathlib.Path(file_name)
 
-    cam.start()
     img = cam.get_image()
+    log.info(img)
     pygame.image.save(img,path)
     log.debug(f"Saved {path}")
     # break
