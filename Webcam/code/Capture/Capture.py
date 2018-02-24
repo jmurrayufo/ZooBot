@@ -1,6 +1,7 @@
 
 import shlex
 import subprocess
+import os
 
 from ..CustomLogging import Log
 
@@ -14,5 +15,7 @@ class Capture:
 
     def run(self, file_name, size="1920x1080", quality=75):
         self.log.debug(f"Run with filename {file_name}")
-        self.log.debug(f"Check if {file_name.parent} exists")
+        if not file_name.parent.exists():
+            self.log.info(f"Creating path {file_name.parent}")
+            os.mkdirs(file_name.parent)
         pass
