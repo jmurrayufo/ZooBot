@@ -23,21 +23,19 @@ class Capture:
                 os.makedirs(file_name.parent)
 
             # Now capture an image
-            cmd = f"streamer -f jpeg -s1920x1080 -o {file_name}"
             t0 = time.time()
             ps = subprocess.run(shlex.split(cmd), 
                                 preexec_fn = preexec_function,
                                 stdout=subprocess.PIPE, 
                                 stderr=subprocess.PIPE)
             t1 = time.time()
-            self.log.debug(f"Capture took {t1-t0}s. Max framerate is {1/(t1-t0)}fps")
 
 
 def preexec_function():
     # Ignore the SIGINT signal by setting the handler to the standard
     # signal handler SIG_IGN.
     signal.signal(signal.SIGINT, signal.SIG_IGN)
-    
+
 
 class DelayedKeyboardInterrupt(object):
     def __enter__(self):

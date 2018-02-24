@@ -17,10 +17,10 @@ parser = argparse.ArgumentParser(description='Webcam Application')
 parser.add_argument('--__version__', default=__version__,
                     help=argparse.SUPPRESS)
 
-parser.add_argument('--fps', 
+parser.add_argument('--frame-delay', 
                     type=float,
-                    default=0.016,
-                    help='Frames per second')
+                    default=60,
+                    help='Delay between frames in seconds')
 
 args = parser.parse_args()
 
@@ -49,7 +49,7 @@ while 1:
     if datetime.datetime.now() < next_capture:
         dt = (next_capture - datetime.datetime.now()).total_seconds()
         time.sleep(dt)
-        next_capture += datetime.timedelta(seconds = 1/args.fps)
+        next_capture += datetime.timedelta(seconds = args.frame_delay)
 
     dt = datetime.datetime.now()
 
