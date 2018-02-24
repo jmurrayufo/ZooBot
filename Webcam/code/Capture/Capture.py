@@ -1,10 +1,17 @@
 
+import shlex
+import subprocess
+
+from ..CustomLogging import Log
+
 
 class Capture:
     # streamer -f jpeg -s1920x1080 -o image.jpeg
 
-    def __init__(self, file_name, size="1920x1080", quality=75 ):
+    def __init__(self ):
+        self.log = Log()
         pass
 
-    def run(self):
+    def run(self, file_name, size="1920x1080", quality=75):
+        self.log.debug(f"Run with filename {file_name}")
         pass
