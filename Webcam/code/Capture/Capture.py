@@ -54,7 +54,7 @@ class Capture:
         self.camera.push_settings()
         img = self.cam.get_image()
         self.camera.get_settings()
-        pygame.image.save(img, str(path))
+        pygame.image.save(img, str(file_name))
         t1 = time.time()
 
 
