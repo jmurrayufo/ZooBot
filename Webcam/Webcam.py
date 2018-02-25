@@ -5,14 +5,11 @@ import datetime
 import pathlib
 import time
 
-import pygame
-import pygame.camera
 
 from __version__ import __version__
 from code.Capture import Capture
 from code.CustomLogging import Log
 from code.Mount import Mount
-from code.Camera import Camera
 
 
 
@@ -49,17 +46,7 @@ log.info("Begin main loop")
 cpt = Capture()
 next_capture = datetime.datetime.now()
 
-pygame.camera.init()
-pygame.camera.list_cameras() #Camera detected or not
-cam = pygame.camera.Camera("/dev/video0",(1920,1080))
-cam.start()
-# cam.set_controls(vflip=True)
 
-camera = Camera(args,"/dev/video0")
-camera.get_settings()
-camera.config_manual()
-camera.push_settings()
-camera.log_settings()
 while 1:
 
     if datetime.datetime.now() < next_capture:
@@ -70,24 +57,13 @@ while 1:
 
     next_capture += datetime.timedelta(seconds = args.frame_delay)
 
-
     dt = datetime.datetime.now()
 
     file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
 
     path = pathlib.Path(file_name)
 
-    camera.config_manual()
-    camera.push_settings()
-    img = cam.get_image()
-    camera.get_settings()
-
-    pygame.image.save(img,str(path))
-    # break
-
-    # cpt.run(path)
-# cap.release()
-
+    cpt.run(path)
 
 
 log.info("Fin")

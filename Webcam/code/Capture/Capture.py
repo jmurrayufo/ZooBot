@@ -4,8 +4,11 @@ import shlex
 import subprocess
 import time
 import signal
+import pygame
+import pygame.camera
 
 from ..CustomLogging import Log
+from code.Camera import Camera
 
 
 class Capture:
@@ -13,9 +16,19 @@ class Capture:
 
     def __init__(self ):
         self.log = Log()
-        pass
+        pygame.camera.init()
+        pygame.camera.list_cameras() #Camera detected or not
+        self.cam = pygame.camera.Camera("/dev/video0",(1920,1080))
+        self.cam.start()
 
-    def run(self, file_name, size="1920x1080", quality=75):
+        self.camera = Camera(args,"/dev/video0")
+        self.camera.get_settings()
+        self.camera.config_manual()
+        self.camera.push_settings()
+        self.camera.log_settings()
+
+
+    def run(self, file_name):
         # with DelayedKeyboardInterrupt():
         # self.log.debug(f"Run with filename {file_name}")
         if not file_name.parent.exists():
@@ -23,12 +36,13 @@ class Capture:
             os.makedirs(file_name.parent)
 
         # Now capture an image
-        cmd = f"streamer -f jpeg -s {size} -o {file_name}"
         t0 = time.time()
-        ps = subprocess.run(shlex.split(cmd), 
-                            preexec_fn = preexec_function,
-                            stdout=subprocess.PIPE, 
-                            stderr=subprocess.PIPE)
+
+        self.camera.config_manual()
+        self.camera.push_settings()
+        img = self.cam.get_image()
+        self.camera.get_settings()
+        pygame.image.save(img,str(path))
         t1 = time.time()
 
 
