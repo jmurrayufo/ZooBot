@@ -18,8 +18,8 @@ class Capture:
         self.log = Log()
         self.log.info("Init")
         self.log.info("Init pygame")
-        pygame.camera.init()
-        pygame.camera.list_cameras() #Camera detected or not
+        # pygame.camera.init()
+        # pygame.camera.list_cameras() #Camera detected or not
 
         self.log.info("Init Camera")
         self.camera = Camera(args,"/dev/video0")
@@ -32,11 +32,11 @@ class Capture:
         self.log.info("Log Camera settings")
         self.camera.log_settings()
 
-        self.log.info("Cameras listed, bind to /dev/video0")
-        self.cam = pygame.camera.Camera("/dev/video0", (640,480) )
+        # self.log.info("Cameras listed, bind to /dev/video0")
+        # self.cam = pygame.camera.Camera("/dev/video0", (640,480) )
 
-        self.log.info("Start pygame camera")
-        self.cam.start()
+        # self.log.info("Start pygame camera")
+        # self.cam.start()
 
 
     def run(self, file_name):
@@ -48,9 +48,13 @@ class Capture:
 
         # Now capture an image
         t0 = time.time()
-
-        img = self.cam.get_image()
-        pygame.image.save(img, str(file_name))
+        cmd = f"streamer -f jpeg -s1920x1080 -o {file_name}"
+        ps = subprocess.run(shlex.split(cmd), 
+                            stdout=subprocess.PIPE, 
+                            stderr=subprocess.PIPE)
+        
+        # img = self.cam.get_image()
+        # pygame.image.save(img, str(file_name))
         t1 = time.time()
 
 
