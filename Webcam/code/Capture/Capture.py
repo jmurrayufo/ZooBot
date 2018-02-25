@@ -33,7 +33,7 @@ class Capture:
         self.camera.log_settings()
 
         self.log.info("Cameras listed, bind to /dev/video0")
-        self.cam = pygame.camera.Camera("/dev/video0", (1920,1080) )
+        self.cam = pygame.camera.Camera("/dev/video0", (640,480) )
 
         self.log.info("Start pygame camera")
         self.cam.start()
