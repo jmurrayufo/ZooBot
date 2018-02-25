@@ -43,7 +43,7 @@ else:
 
 log.info("Begin main loop")
 
-cpt = Capture()
+cpt = Capture(args)
 next_capture = datetime.datetime.now()
 
 

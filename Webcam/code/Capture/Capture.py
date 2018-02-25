@@ -14,7 +14,7 @@ from code.Camera import Camera
 class Capture:
     # streamer -f jpeg -s1920x1080 -o image.jpeg
 
-    def __init__(self ):
+    def __init__(self, args):
         self.log = Log()
         pygame.camera.init()
         pygame.camera.list_cameras() #Camera detected or not
@@ -42,7 +42,7 @@ class Capture:
         self.camera.push_settings()
         img = self.cam.get_image()
         self.camera.get_settings()
-        pygame.image.save(img,str(path))
+        pygame.image.save(img, str(path))
         t1 = time.time()
 
 
