@@ -27,7 +27,6 @@ class Capture:
         self.log.info("Start pygame camera")
         self.cam.start()
 
-
         self.log.info("Init Camera")
         self.camera = Camera(args,"/dev/video0")
 
@@ -50,10 +49,7 @@ class Capture:
         # Now capture an image
         t0 = time.time()
 
-        self.camera.config_manual()
-        self.camera.push_settings()
         img = self.cam.get_image()
-        self.camera.get_settings()
         pygame.image.save(img, str(file_name))
         t1 = time.time()
 
