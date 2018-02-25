@@ -8,7 +8,7 @@ import pygame
 import pygame.camera
 
 from ..CustomLogging import Log
-from code.Camera import Camera
+from ..Camera import Camera
 
 
 class Capture:
@@ -16,15 +16,27 @@ class Capture:
 
     def __init__(self, args):
         self.log = Log()
+        self.log.info("Init")
+        self.log.info("Init pygame")
         pygame.camera.init()
         pygame.camera.list_cameras() #Camera detected or not
+
+        self.log.info("Cameras listed, bind to /dev/video0")
         self.cam = pygame.camera.Camera("/dev/video0",(1920,1080))
+
+        self.log.info("Start pygame camera")
         self.cam.start()
 
+
+        self.log.info("Init Camera")
         self.camera = Camera(args,"/dev/video0")
+
+        self.log.info("Grab Camera settings")
         self.camera.get_settings()
         self.camera.config_manual()
+        self.log.info("Push manual Camera settings")
         self.camera.push_settings()
+        self.log.info("Log Camera settings")
         self.camera.log_settings()
 
 
