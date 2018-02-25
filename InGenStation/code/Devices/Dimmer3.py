@@ -44,12 +44,13 @@ class Dimmer3:
         pass
 
 
-    def bind(self, controller, channel):
+    def bind(self, controller, channel, override=False):
         """Given a valid Controller instance, bind it to controlling a given 
         channel.
         """
         self.log.info(f"Binding controller {controller} to channel {channel} on {self}")
         self.channels[channel]['controller'] = controller
+        self.channels[channel]['override'] = override
 
 
     def overide(self, channel, setting, duration=None):
@@ -69,6 +70,8 @@ class Dimmer3:
             val = await self.channels[i]['controller'].get_value()
             if type(val) == tuple:
                 val = sum(val)
+            if self.channels[i]['override'] and val > 0:
+                val = self.channels[i]['override']
             await self.setOutput(i,val)
 
 
