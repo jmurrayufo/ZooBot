@@ -21,12 +21,6 @@ class Capture:
         pygame.camera.init()
         pygame.camera.list_cameras() #Camera detected or not
 
-        self.log.info("Cameras listed, bind to /dev/video0")
-        self.cam = pygame.camera.Camera("/dev/video0",(1920,1080))
-
-        self.log.info("Start pygame camera")
-        self.cam.start()
-
         self.log.info("Init Camera")
         self.camera = Camera(args,"/dev/video0")
 
@@ -37,6 +31,12 @@ class Capture:
         self.camera.push_settings()
         self.log.info("Log Camera settings")
         self.camera.log_settings()
+
+        self.log.info("Cameras listed, bind to /dev/video0")
+        self.cam = pygame.camera.Camera("/dev/video0", (1920,1080) )
+
+        self.log.info("Start pygame camera")
+        self.cam.start()
 
 
     def run(self, file_name):
