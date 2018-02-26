@@ -58,7 +58,7 @@ class DragonHab:
 
                 t_sleep = (next_update - datetime.datetime.now()).total_seconds()
                 t_sleep = max(0, t_sleep)
-                next_update += datetime.timedelta(seconds = args.update_delay)
+                next_update += datetime.timedelta(seconds = self.args.update_delay)
 
                 loops = 0
                 while datetime.datetime.now() > next_update:
