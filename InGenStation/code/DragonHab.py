@@ -1,24 +1,20 @@
-from .Controllers import AstralController, PID, DummyController
-from .CustomLogging import Log
-from .Devices import Heater, Dimmer2, Dimmer3
-from .Sensors import TMP102, TMP006, Si7021
-from .Sql import SQL
 from astral import Location
 import asyncio
-import datetime
 import datetime
 import logging
 import numpy as np
 import sanic
 import time
 
+from .Controllers import AstralController, PID, DummyController
+from .CustomLogging import Log
+from .Devices import Heater, Dimmer2, Dimmer3
+from .Sensors import TMP102, TMP006, Si7021
+
 class DragonHab:
 
     def __init__(self, args): 
         self.log = Log()
-
-        #self.sql = SQL(args)
-        #self.sql.connect()
 
         self.args = args
         self.sensors = {}
@@ -53,6 +49,7 @@ class DragonHab:
 
 
     async def run(self):
+        next_update = datetime.datetime.now()
         while True:
             try:
                 t = time.time()
