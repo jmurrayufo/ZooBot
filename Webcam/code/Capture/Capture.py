@@ -48,11 +48,11 @@ class Capture:
 
         # Now capture an image
         t0 = time.time()
-        cmd = f"streamer -f jpeg -s1920x1080 -o {file_name}"
+        cmd = f"streamer -f jpeg -s 1920x1080 -o {file_name}"
         ps = subprocess.run(shlex.split(cmd), 
                             stdout=subprocess.PIPE, 
                             stderr=subprocess.PIPE)
-        
+
         # img = self.cam.get_image()
         # pygame.image.save(img, str(file_name))
         t1 = time.time()
