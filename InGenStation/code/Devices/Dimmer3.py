@@ -68,10 +68,16 @@ class Dimmer3:
 
             await self.channels[i]['controller'].update()
             val = await self.channels[i]['controller'].get_value()
+
             if type(val) == tuple:
                 val = sum(val)
-            if self.channels[i]['override'] and val > 0:
-                val = self.channels[i]['override']
+
+            if self.channels[i]['override']:
+                if val > 50:
+                    val = 100
+                else:
+                    val = 0
+
             await self.setOutput(i,val)
 
 

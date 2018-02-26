@@ -28,14 +28,14 @@ class DragonHab:
         self.devices['dimmer0'] = Dimmer3("dimmer0", 0x3F, args) 
 
         tmp_controller = AstralController(args, 'astr0', "35°18'N", "105°06'W", 0)
-        self.devices['dimmer0'].bind(tmp_controller,1)
-        self.devices['dimmer0'].bind(tmp_controller,4, override=100)
+        self.devices['dimmer0'].bind(tmp_controller, 1)
+        self.devices['dimmer0'].bind(tmp_controller, 4, override=True)
 
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=15.0, I=0.02, Integrator=30/0.02)
         tmp_controller.set_point= 23.8889
-        self.devices['dimmer0'].bind(tmp_controller,2)
-        self.devices['dimmer0'].bind(tmp_controller,3)
+        self.devices['dimmer0'].bind(tmp_controller, 2)
+        self.devices['dimmer0'].bind(tmp_controller, 3)
 
         self.last_metric_log = datetime.datetime.min
         addresses = set()
@@ -50,14 +50,23 @@ class DragonHab:
 
     async def run(self):
         next_update = datetime.datetime.now()
+
         while True:
             try:
-                t = time.time()
 
                 await self.update()
 
-                t_sleep = self.args.update_delay - (time.time() - t)
+                t_sleep = (next_update - datetime.datetime.now()).total_seconds()
                 t_sleep = max(0, t_sleep)
+                next_update += datetime.timedelta(seconds = args.update_delay)
+
+                loops = 0
+                while datetime.datetime.now() > next_update:
+                    loops += 1
+                    next_update += datetime.timedelta(seconds = args.update_delay)
+                if loops > 0:
+                    self.log.warning(f"Main loop catching up. Added {loops}x{args.update_delay}={loops * args.update_delay}s")
+
                 await asyncio.sleep(t_sleep)
             except KeyboardInterrupt:
                 raise
