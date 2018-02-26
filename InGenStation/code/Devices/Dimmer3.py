@@ -27,10 +27,10 @@ class Dimmer3:
             raise ValueError("Address not in value addresses")
 
         self.channels = {}
-        self.channels[1] = {}
-        self.channels[2] = {}
-        self.channels[3] = {}
-        self.channels[4] = {}
+        self.channels[1] = {'setting':0}
+        self.channels[2] = {'setting':0}
+        self.channels[3] = {'setting':0}
+        self.channels[4] = {'setting':0}
 
         self.address = address
         self.last_update = datetime.datetime.min
@@ -78,7 +78,10 @@ class Dimmer3:
                 else:
                     val = 0
 
-            await self.setOutput(i,val)
+            # Prevent noisy lights at night!
+            if val != self.channels[i]['setting']:
+                self.channels[i]['setting'] = val
+                await self.setOutput(i,val)
 
 
     async def setOutput(self, channel, value):
@@ -95,8 +98,8 @@ class Dimmer3:
             self.log.critical(f"Attempted to write to channel 0x{channel:0X}, which is invalid!")
             raise IndexError(f"Channel 0x{channel:0X} is not a valid channel.")
         # We must not attempt to write more than once every 10 ms, or the device will not accept the commands!
-        if time.time() - self.last_write < 0.05:
-            time.sleep(0.05)
+        if time.time() - self.last_write < 0.1:
+            time.sleep(0.1)
         with smbus2.SMBusWrapper(1) as bus:
             bus.write_word_data(self.address, channel, value)
         self.last_write = time.time()
