@@ -30,7 +30,7 @@ class Capture:
 
         # Now capture an image
         t0 = time.time()
-        camera.capture(str(file_name))
+        self.camera.capture(str(file_name))
         t1 = time.time()
 
 
