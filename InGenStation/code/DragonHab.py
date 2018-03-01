@@ -64,9 +64,9 @@ class DragonHab:
                 loops = 0
                 while datetime.datetime.now() > next_update:
                     loops += 1
-                    next_update += datetime.timedelta(seconds = args.update_delay)
+                    next_update += datetime.timedelta(seconds = self.args.update_delay)
                 if loops > 0:
-                    self.log.warning(f"Main loop catching up. Added {loops}x{args.update_delay}={loops * args.update_delay}s")
+                    self.log.warning(f"Main loop catching up. Added {loops}x{self.args.update_delay}={loops * self.args.update_delay}s")
 
                 await asyncio.sleep(t_sleep)
             except KeyboardInterrupt:
