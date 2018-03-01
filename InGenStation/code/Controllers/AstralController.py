@@ -89,15 +89,15 @@ class AstralController(Controller):
 
             elif now > dawn and now <= sunrise:
                 setting = (now - dawn)/(sunrise - dawn) 
-                setting *= self.max_value 
+                setting *= 100
                 setting = int(setting)
 
             elif now > sunrise and now <= sunset:
-                setting = self.max_value
+                setting = 100
 
             elif now > sunset and now <= dusk:
                 setting = 1 - (now - sunset)/(dusk - sunset) 
-                setting *= self.max_value 
+                setting *= 100 
                 setting = int(setting)
 
             elif now > dusk:
@@ -105,6 +105,9 @@ class AstralController(Controller):
 
             # Debug override
             # setting = 100
+
+            if setting > self.max_value:
+                setting = self.max_value
             
             if self.setting != setting:
                 self.setting = setting
