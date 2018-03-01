@@ -27,7 +27,7 @@ class DragonHab:
         # Check this in under the test group
         self.devices['dimmer0'] = Dimmer3("dimmer0", 0x3F, args) 
 
-        tmp_controller = AstralController(args, 'astr0', "35°18'N", "105°06'W", 0, max_value=75)
+        tmp_controller = AstralController(args, 'astr0', "35°18'N", "105°06'W", 0, max_value=51)
         self.devices['dimmer0'].bind(tmp_controller, 1)
         # Commented out until we get proper venting of the vivarium
         self.devices['dimmer0'].bind(tmp_controller, 4, override=True)
