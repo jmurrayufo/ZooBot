@@ -27,10 +27,10 @@ class Dimmer3:
             raise ValueError("Address not in value addresses")
 
         self.channels = {}
-        self.channels[1] = {'setting':0}
-        self.channels[2] = {'setting':0}
-        self.channels[3] = {'setting':0}
-        self.channels[4] = {'setting':0}
+        self.channels[1] = {'setting':-1}
+        self.channels[2] = {'setting':-1}
+        self.channels[3] = {'setting':-1}
+        self.channels[4] = {'setting':-1}
 
         self.address = address
         self.last_update = datetime.datetime.min
