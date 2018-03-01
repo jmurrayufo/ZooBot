@@ -38,7 +38,7 @@ class DragonHab:
         self.devices['dimmer0'].bind(tmp_controller, 2)
         self.devices['dimmer0'].bind(tmp_controller, 3)
 
-        self.last_metric_log = datetime.datetime.min
+        self.next_metric_log = datetime.datetime.now()
         addresses = set()
         for sensor in self.sensors:
             if self.sensors[sensor].address in addresses:
@@ -106,9 +106,9 @@ class DragonHab:
                 value = await self.devices['dimmer0'].channels[1]['controller'].get_value()
                 self.log.metric(name="dimmer0.astral1.setting", generic_int=value)
 
-
-                self.last_metric_log += datetime.timedelta(seconds=self.args.log_delay)
-                
+                self.next_metric_log += datetime.timedelta(seconds=self.args.log_delay)
+                if datetime.datetime.now() > self.next_metric_log:
+                    self.log.warning(f"Next metric log has already passed! {self.next_metric_log - datetime.datetime.now()} ago.")
 
         finally:
             self.update_in_progress = False
