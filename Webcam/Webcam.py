@@ -11,9 +11,6 @@ from code.Capture import Capture
 from code.CustomLogging import Log
 from code.Mount import Mount
 
-
-
-
 parser = argparse.ArgumentParser(description='Webcam Application')
 
 parser.add_argument('--__version__', default=__version__,
