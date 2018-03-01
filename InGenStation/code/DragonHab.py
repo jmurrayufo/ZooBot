@@ -34,7 +34,7 @@ class DragonHab:
 
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=15.0, I=0.02, Integrator=30/0.02)
-        tmp_controller.set_point= 23.8889
+        tmp_controller.set_point= 26.6667
         self.devices['dimmer0'].bind(tmp_controller, 2)
         self.devices['dimmer0'].bind(tmp_controller, 3)
 
