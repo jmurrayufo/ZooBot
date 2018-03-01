@@ -17,6 +17,7 @@ class Capture:
         self.log.info("Init PiCamera")
         self.camera = PiCamera()
         self.camera.resolution = (3280,2464)
+        self.camera.rotation = 90
         self.log.info("Camera configured, sleeping...")
         time.sleep(2)
         self.log.info("Camera setup completed!")
