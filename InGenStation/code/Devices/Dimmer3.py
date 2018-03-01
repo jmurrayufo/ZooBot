@@ -74,10 +74,8 @@ class Dimmer3:
 
             if self.channels[i]['override']:
                 if val > 50:
-                    self.log.debug(f"Override on channel {i}")
                     val = 100
                 else:
-                    self.log.debug(f"Override on channel {i}")
                     val = 0
 
             # Prevent noisy lights at night!
