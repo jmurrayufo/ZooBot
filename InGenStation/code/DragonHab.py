@@ -90,7 +90,7 @@ class DragonHab:
                 await self.sensors[sensor].update()
 
 
-            if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_delay):
+            if datetime.datetime.now() > self.next_metric_log:
                 # self.log.debug("Log sensor data")
                 # await self.log_sensors()
                 self.log.metric(name="t0.temp", generic_float=self.sensors["t0"].temperature)
@@ -107,7 +107,7 @@ class DragonHab:
                 self.log.metric(name="dimmer0.astral1.setting", generic_int=value)
 
 
-                self.last_metric_log = datetime.datetime.now()
+                self.last_metric_log += datetime.timedelta(seconds=self.args.log_delay)
                 
 
         finally:
