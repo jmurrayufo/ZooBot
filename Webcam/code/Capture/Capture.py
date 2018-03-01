@@ -33,6 +33,7 @@ class Capture:
 
         # Now capture an image
         t0 = time.time()
+        self.camera.annotate_text = dt.strftime("%Y/%m/%d %H:%M:%S")
         self.camera.capture(str(file_name))
         t1 = time.time()
 
