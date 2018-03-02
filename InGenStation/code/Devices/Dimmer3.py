@@ -78,6 +78,9 @@ class Dimmer3:
                 else:
                     val = 0
 
+            if self.channels[i]['override'] and val != self.channels[i]['setting']:
+                self.log.debug(f"Channel {i} set from {self.channels[i]['setting']} to {val}")
+
             # Prevent noisy lights at night!
             if val != self.channels[i]['setting']:
                 self.channels[i]['setting'] = val
