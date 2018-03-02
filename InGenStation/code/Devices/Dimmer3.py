@@ -97,7 +97,7 @@ class Dimmer3:
 
     async def setOutput(self, channel, value):
         if (value > 100 or value < 0) and channel != 3:
-            self.log.warning(f"{self} saw setOutput value of {value}, outside range [0,100]!")
+            self.log.warning(f"{self} saw setOutput value of {value:.3f}, outside range [0,100]!")
 
         value = int(np.clip(100-value, 0, 100))
 
