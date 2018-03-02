@@ -8,6 +8,7 @@ import subprocess
 import time
 
 from ..CustomLogging import Log
+from ..Mount import Mount
 
 
 class Capture:
@@ -31,6 +32,17 @@ class Capture:
         if not file_name.parent.exists():
             self.log.info(f"Creating path {file_name.parent}")
             os.makedirs(file_name.parent)
+
+        
+        x = Mount()
+        mount_loc = "/home/jmurray/ZFS"
+        if not x.is_mounted(mount_loc):
+            log.info(f"Didn't find {mount_loc} to be mounted. Fixing that.")
+            x.mount("jmurray@192.168.1.2:/ZFS/Media", mount_loc)
+            if not x.is_mounted(mount_loc):
+                raise OSError("Couldn't mount, oh no!")
+        else:
+            log.info(f"Found {mount_loc} to be mounted.")
 
         # Now capture an image
         t0 = time.time()
