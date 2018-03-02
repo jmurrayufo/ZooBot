@@ -63,6 +63,10 @@ class Dimmer3:
 
     async def update(self):
         for i in range(1,4+1):
+
+            # Sleep for 10 ms between runs to allow I2C buss to reset?
+            time.sleep(0.01)
+
             if 'controller' not in self.channels[i]:
                 continue
 
