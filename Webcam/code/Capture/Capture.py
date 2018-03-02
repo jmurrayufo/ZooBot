@@ -33,7 +33,7 @@ class Capture:
             self.log.info(f"Creating path {file_name.parent}")
             os.makedirs(file_name.parent)
 
-        
+
         x = Mount()
         mount_loc = "/home/jmurray/ZFS"
         if not x.is_mounted(mount_loc):
@@ -41,8 +41,6 @@ class Capture:
             x.mount("jmurray@192.168.1.2:/ZFS/Media", mount_loc)
             if not x.is_mounted(mount_loc):
                 raise OSError("Couldn't mount, oh no!")
-        else:
-            log.info(f"Found {mount_loc} to be mounted.")
 
         # Now capture an image
         t0 = time.time()
