@@ -120,12 +120,12 @@ class DragonHab:
         if request.method == 'GET':
             self.log.info(f"Rquest to get channel data for channel {channel}")
             return sanic.response.json({'channel':channel,
-                'setting':self.devices['dimmer0'][channel]['hold']})
+                'setting':self.devices['dimmer0'].channels[channel]['hold']})
 
         elif request.method in ['POST','PUT']:
             self.log.info(f"Rquest to set channel {channel} to {setting}")
             # Limit setting to [-1,100]
             setting = max(-1,setting)
             setting = min(100,setting)
-            self.devices['dimmer0'][channel]['hold'] = setting
+            self.devices['dimmer0'].channels[channel]['hold'] = setting
             return sanic.response.json({'channel':channel,'hold':setting})
