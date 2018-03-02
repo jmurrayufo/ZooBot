@@ -4,6 +4,7 @@ import datetime
 import logging
 import numpy as np
 import sanic
+import sanic
 import time
 
 from .Controllers import AstralController, PID, DummyController
@@ -112,3 +113,12 @@ class DragonHab:
 
         finally:
             self.update_in_progress = False
+
+
+    async def hold_handler(self, request, channel, setting=None):
+        if request.method == 'GET':
+            self.log.info(f"Rquest to get channel data for channel {channel}")
+            return sanic.response.json({'data':'test'})
+        elif request.method in ['POST','PUT']:
+            self.log.info(f"Rquest to set channel {channel} to {setting}")
+            return sanic.response.json({'data':'test'})

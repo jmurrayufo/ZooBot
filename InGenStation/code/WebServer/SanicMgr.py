@@ -38,7 +38,14 @@ class SanicMgr:
 
         if  args.purpose in ['dragon', 'test']:
             SanicMgr.app.add_task(self.hab.run)
-            pass
+
+            view = CompositionView()
+            view.add(['POST','PUT'], self.hab.hold_handler)
+            SanicMgr.app.add_route(view, '/hold/<channel>/<setting>')
+
+            view = CompositionView()
+            view.add(['GET'], self.hab.hold_handler)
+            SanicMgr.app.add_route(view, '/hold/<channel>')
 
         if  args.purpose in ['bug', 'test']:
             view = CompositionView()
