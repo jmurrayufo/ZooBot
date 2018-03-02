@@ -30,9 +30,6 @@ class Capture:
 
     def run(self, file_name):
         # with DelayedKeyboardInterrupt():
-        if not file_name.parent.exists():
-            self.log.info(f"Creating path {file_name.parent}")
-            os.makedirs(file_name.parent)
 
 
         mount = Mount()
@@ -41,6 +38,10 @@ class Capture:
             mount.mount("jmurray@192.168.1.2:/ZFS/Media", self.args.mount_location)
             if not mount.is_mounted(self.args.mount_location):
                 raise OSError("Couldn't mount, oh no!")
+                
+        if not file_name.parent.exists():
+            self.log.info(f"Creating path {file_name.parent}")
+            os.makedirs(file_name.parent)
 
         # Now capture an image
         t0 = time.time()
