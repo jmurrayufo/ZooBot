@@ -41,11 +41,11 @@ class SanicMgr:
 
             view = CompositionView()
             view.add(['POST','PUT'], self.hab.hold_handler)
-            SanicMgr.app.add_route(view, '/hold/<channel>/<setting>')
+            SanicMgr.app.add_route(view, '/hold/<channel:int>/<setting>')
 
             view = CompositionView()
             view.add(['GET'], self.hab.hold_handler)
-            SanicMgr.app.add_route(view, '/hold/<channel>')
+            SanicMgr.app.add_route(view, '/hold/<channel:int>')
 
         if  args.purpose in ['bug', 'test']:
             view = CompositionView()
