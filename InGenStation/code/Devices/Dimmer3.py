@@ -93,8 +93,6 @@ class Dimmer3:
             pass
         value = int(np.clip(100-value, 0, 100))
 
-        self.channels[channel]['setting'] = value
-
         channel = 0x7F+channel
 
         if channel not in [self.CH_1, self.CH_2, self.CH_3, self.CH_4]:
