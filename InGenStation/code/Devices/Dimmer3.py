@@ -73,7 +73,7 @@ class Dimmer3:
                 val = sum(val)
 
             if self.channels[i]['override']:
-                if val > 0:
+                if val > self.channels[i]['override']:
                     val = 100
                 else:
                     val = 0
