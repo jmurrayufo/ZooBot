@@ -41,7 +41,7 @@ class SanicMgr:
 
             view = CompositionView()
             view.add(['POST','PUT'], self.hab.hold_handler)
-            SanicMgr.app.add_route(view, '/hold/<channel:int>/<setting>')
+            SanicMgr.app.add_route(view, '/hold/<channel:int>/<setting:int>')
 
             view = CompositionView()
             view.add(['GET'], self.hab.hold_handler)
