@@ -14,6 +14,7 @@ from ..Mount import Mount
 class Capture:
 
     def __init__(self, args):
+        self.args = args
         self.log = Log()
         self.log.info("Init")
         self.log.info("Init PiCamera")
@@ -35,11 +36,10 @@ class Capture:
 
 
         x = Mount()
-        mount_loc = "/home/jmurray/ZFS"
-        if not x.is_mounted(mount_loc):
-            log.info(f"Didn't find {mount_loc} to be mounted. Fixing that.")
-            x.mount("jmurray@192.168.1.2:/ZFS/Media", mount_loc)
-            if not x.is_mounted(mount_loc):
+        if not x.is_mounted(self.args.mount_location):
+            log.info(f"Didn't find {self.args.mount_location} to be mounted. Fixing that.")
+            x.mount("jmurray@192.168.1.2:/ZFS/Media", self.args.mount_location)
+            if not x.is_mounted(self.args.mount_location):
                 raise OSError("Couldn't mount, oh no!")
 
         # Now capture an image

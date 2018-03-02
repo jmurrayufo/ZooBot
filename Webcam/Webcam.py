@@ -21,6 +21,11 @@ parser.add_argument('--frame-delay',
                     default=60,
                     help='Delay between frames in seconds')
 
+parser.add_argument('--mount-location'
+                    default="/home/jmurray/ZFS",
+                    help='Location to attempt to mount')
+
+
 args = parser.parse_args()
 
 log = Log(args)
@@ -47,7 +52,7 @@ while 1:
 
     dt = datetime.datetime.now()
 
-    file_name = dt.strftime(f"{mount_loc}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
+    file_name = dt.strftime(f"{args.mount_location}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
 
     path = pathlib.Path(file_name)
 
