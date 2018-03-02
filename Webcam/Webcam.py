@@ -21,7 +21,7 @@ parser.add_argument('--frame-delay',
                     default=60,
                     help='Delay between frames in seconds')
 
-parser.add_argument('--mount-location'
+parser.add_argument('--mount-location',
                     default="/home/jmurray/ZFS",
                     help='Location to attempt to mount')
 
