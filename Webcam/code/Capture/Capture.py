@@ -35,11 +35,11 @@ class Capture:
             os.makedirs(file_name.parent)
 
 
-        x = Mount()
-        if not x.is_mounted(self.args.mount_location):
-            log.info(f"Didn't find {self.args.mount_location} to be mounted. Fixing that.")
-            x.mount("jmurray@192.168.1.2:/ZFS/Media", self.args.mount_location)
-            if not x.is_mounted(self.args.mount_location):
+        mount = Mount()
+        if not mount.is_mounted(self.args.mount_location):
+            self.log.info(f"Didn't find {self.args.mount_location} to be mounted. Fixing that.")
+            mount.mount("jmurray@192.168.1.2:/ZFS/Media", self.args.mount_location)
+            if not mount.is_mounted(self.args.mount_location):
                 raise OSError("Couldn't mount, oh no!")
 
         # Now capture an image
