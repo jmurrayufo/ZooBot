@@ -58,7 +58,7 @@ class AstralController(Controller):
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
             dusk = (sun['dusk'] + offset).replace(tzinfo=None)
 
-            if True and datetime.date.today() < datetime.date(2018,6,20):
+            if False and datetime.date.today() < datetime.date(2018,6,20):
                 # Overide for baby dragon
                 if datetime.date.today() != self.today:
                     self.log.info("New dragon overide protocall is in effect.")
