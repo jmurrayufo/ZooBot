@@ -47,6 +47,10 @@ class SanicMgr:
             view.add(['GET'], self.hab.hold_handler)
             SanicMgr.app.add_route(view, '/hold/<channel:int>')
 
+            view = CompositionView()
+            view.add(['GET'], self.hab.poke_handler)
+            SanicMgr.app.add_route(view, '/poke/')
+
         if  args.purpose in ['bug', 'test']:
             view = CompositionView()
             view.add(['GET'], self.hab.all_temperature_handler)

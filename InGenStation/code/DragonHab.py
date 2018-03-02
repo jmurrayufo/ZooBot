@@ -130,3 +130,9 @@ class DragonHab:
             setting = min(100,setting)
             self.devices['dimmer0'].channels[channel]['hold'] = setting
             return sanic.response.json({'channel':channel,'hold':setting})
+
+
+    async def poke_handler(self, request):
+
+        for channel in range(1,4+1):
+            self.devices['dimmer0'].channels[channel]['poke'] = True
