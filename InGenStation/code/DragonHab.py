@@ -104,7 +104,7 @@ class DragonHab:
                 self.log.metric(name="dimmer0.pid2.d1", generic_float=values[2])
                 
                 # Record current lamp settings
-                value = await self.devices['dimmer0'].channels[1]['controller'].get_value()
+                value = self.devices['dimmer0'].channels[1]['setting']
                 self.log.metric(name="dimmer0.astral1.setting", generic_int=value)
 
                 self.next_metric_log += datetime.timedelta(seconds=self.args.log_delay)
