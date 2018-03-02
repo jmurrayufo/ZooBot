@@ -125,6 +125,7 @@ class DragonHab:
         elif request.method in ['POST','PUT']:
             self.log.info(f"Rquest to set channel {channel} to {setting}")
             # Limit setting to [-1,100]
+            setting = int(setting)
             setting = max(-1,setting)
             setting = min(100,setting)
             self.devices['dimmer0'].channels[channel]['hold'] = setting
