@@ -103,9 +103,8 @@ class AstralController(Controller):
                 setting = 0
 
             setting += self.setting_floor
-            setting = int(setting)
             
-            if self.setting != setting:
+            if int(self.setting) != int(setting):
                 self.log.debug(f"Setting on AstralController {self.name} changed from {self.setting:.1f} to {setting:.1f}")
                 self.setting = setting
         except:
