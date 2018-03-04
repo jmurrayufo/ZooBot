@@ -36,6 +36,8 @@ class AstralController(Controller):
         self.setting = -1
         self.report_times = report_times
 
+        self.last_delta_alarm = datetime.datetime.now()
+
     async def update(self):
         t = time.time()
         if self.update_in_progress:
@@ -104,10 +106,12 @@ class AstralController(Controller):
                 setting = 0
 
             setting += self.setting_floor
-            
-            if int(self.setting) != int(setting):
+
+            if abs(self.setting - setting) > 1 or (
+                    self.setting != setting and self.last_delta_alarm - now > datetime.timedelta(seconds=60)):
                 self.log.debug(f"Setting on AstralController {self.name} changed from {self.setting:.1f} to {setting:.1f}")
                 self.setting = setting
+                self.last_delta_alarm = now
         except:
             self.state = State.DEGRADED
             self.log.error(f"AstralController {self} is in a {self.state} state.")
