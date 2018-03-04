@@ -106,8 +106,8 @@ class AstralController(Controller):
             setting = int(setting)
             
             if self.setting != setting:
+                self.log.debug(f"Setting on AstralController {self.name} changed from {self.setting} to {setting}")
                 self.setting = setting
-                self.log.debug(f"Setting on AstralController {self.name} changed to {setting}")
         except:
             self.state = State.DEGRADED
             self.log.error(f"AstralController {self} is in a {self.state} state.")
