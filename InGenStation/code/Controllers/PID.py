@@ -13,7 +13,8 @@ class PID(Controller):
     def __init__(self, args, name, sensor, sensor_attrib,
         P=1.0, I=0.0, D=0.0, 
         Derivator=0, 
-        Integrator=0, Integrator_max=100, Integrator_min=-100):
+        Integrator=0, Integrator_max=100, Integrator_min=-100,
+        astral_adjuster=None):
 
         self.log = Log()
         self.P_value = 0
@@ -30,6 +31,7 @@ class PID(Controller):
         self.Integrator_max = Integrator_max
         self.Integrator_min = Integrator_min
         self.last_update = None
+        self.astral_adjuster = astral_adjuster
 
         self.set_point = 0.0
         self.error = 0.0
@@ -42,6 +44,11 @@ class PID(Controller):
         # Get current value
         await self.sensor.update()
         current_value = getattr(self.sensor, self.sensor_attrib)
+
+        # Adjust from the astral settings if needed
+        if self.astral_adjuster is not None:
+            await self.astral_adjuster.update()
+            self.set_point = await self.astral_adjuster.get_value()
 
         self.error = self.set_point - current_value
         # print(f"Error: {self.set_point:.3f} - {current_value:.3f} = {self.error:.3f}")

@@ -18,7 +18,7 @@ class AstralController(Controller):
     @param max_value Max output value of controller"""
 
 
-    def __init__(self, args, name, lat, lon, elivation, max_value=100):
+    def __init__(self, args, name, lat, lon, elivation, day_value, night_value):
 
         super().__init__()
         self.log = Log()
@@ -31,7 +31,8 @@ class AstralController(Controller):
         self.state = State.INITIALIZED
         self.update_in_progress = False
         self.today = None
-        self.setting = None
+        self.setting_floor = night_value
+        self.setting_offset = day_value - night_value
 
 
     async def update(self):
@@ -89,29 +90,24 @@ class AstralController(Controller):
 
             elif now > dawn and now <= sunrise:
                 setting = (now - dawn)/(sunrise - dawn) 
-                setting *= 100
-                setting = int(setting)
+                setting *= self.setting_offset
 
             elif now > sunrise and now <= sunset:
-                setting = 100
+                setting = self.setting_offset
 
             elif now > sunset and now <= dusk:
                 setting = 1 - (now - sunset)/(dusk - sunset) 
-                setting *= 100 
-                setting = int(setting)
+                setting *= self.setting_offset 
 
             elif now > dusk:
                 setting = 0
 
-            # Debug override
-            # setting = 100
-
-            if setting > self.max_value:
-                setting = self.max_value
+            self.setting += self.setting_floor
+            setting = int(setting)
             
             if self.setting != setting:
                 self.setting = setting
-                self.log.debug(f"Setting changed to {setting}")
+                self.log.debug(f"Setting on AstralController {self.name} changed to {setting}")
         except:
             self.state = State.DEGRADED
             self.log.error(f"AstralController {self} is in a {self.state} state.")
