@@ -107,11 +107,13 @@ class AstralController(Controller):
 
             setting += self.setting_floor
 
-            if abs(self.setting - setting) > 1 or (
-                    self.setting != setting and self.last_delta_alarm - now > datetime.timedelta(seconds=60)):
+            if (self.setting != setting and 
+                    self.last_delta_alarm - now > datetime.timedelta(seconds=60)):
                 self.log.debug(f"Setting on AstralController {self.name} changed from {self.setting:.1f} to {setting:.1f}")
-                self.setting = setting
                 self.last_delta_alarm = now
+
+            self.setting = setting
+
         except:
             self.state = State.DEGRADED
             self.log.error(f"AstralController {self} is in a {self.state} state.")
