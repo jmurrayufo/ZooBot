@@ -102,7 +102,7 @@ class AstralController(Controller):
             elif now > dusk:
                 setting = 0
 
-            self.setting += self.setting_floor
+            setting += self.setting_floor
             setting = int(setting)
             
             if self.setting != setting:
