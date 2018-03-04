@@ -151,4 +151,4 @@ class DragonHab:
 
         for channel in range(1,4+1):
             self.devices['dimmer0'].channels[channel]['poke'] = True
-        returen sanic.response.text("Poked all 4 channels")
+        return sanic.response.text("Poked all 4 channels")
