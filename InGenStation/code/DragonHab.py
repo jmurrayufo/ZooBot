@@ -35,7 +35,7 @@ class DragonHab:
         self.devices['dimmer0'].bind(tmp_controller, 4, override=10)
 
         tmp_controller = AstralController(args, 'astrPID', "35°18'N", "105°06'W",  
-            elivation=0, day_value=26.6667, night_value=12.1111)
+            elivation=0, day_value=26.6667, night_value=21.1111)
 
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=15.0, I=0.02, Integrator=30/0.02, 
