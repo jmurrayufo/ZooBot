@@ -19,7 +19,7 @@ class AstralController(Controller):
     @param night_value Value during nightime operations"""
 
 
-    def __init__(self, args, name, lat, lon, elivation, day_value, night_value):
+    def __init__(self, args, name, lat, lon, elivation, day_value, night_value, report_times=False):
 
         super().__init__()
         self.log = Log()
@@ -74,7 +74,7 @@ class AstralController(Controller):
                 sunset = datetime.datetime.now().replace(hour=22, minute=30, second=0)
                 dusk = datetime.datetime.now().replace(hour=22, minute=50, second=0)
 
-            if datetime.date.today() != self.today:
+            if self.report_times and datetime.date.today() != self.today:
                 self.log.info("Todays times are as follows!")
                 self.log.info(f"Dawn: {dawn}")
                 self.log.info(f"Sunrise: {sunrise}")
