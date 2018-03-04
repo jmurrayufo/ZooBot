@@ -15,7 +15,8 @@ class AstralController(Controller):
     @param lat If astral is used, valid lat of location
     @param lon If astral is used, valid lon of location
     @param elevation If astral is used, valid elevation of location
-    @param max_value Max output value of controller"""
+    @param day_value Value during daytime operations
+    @param night_value Value during nightime operations"""
 
 
     def __init__(self, args, name, lat, lon, elivation, day_value, night_value):
@@ -27,7 +28,6 @@ class AstralController(Controller):
         self.lat = lat
         self.lon = lon
         self.elivation = elivation
-        self.max_value = max_value
         self.state = State.INITIALIZED
         self.update_in_progress = False
         self.today = None
