@@ -27,10 +27,22 @@ class Dimmer3:
             raise ValueError("Address not in value addresses")
 
         self.channels = {}
-        self.channels[1] = {'setting':-1, 'hold':-1, 'poke':False}
-        self.channels[2] = {'setting':-1, 'hold':-1, 'poke':False}
-        self.channels[3] = {'setting':-1, 'hold':-1, 'poke':False}
-        self.channels[4] = {'setting':-1, 'hold':-1, 'poke':False}
+        self.channels[1] = {'setting':-1, 
+                            'hold':-1, 
+                            'poke':False,
+                            'last_bounds_error':datetime.datetime.min}
+        self.channels[2] = {'setting':-1, 
+                            'hold':-1, 
+                            'poke':False,
+                            'last_bounds_error':datetime.datetime.min}
+        self.channels[3] = {'setting':-1, 
+                            'hold':-1, 
+                            'poke':False,
+                            'last_bounds_error':datetime.datetime.min}
+        self.channels[4] = {'setting':-1, 
+                            'hold':-1, 
+                            'poke':False,
+                            'last_bounds_error':datetime.datetime.min}
 
         self.address = address
         self.last_update = datetime.datetime.min
@@ -96,7 +108,12 @@ class Dimmer3:
 
 
     async def setOutput(self, channel, value):
-        if (value > 100 or value < 0) and channel != 3:
+        now = datetime.datetime.now()
+        lbe = self.channels[channel]['last_bounds_error']
+        if (value > 100 or value < 0)
+                and channel != 3
+                and lbe - now > datetime.datetime.timedelta(seconds=15):
+            self.channels[channel]['last_bounds_error'] = datetime.datetime.now()
             self.log.warning(f"{self} saw setOutput value of {value:.3f}, outside range [0,100]!")
 
         value = int(np.clip(100-value, 0, 100))
