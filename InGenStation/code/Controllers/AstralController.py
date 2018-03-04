@@ -62,7 +62,7 @@ class AstralController(Controller):
 
             if True and datetime.date.today() < datetime.date(2018,6,20):
                 # Overide for baby dragon
-                if datetime.date.today() != self.today:
+                if self.report_times and datetime.date.today() != self.today:
                     self.log.info("New dragon overide protocall is in effect.")
 
                 dawn = datetime.datetime.now().replace(hour=6, minute=16, second=0)
