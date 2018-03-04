@@ -34,6 +34,7 @@ class AstralController(Controller):
         self.setting_floor = night_value
         self.setting_offset = day_value - night_value
         self.setting = -1
+        self.reported_setting = -1
         self.report_times = report_times
 
         self.last_delta_alarm = datetime.datetime.now()
@@ -112,10 +113,11 @@ class AstralController(Controller):
 
             setting += self.setting_floor
 
-            if (self.setting != setting and 
+            if (self.reported_setting != setting and 
                     now - self.last_delta_alarm > datetime.timedelta(seconds=60)):
-                self.log.debug(f"Setting on AstralController {self.name} changed from {self.setting:.1f} to {setting:.1f}")
+                self.log.debug(f"Setting on AstralController {self.name} changed from {self.reported_setting:.1f} to {setting:.1f}")
                 self.last_delta_alarm = now
+                self.reported_setting = setting
 
             self.setting = setting
 
