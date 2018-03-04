@@ -78,9 +78,9 @@ class AstralController(Controller):
                 dusk = datetime.datetime.now().replace(hour=23, minute=59, second=59)
 
                 dawn = dawn.replace(microsecond=0)
-                sunrise = dawn.replace(microsecond=0)
-                sunset = dawn.replace(microsecond=0)
-                dusk = dawn.replace(microsecond=0)
+                sunrise = sunrise.replace(microsecond=0)
+                sunset = sunset.replace(microsecond=0)
+                dusk = dusk.replace(microsecond=0)
 
             if self.report_times and datetime.date.today() != self.today:
                 self.log.info("Todays times are as follows!")
