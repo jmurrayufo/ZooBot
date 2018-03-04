@@ -113,7 +113,7 @@ class AstralController(Controller):
             setting += self.setting_floor
 
             if (self.setting != setting and 
-                    self.last_delta_alarm - now > datetime.timedelta(seconds=60)):
+                    now - self.last_delta_alarm > datetime.timedelta(seconds=60)):
                 self.log.debug(f"Setting on AstralController {self.name} changed from {self.setting:.1f} to {setting:.1f}")
                 self.last_delta_alarm = now
 
