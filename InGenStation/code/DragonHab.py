@@ -110,12 +110,14 @@ class DragonHab:
                 
                 # Record current lamp settings
                 value = self.devices['dimmer0'].channels[1]['setting']
-                self.log.metric(name="dimmer0.astral1.setting", generic_int=value)
+                self.log.metric(name="dimmer0.astral1.setting", generic_float=value)
+                value = self.devices['dimmer0'].channels[4]['setting']
+                self.log.metric(name="dimmer0.UV.setting", generic_float=value)
 
                 # Record PID settings
 
                 value = await self.devices['dimmer0'].channels[2]['controller'].astral_adjuster.get_value()
-                self.log.metric(name="dimmer0.astralPID.setting", generic_int=value)
+                self.log.metric(name="dimmer0.astralPID.setting", generic_float=value)
 
                 self.next_metric_log += datetime.timedelta(seconds=self.args.log_delay)
                 if datetime.datetime.now() > self.next_metric_log:
