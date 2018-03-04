@@ -33,7 +33,7 @@ class AstralController(Controller):
         self.today = None
         self.setting_floor = night_value
         self.setting_offset = day_value - night_value
-
+        self.setting = -1
 
     async def update(self):
         t = time.time()
