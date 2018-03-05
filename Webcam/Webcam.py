@@ -18,7 +18,7 @@ parser.add_argument('--__version__', default=__version__,
 
 parser.add_argument('--frame-delay', 
                     type=float,
-                    default=10,
+                    default=60,
                     help='Delay between frames in seconds')
 
 parser.add_argument('--mount-location',
@@ -41,14 +41,17 @@ next_capture = datetime.datetime.now()
 
 
 while 1:
-    loop = 0
-    while datetime.datetime.now() > next_capture:
-        loop += 1
-        next_capture += datetime.timedelta(seconds = args.frame_delay)
-    
-    if loop > 1:
-        log.warning(f"Cannot keep up! Currently {args.frame_delay*loop}s behind!")
 
+    loop = 0
+    while next_capture < datetime.datetime.now():
+        next_capture += datetime.timedelta(seconds = args.frame_delay)
+        loop += 1
+
+    if loop > 1: 
+        log.warning(f"Cannot keep up! Currently {loop*args.frame_delay:.0f}s behind!")
+
+    dt = (datetime.datetime.now() - next_capture).total_seconds()
+    time.sleep(dt)
 
     dt = datetime.datetime.now()
 
