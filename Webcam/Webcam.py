@@ -43,19 +43,19 @@ next_capture = datetime.datetime.now()
 while 1:
 
     loop = 0
-    while next_capture < datetime.datetime.now():
+    now = datetime.datetime.now()
+    while next_capture < now:
         next_capture += datetime.timedelta(seconds = args.frame_delay)
+        dt = (now - next_capture).total_seconds()
         loop += 1
 
     if loop > 1: 
         log.warning(f"Cannot keep up! Currently {loop*args.frame_delay:.0f}s behind!")
 
-    dt = (datetime.datetime.now() - next_capture).total_seconds()
     time.sleep(dt)
 
-    dt = datetime.datetime.now()
 
-    file_name = dt.strftime(f"{args.mount_location}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
+    file_name = now.strftime(f"{args.mount_location}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
 
     path = pathlib.Path(file_name)
 
