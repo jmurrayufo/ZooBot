@@ -47,6 +47,7 @@ while 1:
     while next_capture < now:
         next_capture += datetime.timedelta(seconds = args.frame_delay)
         dt = (now - next_capture).total_seconds()
+        print(now, next_capture, dt)
         loop += 1
 
     if loop > 1: 
