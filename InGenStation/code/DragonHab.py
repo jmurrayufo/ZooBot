@@ -37,8 +37,8 @@ class DragonHab:
         tmp_controller = AstralController(args, 'astrPID', "35°18'N", "105°06'W",  
             elivation=0, day_value=26.6667, night_value=21.1111)
 
-        P = 18
-        I = 0.01
+        P = 22
+        I = 0.005
         default_I = 30
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=P, I=I, Integrator=default_I/I, 
