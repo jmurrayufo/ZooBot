@@ -18,7 +18,7 @@ parser.add_argument('--__version__', default=__version__,
 
 parser.add_argument('--frame-delay', 
                     type=float,
-                    default=60,
+                    default=10,
                     help='Delay between frames in seconds')
 
 parser.add_argument('--mount-location',
@@ -47,7 +47,6 @@ while 1:
     while next_capture < now:
         next_capture += datetime.timedelta(seconds = args.frame_delay)
         dt = (next_capture - now).total_seconds()
-        print(now, next_capture, dt)
         loop += 1
 
     if loop > 1: 
