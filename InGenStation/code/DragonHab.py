@@ -15,6 +15,18 @@ from .Sensors import TMP102, TMP006, Si7021
 class DragonHab:
 
     def __init__(self, args): 
+
+        # Heater Lamp Config
+        P = 22
+        I = 0.005
+        default_I = 30
+
+        # Basking Lamp and UV Config
+        basking_lamp_setting = 42
+        uv_trigger = basking_lamp_setting - 1
+
+
+
         self.log = Log()
 
         self.args = args
@@ -29,17 +41,15 @@ class DragonHab:
         self.devices['dimmer0'] = Dimmer3("dimmer0", 0x3F, args) 
 
         tmp_controller = AstralController(args, 'astr0', "35°18'N", "105°06'W",  
-            elivation=0, day_value=42, night_value=0, report_times=True)
+            elivation=0, day_value=basking_lamp_setting, night_value=0, 
+            report_times=True)
         self.devices['dimmer0'].bind(tmp_controller, 1)
+        
         # Commented out until we get proper venting of the vivarium
-        self.devices['dimmer0'].bind(tmp_controller, 4, override=43)
+        self.devices['dimmer0'].bind(tmp_controller, 4, override=uv_trigger)
 
         tmp_controller = AstralController(args, 'astrPID', "35°18'N", "105°06'W",  
             elivation=0, day_value=26.6667, night_value=21.1111)
-
-        P = 22
-        I = 0.005
-        default_I = 30
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=P, I=I, Integrator=default_I/I, 
             astral_adjuster=tmp_controller)
