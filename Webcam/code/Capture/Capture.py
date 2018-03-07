@@ -56,7 +56,7 @@ class Capture:
         t0 = time.time()
         self.camera.annotate_text = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         with DelayedKeyboardInterrupt():
-            self.log.info(f"Camera gain: {self.camera.awb_gains}")
+            self.log.debug(f"Camera gain: {self.camera.awb_gains}")
             self.camera.capture(str(file_name))
         t1 = time.time()
 
