@@ -23,12 +23,12 @@ class Capture:
         self.camera.resolution = (2592,1944)
         # self.camera.resolution = (1920,1080)
         self.camera.framerate = 1
-        self.camera.iso = 640
+        self.camera.iso = 400
         self.log.info("Camera configured, sleeping...")
         time.sleep(2)
         self.log.info("Camera stable, finish setup")
         self.camera.rotation = 0
-        self.camera.shutter_speed = 10000
+        self.camera.shutter_speed = 15000
         # self.log.info(f"Shutter Speed: {self.camera.shutter_speed}")
         # self.camera.exposure_mode = 'off'
         # g = self.camera.awb_gains
