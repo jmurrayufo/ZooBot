@@ -28,7 +28,7 @@ class Capture:
         time.sleep(2)
         self.log.info("Camera stable, finish setup")
         self.camera.rotation = 0
-        self.camera.shutter_speed = 5000
+        self.camera.shutter_speed = 10000
         # self.log.info(f"Shutter Speed: {self.camera.shutter_speed}")
         # self.camera.exposure_mode = 'off'
         # g = self.camera.awb_gains
