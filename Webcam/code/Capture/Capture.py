@@ -22,9 +22,17 @@ class Capture:
         self.log.info(f"Booted with a camera of {self.camera.revision}")
         self.camera.resolution = (1920,1080)
         self.camera.framerate = 1
-        self.camera.rotation = 0
+        self.camera.iso = 100
         self.log.info("Camera configured, sleeping...")
         time.sleep(2)
+        self.log.info("Camera stable, finish setup")
+        self.camera.rotation = 0
+        camera.shutter_speed = camera.exposure_speed
+        camera.exposure_mode = 'off'
+        g = camera.awb_gains
+        self.log.info(f"AWB gains: {g}")
+        camera.awb_mode = 'off'
+        camera.awb_gains = g
         self.log.info("Camera setup completed!")
 
 
@@ -46,7 +54,8 @@ class Capture:
         # Now capture an image
         t0 = time.time()
         self.camera.annotate_text = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
-        self.camera.capture(str(file_name))
+        with DelayedKeyboardInterrupt():
+            self.camera.capture(str(file_name))
         t1 = time.time()
 
 
