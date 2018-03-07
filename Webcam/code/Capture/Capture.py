@@ -28,11 +28,12 @@ class Capture:
         self.log.info("Camera stable, finish setup")
         self.camera.rotation = 0
         self.camera.shutter_speed = self.camera.exposure_speed
+        self.log.info(f"Shutter Speed: {self.camera.shutter_speed}")
         self.camera.exposure_mode = 'off'
-        g = self.camera.awb_gains
-        self.log.info(f"AWB gains: {g}")
-        self.camera.awb_mode = 'off'
-        self.camera.awb_gains = g
+        # g = self.camera.awb_gains
+        # self.log.info(f"AWB gains: {g}")
+        # self.camera.awb_mode = 'off'
+        # self.camera.awb_gains = g
         self.log.info("Camera setup completed!")
 
 
