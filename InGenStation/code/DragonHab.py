@@ -17,7 +17,7 @@ class DragonHab:
     def __init__(self, args): 
 
         # Heater Lamp Config
-        P = 22
+        P = 25
         I = 0.005
         default_I = 30
 
