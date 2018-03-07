@@ -102,8 +102,6 @@ class Dimmer3:
 
             # Prevent noisy lights at night!
             if i in [2,3] or val != self.channels[i]['setting'] or self.channels[i]['poke']:
-                if i in [1,4]:
-                    self.log.debug(f"Channel {i} set from {self.channels[i]['setting']} to {val}")
                 self.channels[i]['setting'] = val
                 await self.setOutput(i,val)
                 self.channels[i]['poke'] = False
