@@ -22,7 +22,7 @@ class Capture:
         self.log.info(f"Booted with a camera of {self.camera.revision}")
         self.camera.resolution = (1920,1080)
         self.camera.framerate = 1
-        self.camera.rotation = 180
+        self.camera.rotation = 0
         self.log.info("Camera configured, sleeping...")
         time.sleep(2)
         self.log.info("Camera setup completed!")
