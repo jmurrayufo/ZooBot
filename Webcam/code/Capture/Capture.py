@@ -32,8 +32,8 @@ class Capture:
         # self.camera.exposure_mode = 'off'
         # g = self.camera.awb_gains
         # self.log.info(f"AWB gains: {g}")
-        # self.camera.awb_mode = 'off'
-        # self.camera.awb_gains = g
+        self.camera.awb_mode = 'off'
+        self.camera.awb_gains = (1.5, 1.2)
         self.log.info("Camera setup completed!")
 
 
