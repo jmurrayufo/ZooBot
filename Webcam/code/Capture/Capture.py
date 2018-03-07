@@ -23,7 +23,7 @@ class Capture:
         self.camera.resolution = (2592,1944)
         # self.camera.resolution = (1920,1080)
         self.camera.framerate = 1
-        self.camera.iso = 800
+        self.camera.iso = 640
         self.log.info("Camera configured, sleeping...")
         time.sleep(2)
         self.log.info("Camera stable, finish setup")
