@@ -25,6 +25,9 @@ parser.add_argument('--mount-location',
                     default="/home/jmurray/ZFS",
                     help='Location to attempt to mount')
 
+parser.add_argument('--ram-disk',
+                    default="/mnt/ramdisk",
+                    help='Location of ramdisk')
 
 args = parser.parse_args()
 

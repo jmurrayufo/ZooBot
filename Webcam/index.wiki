@@ -1,8 +1,8 @@
 =Webcam=
 
 
-* [ ] Capture Image
-    * [ ] Capture from PiCamera to file
+* [.] Capture Image
+    * [X] Capture from PiCamera to file
     * [ ] Create manifest file with image
         * [ ] JSON?
     * [ ] Throttle image capture based on /mnt/ramdisk usage
