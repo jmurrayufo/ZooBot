@@ -30,19 +30,23 @@ class Dimmer3:
         self.channels[1] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min}
+                            'last_bounds_error':datetime.datetime.min
+                            'gain':1.0}
         self.channels[2] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min}
+                            'last_bounds_error':datetime.datetime.min
+                            'gain':1.0}
         self.channels[3] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min}
+                            'last_bounds_error':datetime.datetime.min
+                            'gain':1.0}
         self.channels[4] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min}
+                            'last_bounds_error':datetime.datetime.min
+                            'gain':1.0}
 
         self.address = address
         self.last_update = datetime.datetime.min
@@ -56,13 +60,14 @@ class Dimmer3:
         pass
 
 
-    def bind(self, controller, channel, override=False):
+    def bind(self, controller, channel, override=False, gain=1.0):
         """Given a valid Controller instance, bind it to controlling a given 
         channel.
         """
         self.log.info(f"Binding controller {controller} to channel {channel} on {self}")
         self.channels[channel]['controller'] = controller
         self.channels[channel]['override'] = override
+        self.channels[channel]['gain'] = gain
 
 
     def overide(self, channel, setting, duration=None):
@@ -96,6 +101,8 @@ class Dimmer3:
             # If we have a hold, honor it
             if self.channels[i]['hold'] != -1:
                 val = self.channels[i]['hold']
+            else:
+                val *= self.channels[i]['gain']
 
             if self.channels[i]['override'] and val != self.channels[i]['setting']:
                 self.log.debug(f"Channel {i} set from {self.channels[i]['setting']} to {val}")

@@ -55,7 +55,7 @@ class DragonHab:
             astral_adjuster=tmp_controller)
         # tmp_controller.set_point= 26.6667
         self.devices['dimmer0'].bind(tmp_controller, 2)
-        self.devices['dimmer0'].bind(tmp_controller, 3)
+        self.devices['dimmer0'].bind(tmp_controller, 3, gain=0.8)
 
         self.next_metric_log = datetime.datetime.now()
         addresses = set()
