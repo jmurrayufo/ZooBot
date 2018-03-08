@@ -9,3 +9,7 @@ class Manifest:
 
     def __init__(self, image):
         self.image = image
+
+
+    def write(self):
+        pass

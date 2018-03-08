@@ -29,6 +29,14 @@ parser.add_argument('--ram-disk',
                     default="/mnt/ramdisk",
                     help='Location of ramdisk')
 
+parser.add_argument('--remote-host',
+                    default="192.168.1.2",
+                    help='Location of ramdisk')
+
+parser.add_argument('--remote-path',
+                    default="/ZFS/Media/Webcams",
+                    help='Location to attempt to mount')
+
 args = parser.parse_args()
 
 log = Log(args)
