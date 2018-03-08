@@ -6,8 +6,9 @@
     * [ ] Create manifest file with image
         * [ ] JSON?
     * [ ] Throttle image capture based on /mnt/ramdisk usage
-* [ ] Store Image
-    * [ ] Create a ramdisk
+* [o] Store Image
+    * [X] Create a ramdisk
+    * [X] Class for Ramdisk interactions
     * [ ] Track ramdisk usage in app
 * [ ] Transfer Image
     * [ ] Python SCP?
