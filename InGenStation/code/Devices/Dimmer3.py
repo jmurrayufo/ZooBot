@@ -30,22 +30,22 @@ class Dimmer3:
         self.channels[1] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min
+                            'last_bounds_error':datetime.datetime.min,
                             'gain':1.0}
         self.channels[2] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min
+                            'last_bounds_error':datetime.datetime.min,
                             'gain':1.0}
         self.channels[3] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min
+                            'last_bounds_error':datetime.datetime.min,
                             'gain':1.0}
         self.channels[4] = {'setting':-1, 
                             'hold':-1, 
                             'poke':False,
-                            'last_bounds_error':datetime.datetime.min
+                            'last_bounds_error':datetime.datetime.min,
                             'gain':1.0}
 
         self.address = address
