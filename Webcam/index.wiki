@@ -2,9 +2,27 @@
 
 
 * [ ] Capture Image
+    * [ ] Capture from PiCamera to file
+    * [ ] Create manifest file with image
+        * [ ] JSON?
+    * [ ] Throttle image capture based on /mnt/ramdisk usage
 * [ ] Store Image
+    * [ ] Create a ramdisk
+    * [ ] Track ramdisk usage in app
 * [ ] Transfer Image
+    * [ ] Python SCP?
+    * [ ] Damon?
+    * [ ] Pull from Bigbox?
 * [ ] Compress Image
+    * [ ] Nightly run of jpegoptim?
+    * [ ] Compress on transfer?
 * [ ] Delete Image (Source)
+    * [ ] Delete as copied?
+    * [ ] Delete as needed?
 * [ ] Generate Video
+    * [ ] Decide on good FPS to use
+    * [ ] ffmpeg cron?
+    * [ ] Python script?
 * [ ] Delete Image (Destination)
+    * [ ] Asure video suceeded?
+    * [ ] Prompt user?
