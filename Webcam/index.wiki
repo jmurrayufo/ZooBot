@@ -1,0 +1,10 @@
+=Webcam=
+
+
+* [ ] Capture Image
+* [ ] Store Image
+* [ ] Transfer Image
+* [ ] Compress Image
+* [ ] Delete Image (Source)
+* [ ] Generate Video
+* [ ] Delete Image (Destination)
