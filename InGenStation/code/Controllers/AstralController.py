@@ -58,10 +58,10 @@ class AstralController(Controller):
 
             sun = l.sun(date=datetime.date.today())
 
-            dawn = (sun['dawn'] + offset).replace(tzinfo=None) - datetime.timedelta(minutes=45)
+            dawn = (sun['dawn'] + offset).replace(tzinfo=None) - datetime.timedelta(minutes=60)
             sunrise = (sun['sunrise'] + offset).replace(tzinfo=None)
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
-            dusk = (sun['dusk'] + offset).replace(tzinfo=None) + datetime.timedelta(minutes=45)
+            dusk = (sun['dusk'] + offset).replace(tzinfo=None) + datetime.timedelta(minutes=60)
 
             if False and datetime.date.today() < datetime.date(2018,6,20):
                 # Overide for baby dragon
