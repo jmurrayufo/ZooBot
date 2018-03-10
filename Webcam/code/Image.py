@@ -19,9 +19,6 @@ class Image:
         self.local_path = Path(self.args.ram_disk, self.path.name)
 
         self.stat = self.local_path.stat()
-        self.log.debug(self.stat)
-        for i in self.stat:
-            print(i)
 
         self.current_location = None
         self.manifest = None

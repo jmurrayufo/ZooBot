@@ -18,10 +18,15 @@ class Manifest:
     def write(self):
         data = {"file_name":self.image.path.name,
                 "destination":self.image.path,
-                "local_path":self.image.local_path}
+                "local_path":self.image.local_path,
+                "st_size": self.image.stat.st_size,
+                "st_atime": self.image.stat.st_atime,
+                "st_mtime": self.image.stat.st_mtime,
+                "st_ctime": self.image.stat.st_ctime,
+                }
         self.manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem + ".json")
-        self.log.debug(f"Write to: {self.manifest_file}")
-        self.log.debug(json.dumps(data, cls=CustomEncoder))
+        with open(self.manifest_file,'w') as fp:
+            json.dump(data, fp, cls=CustomEncoder)
 
 
     def get_file(self):
