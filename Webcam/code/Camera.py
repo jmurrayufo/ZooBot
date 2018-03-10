@@ -4,6 +4,7 @@ import datetime
 import os
 import signal
 import time
+from pathlib import Path
 
 from .CustomLogging import Log
 from .Image import Image
