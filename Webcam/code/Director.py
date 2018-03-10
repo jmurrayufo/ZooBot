@@ -25,6 +25,7 @@ class Director:
         base_wait = 1
         copy_queue = []
         cleanup_queue = []
+        move_queue = []
         while 1:
             # Determine if we need to throttle back
             fill_percent = self.ramdisk.fill_percent()
@@ -47,15 +48,19 @@ class Director:
             image.queue_copy()
             copy_queue.append(image)
 
-            # Check for copied files to delete
+            # Check for copied files to move
             for image in copy_queue:
                 if image.is_copied():
-                    cleanup_queue.append(image)
+                    image.move_results()
+                    move_queue.append(image)
+            copy_queue = [x for x in copy_queue if x not in move_queue]
 
-            copy_queue = [x for x in copy_queue if x not in cleanup_queue]
-            # Clean up Ramdisk as able
-            for image in cleanup_queue:
-                image.cleanup()
+            # Check for copied files to delete
+            for image in move_queue:
+                if image.is_copied():
+                    image.cleanup()
+                    cleanup_queue.append(image)
+            move_queue = [x for x in move_queue if x not in cleanup_queue]
 
             cleanup_queue = [x for x in cleanup_queue if not x.is_cleaned()]
 
