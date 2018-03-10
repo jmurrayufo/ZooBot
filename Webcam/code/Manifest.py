@@ -20,4 +20,11 @@ class Manifest:
                 "local_path":self.image.local_path}
         manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem + ".json")
         self.log.debug(f"Write to: {manifest_file}")
-        self.log.debug(json.dumps(data))
+        self.log.debug(json.dumps(data), cls=CustomEncoder)
+
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Path):
+            return str(obj)
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
