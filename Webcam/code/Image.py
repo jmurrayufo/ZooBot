@@ -38,15 +38,18 @@ class Image:
 
         cmd = f"scp {self.local_path} {self.args.remote_host}:{self.args.remote_dropbox}/Working/"
         self.log.debug(cmd)
+        self.process = subprocess.Popen(shlex.split(cmd)).wait(30)
 
         self.manifest.write()
 
         cmd = f"scp {self.manifest.get_file()} {self.args.remote_host}:{self.args.remote_dropbox}/Working/"
         self.log.debug(cmd)
+        self.process = subprocess.Popen(shlex.split(cmd)).wait(30)
 
         cmd = f"ssh bigbox 'mv {self.args.remote_dropbox}/Working/{self.manifest.get_file().name} {self.args.remote_dropbox}/Working/{self.path.name} {self.args.remote_dropbox}/Inbox/'"
         self.log.debug(cmd)
-        # self.process = subprocess.Popen(shlex.split(cmd))
+        self.process = subprocess.Popen(shlex.split(cmd)).wait(30)
+        # self.process = subprocess.Popen(shlex.split(cmd)).wait(30)
 
     def is_copied(self):
         pass
