@@ -32,17 +32,17 @@ class Image:
         if not self.manifest:
             self.spawn_manifest()
 
-        self.remote_dropbox = Path(self.args.remote_dropbox, self.path)
+        # self.remote_dropbox = Path(self.args.remote_dropbox, self.path)
 
-        cmd = f"scp {self.local_path} {self.args.remote_host}:{self.remote_dropbox}/Working/"
+        cmd = f"scp {self.local_path} {self.args.remote_host}:{self.args.remote_dropbox}/Working/"
         self.log.debug(cmd)
 
         self.manifest.write()
 
-        cmd = f"scp {self.manifest.get_file()} {self.args.remote_host}:{self.remote_dropbox}/Working/"
+        cmd = f"scp {self.manifest.get_file()} {self.args.remote_host}:{self.args.remote_dropbox}/Working/"
         self.log.debug(cmd)
 
-        cmd = f"ssh bigbox 'mv {self.remote_dropbox}/Working/{self.manifest.get_file()} {self.remote_dropbox}/Working/{self.path.name} {self.remote_dropbox}/Inbox/'"
+        cmd = f"ssh bigbox 'mv {self.remote_dropbox}/Working/{self.manifest.get_file()} {self.args.remote_dropbox}/Working/{self.path.name} {self.remote_dropbox}/Inbox/'"
         self.log.debug(cmd)
         # self.process = subprocess.Popen(shlex.split(cmd))
 
