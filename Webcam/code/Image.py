@@ -32,7 +32,7 @@ class Image:
         if not self.manifest:
             self.spawn_manifest()
 
-        self.remote_path = Path(self.args.remote_path, self.path)
+        self.remote_dropbox = Path(self.args.remote_dropbox, self.path)
 
         cmd = f"scp {self.local_path} {self.args.remote_host}:{self.remote_dropbox}/Working/"
         self.log.debug(cmd)
