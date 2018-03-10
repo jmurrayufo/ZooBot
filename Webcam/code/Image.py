@@ -3,7 +3,7 @@ import subprocess
 import shlex 
 from pathlib import Path
 
-from . import Manifest
+from .Manifest import Manifest
 from .CustomLogging import Log
 
 class Image:

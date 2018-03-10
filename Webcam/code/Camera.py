@@ -6,7 +6,7 @@ import signal
 import time
 
 from .CustomLogging import Log
-from . import Image
+from .Image import Image
 
 
 class Camera:
