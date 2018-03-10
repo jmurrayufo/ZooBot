@@ -20,6 +20,8 @@ class Image:
 
         self.stat = self.local_path.stat()
         self.log.debug(self.stat)
+        for i in self.stat:
+            print(i)
 
         self.current_location = None
         self.manifest = None
