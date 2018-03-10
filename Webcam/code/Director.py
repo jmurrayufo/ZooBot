@@ -2,6 +2,7 @@
 import datetime
 import pathlib
 import time
+import numpy as np
 
 from .Ramdisk import Ramdisk
 from .Camera import Camera
