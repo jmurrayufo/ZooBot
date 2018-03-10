@@ -18,5 +18,5 @@ class Manifest:
         data = {"file_name":self.image.path.name,
                 "destination":self.image.path.parent,
                 "local_path":self.image.local_path}
-        manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem, "json")
+        manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem, ".json")
         self.log.debug(f"Write to: {manifest_file}")

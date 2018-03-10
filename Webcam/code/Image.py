@@ -36,7 +36,7 @@ class Image:
 
         self.manifest.write()
 
-        cmd = f"ssh bigbox 'mkdirs -p {remote_path.parent}';scp {self.local_file} {self.args.remote_host}:{self.remote_path}"
+        cmd = f"ssh bigbox 'mkdirs -p {self.remote_path.parent}';scp {self.local_file} {self.args.remote_host}:{self.remote_path}"
         self.log.debug(cmd)
         # self.process = subprocess.Popen(shlex.split(cmd))
 
