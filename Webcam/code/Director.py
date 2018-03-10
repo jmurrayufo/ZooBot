@@ -31,6 +31,7 @@ class Director:
             dt = base_wait*np.exp(fill_percent*5)
 
             # Wait perscribed time
+            self.log.debug(f"Sleep for: {dt}")
             time.sleep(dt)
 
             # Capture image
@@ -53,4 +54,4 @@ class Director:
 
             # Clean up Ramdisk as able
 
-            break # TODO: Remove this!
+            # break # TODO: Remove this!
