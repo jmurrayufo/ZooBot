@@ -10,9 +10,13 @@ class Image:
     """Track data and progress of an image as an object.
     """
 
-    def __init__(self, args, path):
-        self.path = path
+    def __init__(self, args, path, annotate_text):
+        self.annotate_text = annotate_text
         self.args = args
+        self.path = path
+
+        self.local_path = Path(self.args.ram_disk, self.path.name)
+
         self.log = Log()
         self.current_location = None
         self.manifest = None
@@ -24,9 +28,15 @@ class Image:
         self.manifest = Manifest(self)
 
     def queue_copy(self):
-        local_file = Path(self.args.ram_disk, self.path.name)
-        remote_path = Path(self.args.remote_path, self.path)
-        cmd = f"ssh bigbox 'mkdirs -p {remote_path.parent}';scp {local_file} {self.args.remote_host}:{remote_path}"
+
+        if not self.manifest:
+            self.spawn_manifest()
+
+        self.remote_path = Path(self.args.remote_path, self.path)
+
+        self.manifest.write()
+
+        cmd = f"ssh bigbox 'mkdirs -p {remote_path.parent}';scp {self.local_file} {self.args.remote_host}:{self.remote_path}"
         self.log.debug(cmd)
         # self.process = subprocess.Popen(shlex.split(cmd))
 

@@ -34,6 +34,7 @@ class Camera:
         self.camera.awb_mode = 'off'
         self.camera.awb_gains = (1.5, 1.2)
         self.log.info("Camera setup completed!")
+        self.annotate_text = ""
 
 
     def capture(self, file_name):
@@ -45,5 +46,5 @@ class Camera:
         
         self.camera.capture(str(path))
 
-        return Image(self.args, file_name)
+        return Image(self.args, file_name, self.camera.annotate_text)
 

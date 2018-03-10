@@ -3,7 +3,7 @@ import datetime
 import pathlib
 import time
 
-from . import Ramdisk
+from . import Ramdisk, Camera
 from .CustomLogging import Log
 
 class Director:

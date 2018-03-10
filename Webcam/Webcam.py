@@ -10,6 +10,7 @@ from __version__ import __version__
 from code.Capture import Capture
 from code.CustomLogging import Log
 from code.Mount import Mount
+from code import Director
 
 parser = argparse.ArgumentParser(description='Webcam Application')
 
@@ -37,12 +38,24 @@ parser.add_argument('--remote-path',
                     default="/ZFS/Media/Webcams",
                     help='Location to attempt to mount')
 
+parser.add_argument('--director',
+                    default=False,
+                    action='store_true',
+                    help='Use director mode')
+
 args = parser.parse_args()
 
 log = Log(args)
 
 log.info("Booting Webcam.py")
 log.info(args)
+
+if args.director:
+    log.info("Booting with director mode")
+    director = Director(args)
+    director.run()
+    log.info("Director mode exiting")
+    exit()
 
 
 log.info("Begin main loop")
