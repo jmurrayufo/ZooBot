@@ -26,7 +26,7 @@ class Manifest:
                 }
         self.manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem + ".json")
         with open(self.manifest_file,'w') as fp:
-            json.dump(data, fp, cls=CustomEncoder)
+            json.dump(data, fp, indent=2, cls=CustomEncoder)
 
 
     def get_file(self):
