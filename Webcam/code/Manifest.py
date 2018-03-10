@@ -11,16 +11,22 @@ class Manifest:
 
     def __init__(self, image):
         self.image = image
+        self.manifest_file = None
         self.log = Log()
 
 
     def write(self):
         data = {"file_name":self.image.path.name,
-                "destination":self.image.path.parent,
+                "destination":self.image.path,
                 "local_path":self.image.local_path}
-        manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem + ".json")
-        self.log.debug(f"Write to: {manifest_file}")
+        self.manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem + ".json")
+        self.log.debug(f"Write to: {self.manifest_file}")
         self.log.debug(json.dumps(data, cls=CustomEncoder))
+
+
+    def get_file(self):
+        return self.manifest_file
+
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):

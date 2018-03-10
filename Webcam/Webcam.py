@@ -34,9 +34,9 @@ parser.add_argument('--remote-host',
                     default="192.168.1.2",
                     help='Location of ramdisk')
 
-parser.add_argument('--remote-path',
-                    default="/ZFS/Media/Webcams",
-                    help='Location to attempt to mount')
+parser.add_argument('--remote-dropbox',
+                    default="/ZFS/Media/Webcams/Dropbox",
+                    help='Remote location with Working and Inbox directories')
 
 parser.add_argument('--director',
                     default=False,

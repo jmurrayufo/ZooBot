@@ -34,9 +34,15 @@ class Image:
 
         self.remote_path = Path(self.args.remote_path, self.path)
 
+        cmd = f"scp {self.local_path} {self.args.remote_host}:{self.remote_dropbox}/Working/"
+        self.log.debug(cmd)
+
         self.manifest.write()
 
-        cmd = f"ssh bigbox 'mkdirs -p {self.remote_path.parent}';scp {self.local_path} {self.args.remote_host}:{self.remote_path}"
+        cmd = f"scp {self.manifest.get_file()} {self.args.remote_host}:{self.remote_dropbox}/Working/"
+        self.log.debug(cmd)
+
+        cmd = f"ssh bigbox 'mv {self.remote_dropbox}/Working/{self.manifest.get_file()} {self.remote_dropbox}/Working/{self.path.name} {self.remote_dropbox}/Inbox/'"
         self.log.debug(cmd)
         # self.process = subprocess.Popen(shlex.split(cmd))
 
