@@ -11,13 +11,16 @@ class Image:
     """
 
     def __init__(self, args, path, annotate_text):
+        self.log = Log()
+
         self.annotate_text = annotate_text
         self.args = args
         self.path = path
-
         self.local_path = Path(self.args.ram_disk, self.path.name)
 
-        self.log = Log()
+        self.stat = self.local_path.stat()
+        self.log.debug(self.stat)
+
         self.current_location = None
         self.manifest = None
         self.captured = False
