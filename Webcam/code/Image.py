@@ -42,7 +42,7 @@ class Image:
         cmd = f"scp {self.manifest.get_file()} {self.args.remote_host}:{self.args.remote_dropbox}/Working/"
         self.log.debug(cmd)
 
-        cmd = f"ssh bigbox 'mv {self.args.remote_dropbox}/Working/{self.manifest.get_file()} {self.args.remote_dropbox}/Working/{self.path.name} {self.remote_dropbox}/Inbox/'"
+        cmd = f"ssh bigbox 'mv {self.args.remote_dropbox}/Working/{self.manifest.get_file()} {self.args.remote_dropbox}/Working/{self.path.name} {self.args.remote_dropbox}/Inbox/'"
         self.log.debug(cmd)
         # self.process = subprocess.Popen(shlex.split(cmd))
 
