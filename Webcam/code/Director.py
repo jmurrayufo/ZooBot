@@ -52,6 +52,10 @@ class Director:
                 if image.is_copied():
                     cleanup_queue.append(image)
 
+            copy_queue = [x for x in copy_queue if x not in cleanup_queue]
             # Clean up Ramdisk as able
+            for image in cleanup_queue:
+                image.cleanup()
+
 
             # break # TODO: Remove this!

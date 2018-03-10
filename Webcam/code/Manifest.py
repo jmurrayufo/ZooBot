@@ -1,6 +1,8 @@
 
-import json
 from pathlib import Path, PosixPath
+import json
+import os
+
 from .CustomLogging import Log
 
 
@@ -31,6 +33,10 @@ class Manifest:
 
     def get_file(self):
         return self.manifest_file
+
+
+    def cleanup(self):
+        os.remove(self.manifest_file)
 
 
 class CustomEncoder(json.JSONEncoder):
