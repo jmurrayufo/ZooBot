@@ -57,5 +57,8 @@ class Director:
             for image in cleanup_queue:
                 image.cleanup()
 
+            cleanup_queue = [x for x in cleanup_queue if not x.is_cleaned()]
+
+
 
             # break # TODO: Remove this!

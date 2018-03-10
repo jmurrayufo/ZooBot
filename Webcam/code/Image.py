@@ -25,6 +25,7 @@ class Image:
         self.manifest = None
         self.copied = False
         self.moved = False
+        self.cleaned = False
 
 
     def spawn_manifest(self):
@@ -82,6 +83,11 @@ class Image:
         return True
 
 
+    def is_cleaned(self):
+        return self.cleaned
+
+
     def cleanup(self):
         self.manifest.cleanup()
         os.remove(self.local_path)
+        self.cleaned = True
