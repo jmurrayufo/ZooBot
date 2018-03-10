@@ -1,6 +1,6 @@
 
 import json
-from pathlib import Path
+from pathlib import Path, PosixPath
 from .CustomLogging import Log
 
 
@@ -24,7 +24,7 @@ class Manifest:
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, Path):
+        if isinstance(obj, PosixPath):
             return str(obj)
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
