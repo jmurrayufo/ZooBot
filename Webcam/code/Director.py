@@ -29,7 +29,7 @@ class Director:
         while 1:
             # Determine if we need to throttle back
             fill_percent = self.ramdisk.fill_percent()
-            dt = base_wait*np.exp(fill_percent*5)
+            dt = base_wait*np.exp(fill_percent*5) - 1.0
 
             # Wait perscribed time
             self.log.debug(f"Sleep for: {dt}")
