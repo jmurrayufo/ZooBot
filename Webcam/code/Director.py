@@ -36,11 +36,14 @@ class Director:
             min_delta -= datetime.datetime.now()
             if min_delta < datetime.timedelta(0):
                 min_delta = datetime.timedelta(0)
-            self.log.debug(f"Min Delta: {min_delta}")
+            min_delta = min_delta.total_seconds()
+            if dt < min_delta:
+                dt = min_delta
+            # self.log.debug(f"Min Delta: {min_delta}")
             self.last_capture = datetime.datetime.now()
 
             # Wait perscribed time
-            self.log.debug(f"Sleep for: {dt}")
+            # self.log.debug(f"Sleep for: {dt}")
             time.sleep(dt)
 
             # Capture image

@@ -40,14 +40,14 @@ class Image:
         # self.remote_dropbox = Path(self.args.remote_dropbox, self.path)
 
         cmd = f"scp {self.local_path} {self.args.remote_host}:{self.args.remote_dropbox}/Working/"
-        self.log.debug(cmd)
+        # self.log.debug(cmd)
         self.process_jpeg_cp = subprocess.Popen(shlex.split(cmd), 
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         self.manifest.write()
 
         cmd = f"scp {self.manifest.get_file()} {self.args.remote_host}:{self.args.remote_dropbox}/Working/"
-        self.log.debug(cmd)
+        # self.log.debug(cmd)
         self.process_json_cp = subprocess.Popen(shlex.split(cmd), 
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -55,7 +55,7 @@ class Image:
     def move_results(self):
 
         cmd = f"ssh bigbox 'mv {self.args.remote_dropbox}/Working/{self.manifest.get_file().name} {self.args.remote_dropbox}/Working/{self.path.name} {self.args.remote_dropbox}/Inbox/'"
-        self.log.debug(cmd)
+        # self.log.debug(cmd)
         self.process_move = subprocess.Popen(shlex.split(cmd), 
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
