@@ -21,7 +21,7 @@ class Manifest:
     def write(self):
         md5 = MDFive(self.image.local_path).checksum()
         data = {"file_name":self.image.path.name,
-                "destination":self.image.path,
+                "destination":self.image.path.parent,
                 "local_path":self.image.local_path,
                 "st_size": self.image.stat.st_size,
                 "st_atime": self.image.stat.st_atime,
