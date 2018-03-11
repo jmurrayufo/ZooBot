@@ -19,6 +19,7 @@ class Director:
         self.ramdisk = Ramdisk(self.args.ram_disk)
         self.camera = Camera(args)
         self.log.info("Completed Director Init")
+        self.last_capture = datetime.datetime.min
 
 
     def run(self):
@@ -31,6 +32,10 @@ class Director:
             fill_percent = self.ramdisk.fill_percent()
             dt = base_wait*np.exp(fill_percent*5) - 1.0
 
+            min_delta = self.last_capture + datetime.timedelta(self.args.frame_delay)
+            min_delta -= datetime.datetime.now()
+            self.log.debub(f"Min Delta: {min_delta}")
+
             # Wait perscribed time
             self.log.debug(f"Sleep for: {dt}")
             time.sleep(dt)
@@ -40,6 +45,7 @@ class Director:
             file_name = now.strftime(f"Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
             path = pathlib.Path(file_name)
             image = self.camera.capture(path)
+            self.last_capture = datetime.datetime.now()
 
             # Write image and manifest to Ramdisk
             image.spawn_manifest()
