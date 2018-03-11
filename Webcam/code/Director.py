@@ -19,7 +19,7 @@ class Director:
         self.ramdisk = Ramdisk(self.args.ram_disk)
         self.camera = Camera(args)
         self.log.info("Completed Director Init")
-        self.last_capture = datetime.datetime.min
+        self.next_capture = datetime.datetime.now()
 
 
     def run(self):
@@ -30,26 +30,24 @@ class Director:
         while 1:
             # Determine if we need to throttle back
             fill_percent = self.ramdisk.fill_percent()
-            dt = base_wait*np.exp(fill_percent*5) - 1.0
-
-            min_delta = self.last_capture + datetime.timedelta(seconds=self.args.frame_delay)
-            min_delta -= datetime.datetime.now()
-            if min_delta < datetime.timedelta(0):
-                min_delta = datetime.timedelta(0)
-            min_delta = min_delta.total_seconds()
-            if dt < min_delta:
-                dt = min_delta
-            # self.log.debug(f"Min Delta: {min_delta}")
+            extra_delay = base_wait*np.exp(fill_percent*5) - 1.0
+            self.next_capture += datetime.timedelta(seconds=extra_delay)
+            self.next_capture += datetime.timedelta(seconds=self.args.frame_delay)
 
             # Wait perscribed time
-            self.log.debug(f"Sleep for: {dt}")
-            time.sleep(dt)
+            if datetime.datetime.now() > self.next_capture:
+                self.log.warning(f"Capture is currently {datetime.datetime.now() - self.next_capture} behind")
+            else:
+                sleep_time = self.next_capture - datetime.datetime.now()
+                sleep_time = sleep_time.total_seconds()
+                self.log.debug(f"Sleep for: {sleep_time}")
+                time.sleep(sleep_time)
+
 
             # Capture image
             now = datetime.datetime.now()
             file_name = now.strftime(f"Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
             path = pathlib.Path(file_name)
-            self.last_capture = datetime.datetime.now()
             image = self.camera.capture(path)
 
             # Write image and manifest to Ramdisk
