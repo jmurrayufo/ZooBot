@@ -1,5 +1,6 @@
 
 import os
+from pathlib import Path
 
 class Ramdisk:
     """ Manage ram disk. """ 
@@ -27,4 +28,9 @@ class Ramdisk:
         # Returns currnt fill percentage
         stats = os.statvfs(Ramdisk.location)
         return 1 - (stats.f_bfree/stats.f_blocks)
+
+
+    def clean(self):
+        for file in Path(Ramdisk.location).glob("*"):
+            os.remove(file)
 

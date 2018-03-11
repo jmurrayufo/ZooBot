@@ -17,6 +17,7 @@ class Director:
         self.log.info("Begin Director Init")
         self.args = args
         self.ramdisk = Ramdisk(self.args.ram_disk)
+        self.ramdisk.clean()
         self.camera = Camera(args)
         self.log.info("Completed Director Init")
         self.next_capture = datetime.datetime.now()
