@@ -32,7 +32,7 @@ class Director:
             fill_percent = self.ramdisk.fill_percent()
             dt = base_wait*np.exp(fill_percent*5) - 1.0
 
-            min_delta = self.last_capture + datetime.timedelta(self.args.frame_delay)
+            min_delta = self.last_capture + datetime.timedelta(seconds=self.args.frame_delay)
             min_delta -= datetime.datetime.now()
             self.log.debug(f"Min Delta: {min_delta}")
 
