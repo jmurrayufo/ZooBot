@@ -40,16 +40,16 @@ class Director:
             if dt < min_delta:
                 dt = min_delta
             # self.log.debug(f"Min Delta: {min_delta}")
-            self.last_capture = datetime.datetime.now()
 
             # Wait perscribed time
-            # self.log.debug(f"Sleep for: {dt}")
+            self.log.debug(f"Sleep for: {dt}")
             time.sleep(dt)
 
             # Capture image
             now = datetime.datetime.now()
             file_name = now.strftime(f"Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
             path = pathlib.Path(file_name)
+            self.last_capture = datetime.datetime.now()
             image = self.camera.capture(path)
 
             # Write image and manifest to Ramdisk
