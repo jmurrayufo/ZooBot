@@ -27,7 +27,7 @@ class Manifest:
                 "st_atime": self.image.stat.st_atime,
                 "st_mtime": self.image.stat.st_mtime,
                 "st_ctime": self.image.stat.st_ctime,
-                "md5":,md5,
+                "md5":md5,
                 }
         self.manifest_file = Path(self.image.local_path.parent, self.image.local_path.stem + ".json")
         with open(self.manifest_file,'w') as fp:
