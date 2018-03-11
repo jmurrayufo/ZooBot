@@ -48,6 +48,6 @@ class Camera:
         
         self.camera.capture(str(path))
 
-        self.log.debug(datetime.datetime.now()-t0)
+        # self.log.debug(datetime.datetime.now()-t0)
         return Image(self.args, file_name, self.camera.annotate_text)
 
