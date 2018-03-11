@@ -41,11 +41,13 @@ class Camera:
     def capture(self, file_name):
 
         # Now capture an image
+        t0 = datetime.datetime.now()
 
         self.camera.annotate_text = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         path = Path(self.args.ram_disk, file_name.name)
         
         self.camera.capture(str(path))
 
+        self.log.debug(datetime.datetime.now()-t0)
         return Image(self.args, file_name, self.camera.annotate_text)
 
