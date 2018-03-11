@@ -4,7 +4,7 @@ import json
 import os
 
 from .CustomLogging import Log
-from .MD5 import MD5
+from .MDFive import MDFive
 
 
 class Manifest:
@@ -19,7 +19,7 @@ class Manifest:
 
 
     def write(self):
-        md5 = MD5(self.image.local_path).checksum()
+        md5 = MDFive(self.image.local_path).checksum()
         data = {"file_name":self.image.path.name,
                 "destination":self.image.path,
                 "local_path":self.image.local_path,

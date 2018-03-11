@@ -3,5 +3,5 @@ from .Camera import Camera
 from .Director import Director
 from .Image import Image
 from .Manifest import Manifest
-from .MD5 import MD5
+from .MDFive import MDFive
 from .Ramdisk import Ramdisk
