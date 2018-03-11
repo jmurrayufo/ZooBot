@@ -4,7 +4,7 @@ import json
 import os
 
 from .CustomLogging import Log
-from . import MD5
+from .MD5 import MD5
 
 
 class Manifest:
