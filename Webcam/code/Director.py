@@ -34,7 +34,7 @@ class Director:
 
             min_delta = self.last_capture + datetime.timedelta(self.args.frame_delay)
             min_delta -= datetime.datetime.now()
-            self.log.debub(f"Min Delta: {min_delta}")
+            self.log.debug(f"Min Delta: {min_delta}")
 
             # Wait perscribed time
             self.log.debug(f"Sleep for: {dt}")
