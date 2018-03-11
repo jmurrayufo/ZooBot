@@ -39,7 +39,11 @@ class Manifest:
 
 
     def cleanup(self):
-        os.remove(self.manifest_file)
+        try:
+            os.remove(self.manifest_file)
+        except FileNotFoundError:
+            self.log.error(f"File {self.manifest_file} was missing for delete!")
+            pass
 
 
 class CustomEncoder(json.JSONEncoder):

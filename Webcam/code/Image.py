@@ -92,5 +92,9 @@ class Image:
 
     def cleanup(self):
         self.manifest.cleanup()
-        os.remove(self.local_path)
+        try:
+            os.remove(self.local_path)
+        except FileNotFoundError:
+            self.log.error(f"File {self.local_path} was missing for delete!")
+            pass
         self.cleaned = True
