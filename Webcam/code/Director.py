@@ -32,7 +32,7 @@ class Director:
             fill_percent = self.ramdisk.fill_percent()
             extra_delay = base_wait*np.exp(fill_percent*5) - 1.0
             if extra_delay > self.args.frame_delay:
-                self.log.info(f"Ramdisk near capacity ({self.ramdisk.fill_percent():%}), delaying extra {extra_delay:.1f} seconds")
+                self.log.warning(f"Ramdisk near capacity ({self.ramdisk.fill_percent():%}), delaying extra {extra_delay:.1f} seconds")
 
             self.next_capture += datetime.timedelta(seconds=extra_delay)
             self.next_capture += datetime.timedelta(seconds=self.args.frame_delay)
