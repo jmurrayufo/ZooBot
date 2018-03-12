@@ -22,7 +22,7 @@ class DragonHab:
         default_I = 30
 
         # Basking Lamp and UV Config
-        basking_lamp_setting = 42
+        basking_lamp_setting = 44
         uv_trigger = basking_lamp_setting - 1
 
 
