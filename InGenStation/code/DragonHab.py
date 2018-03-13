@@ -25,6 +25,10 @@ class DragonHab:
         basking_lamp_setting = 44
         uv_trigger = basking_lamp_setting - 1
 
+        # Ambient Temperatures
+        ambient_day_temperature = 26.6667
+        ambient_night_temperature = 23.8889
+
 
 
         self.log = Log()
@@ -49,13 +53,14 @@ class DragonHab:
         self.devices['dimmer0'].bind(tmp_controller, 4, override=uv_trigger)
 
         tmp_controller = AstralController(args, 'astrPID', "35°18'N", "105°06'W",  
-            elivation=0, day_value=26.6667, night_value=21.1111)
+            elivation=0, day_value=ambient_day_temperature, night_value=ambient_night_temperature)
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=P, I=I, Integrator=default_I/I, 
             astral_adjuster=tmp_controller)
+
         # tmp_controller.set_point= 26.6667
         self.devices['dimmer0'].bind(tmp_controller, 2)
-        self.devices['dimmer0'].bind(tmp_controller, 3, gain=0.8)
+        self.devices['dimmer0'].bind(tmp_controller, 3, gain=0.5)
 
         self.next_metric_log = datetime.datetime.now()
         addresses = set()
