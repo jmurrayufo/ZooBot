@@ -44,7 +44,7 @@ next_scan = datetime.datetime.now()
 
 while 1:
     while datetime.datetime.now() < next_scan:
-        time.sleep(1)
+        time.sleep(0.1)
 
     # Make sure we have a folder to write too!
 
