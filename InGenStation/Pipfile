@@ -17,6 +17,7 @@ sanic-auth = "*"
 numpy = "*"
 "rpi.gpio" = "*"
 astral = "*"
+pigpio = "*"
 
 
 [dev-packages]
