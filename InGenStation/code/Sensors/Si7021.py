@@ -144,6 +144,7 @@ class Si7021:
     async def _measure_temperature(self, max_loops):
         with I2C(address=self.address) as i2c:
             i2c.write_byte(self.MEASURE_TEMPERATURE_NO_HOLD)
+            time.sleep(0.006)
             count, data = i2c.read_bytes(2)
             self.log.debug(count)
             self.log.debug(data)
