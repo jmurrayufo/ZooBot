@@ -122,6 +122,7 @@ class Si7021:
             measured_temperature = t_list[2]
 
         self._temperature = measured_temperature
+        self.log.debug(self._temperature)
 
         self.last_update = datetime.datetime.now()
         # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
