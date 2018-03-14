@@ -145,7 +145,7 @@ class Si7021:
             if count < 3:
                 self.log.error(pigpio.error_text(count))
                 raise OSError("Couldn't get a good read after max loops")
-        return data[0] << 8 + data[1]
+        return (data[0] << 8) + data[1]
 
 
     async def _measure_temperature(self, max_loops):
@@ -164,7 +164,7 @@ class Si7021:
                 self.log.error(pigpio.error_text(count))
                 raise OSError("Couldn't get a good read after max loops")
         self.log.debug(list(data))
-        return data[0] << 8 + data[1]
+        return (data[0] << 8) + data[1]
 
 
     # async def _measure_humidity(self, bus, max_loops):
