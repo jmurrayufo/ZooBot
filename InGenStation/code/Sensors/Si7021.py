@@ -138,10 +138,12 @@ class Si7021:
                 loop += 1
                 count, data = i2c.read_bytes(3)
                 if count < 3:
+                    time.sleep(0.01)
                     continue
                 crc = self._CRC_calc(data)
                 if crc != data[2]:
                     self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
+                    time.sleep(0.01)
                     continue
 
             if count < 3:
