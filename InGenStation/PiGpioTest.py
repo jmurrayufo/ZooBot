@@ -11,5 +11,5 @@ print(i2c.i2c_write_byte(tmp102,0))
 data = i2c.i2c_read_device(tmp102, 2)
 
 print(data)
-for i in data:
+for i in data[1]:
     print(i)
