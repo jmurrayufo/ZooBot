@@ -18,13 +18,13 @@ RESET = 0xFE
 delay = 0.06
 
 while 1:
+    print(f"\nDelay: {delay}")
 
     print(i2c.i2c_write_byte(h,MEASURE_HUMIDITY_NO_HOLD))
 
     time.sleep(delay)
 
     count, data = i2c.i2c_read_device(h, 3)
-    print(f"Delay: {delay}")
     print(count)
     print(data)
 
