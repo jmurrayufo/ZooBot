@@ -101,6 +101,7 @@ class Si7021:
         self._humidity = await self._measure_humidity(20)
 
         measured_temperature = await self._measure_temperature(20)
+        self.log.debug(measured_temperature)
 
         # Handle boot loop!
         if not hasattr(self,"_temperature"): self._temperature = measured_temperature
