@@ -147,6 +147,7 @@ class Si7021:
                 crc = self._CRC_calc(data)
                 if crc != data[2]:
                     self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
+                    self.reset()
                     time.sleep(0.02)
                     continue
 
