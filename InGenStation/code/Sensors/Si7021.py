@@ -162,6 +162,7 @@ class Si7021:
             if count < 2:
                 self.log.error(pigpio.error_text(count))
                 raise OSError("Couldn't get a good read after max loops")
+        self.log.debug(list(data))
         return data[0] << 8 + data[1]
 
 
