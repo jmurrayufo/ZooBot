@@ -97,12 +97,9 @@ class Si7021:
             # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
             # self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
             return
+        
+        self._humidity = await self._measure_humidity(20)
 
-        h_list = []
-        for i in range(3):
-            h_list.append(await self._measure_humidity(20))
-        h_list = sorted(h_list)
-        self._humidity = h_list[1]
         measured_temperature = await self._measure_temperature(20)
 
         # Handle boot loop!
@@ -148,6 +145,8 @@ class Si7021:
         with I2C(address=self.address) as i2c:
             i2c.write_byte(self.READ_TEMPERATURE_FROM_RH)
             count, data = i2c.read_bytes(2)
+            self.log.debug(data)
+            self.log.debug(list(data))
         return data[0] << 8 + data[1]
 
 
