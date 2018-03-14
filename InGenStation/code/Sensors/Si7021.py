@@ -5,6 +5,7 @@ import asyncio
 import time
 
 from ..CustomLogging import Log
+from ..I2C import I2C
 
 class Si7021:
 
