@@ -12,4 +12,4 @@ data = i2c.i2c_read_device(tmp102, 2)
 
 print(data)
 for i in data:
-    print(i,ord(i), chr(i))
+    print(i)
