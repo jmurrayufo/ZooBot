@@ -129,12 +129,16 @@ class Si7021:
 
     async def _measure_humidity(self, max_loops):
         with I2C(address=self.address) as i2c:
+
             i2c.write_byte(self.MEASURE_HUMIDITY_NO_HOLD)
+
             time.sleep(0.016)
             loop = 0
             while loop < max_loops:
                 loop += 1
                 count, data = i2c.read_bytes(3)
+                if count < 3:
+                    continue
                 crc = self._CRC_calc(data)
                 if crc != data[2]:
                     self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
