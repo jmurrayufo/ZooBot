@@ -16,11 +16,11 @@ MEASURE_TEMPERATURE_NO_HOLD = 0xF3
 READ_TEMPERATURE_FROM_RH = 0xE0
 RESET = 0xFE
 
-print(i2c.i2c_write_byte(h,MEASURE_HUMIDITY_HOLD))
+print(i2c.i2c_write_byte(h,MEASURE_HUMIDITY_NO_HOLD))
 
-time.sleep(0.1)
+# time.sleep(0.1)
 
-count, data = i2c.i2c_read_device(h, 2)
+count, data = i2c.i2c_read_device(h, 3)
 print(count)
 print(data)
 for i in data:
