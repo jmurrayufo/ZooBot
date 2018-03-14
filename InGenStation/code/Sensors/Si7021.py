@@ -132,7 +132,7 @@ class Si7021:
 
     async def _measure_humidity(self, max_loops):
         with I2C(address=self.address) as i2c:
-            i2c.write_byte(self.MEASURE_HUMIDITY_NOHOLD)
+            i2c.write_byte(self.MEASURE_HUMIDITY_NO_HOLD)
             count, data = i2c.read_bytes(3)
             if count < 0:
                 self.log.error(pigpio.error_text(count))
@@ -147,7 +147,7 @@ class Si7021:
 
     async def _measure_temperature(self, max_loops):
         with I2C(address=self.address) as i2c:
-            i2c.write_byte(self.MEASURE_TEMPERATURE_NOHOLD)
+            i2c.write_byte(self.MEASURE_TEMPERATURE_NO_HOLD)
             count, data = i2c.read_bytes(3)
         return data[0] << 8 + data[1]
 
