@@ -20,7 +20,7 @@ delay = 0.06
 while 1:
     print(f"\nDelay: {delay}")
 
-    print(i2c.i2c_write_byte(h,MEASURE_HUMIDITY_NO_HOLD))
+    print(i2c.i2c_write_byte(h,MEASURE_TEMPERATURE_NO_HOLD))
 
     time.sleep(delay)
 
@@ -31,4 +31,4 @@ while 1:
     for i in data:
         print(i)
 
-    delay *= .99
+    delay *= .95
