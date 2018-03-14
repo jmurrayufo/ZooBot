@@ -101,7 +101,6 @@ class Si7021:
         self._humidity = await self._measure_humidity(20)
 
         measured_temperature = await self._measure_temperature(20)
-        self.log.debug(measured_temperature)
 
         # Handle boot loop!
         if not hasattr(self,"_temperature"): self._temperature = measured_temperature
@@ -123,7 +122,6 @@ class Si7021:
             measured_temperature = t_list[2]
 
         self._temperature = measured_temperature
-        self.log.debug(self._temperature)
 
         self.last_update = datetime.datetime.now()
         # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
@@ -163,7 +161,6 @@ class Si7021:
             if count < 2:
                 self.log.error(pigpio.error_text(count))
                 raise OSError("Couldn't get a good read after max loops")
-        self.log.debug(list(data))
         return (data[0] << 8) + data[1]
 
 
