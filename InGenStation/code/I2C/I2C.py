@@ -44,7 +44,4 @@ class I2C:
 
 
     def __exit__(self, exception_type, exception_value, traceback):
-        print(exception_type)
-        print(exception_value)
-        print(traceback)
         self.i2c.i2c_close(self.handle)
