@@ -3,7 +3,9 @@ import smbus2
 import datetime
 import asyncio
 import time
+
 from ..CustomLogging import Log
+from ..I2C import I2C
 
 class TMP102:
 
@@ -47,23 +49,21 @@ class TMP102:
 
 
     async def update(self):
-        t_start = time.time()
-        # self.log.debug(f"Updating TMP102 sensor 0x{self.address:02x}")
-        if self.args.purpose == 'test':
-            import random
-            self._temperature = random.randint(0,0xFFF)
-            self.last_update = datetime.datetime.now()
-            # self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
-            # self.log.debug(f"Temperature was {self.temperature:.1f} C")
-            return
 
-        with smbus2.SMBusWrapper(1) as bus:
-            # This is really a config thing? Maybe?
-            bus.write_byte_data(self.address, 0, 0)
-
-            self._temperature = bus.read_i2c_block_data(self.address, 0, 2)
+        with I2C(address=self.address) as i2c:
+            i2c.write_byte(0)
+            count, self._temperature = i2c.read_bytes(2)
             self._temperature = (self._temperature[0] << 8) + self._temperature[1]
             self._temperature >>= 4
+
+
+        # with smbus2.SMBusWrapper(1) as bus:
+        #     # This is really a config thing? Maybe?
+        #     bus.write_byte_data(self.address, 0, 0)
+
+        #     self._temperature = bus.read_i2c_block_data(self.address, 0, 2)
+        #     self._temperature = (self._temperature[0] << 8) + self._temperature[1]
+        #     self._temperature >>= 4
 
         self.last_update = datetime.datetime.now()
         # self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")

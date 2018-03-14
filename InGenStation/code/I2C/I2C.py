@@ -5,7 +5,7 @@ class I2C:
 
     i2c = pigpio.pi()
 
-    def __init__(self, bus, address):
+    def __init__(self, bus=1, address=0):
         self.bus = bus
         self.address = address
 
