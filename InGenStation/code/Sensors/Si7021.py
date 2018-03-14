@@ -97,34 +97,33 @@ class Si7021:
             # self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
             return
 
-        with smbus2.SMBusWrapper(1) as bus:
-            h_list = []
-            for i in range(3):
-                h_list.append(await self._measure_humidity(bus, 20))
-            h_list = sorted(h_list)
-            self._humidity = h_list[1]
-            measured_temperature = await self._measure_temperature(bus, 20)
+        h_list = []
+        for i in range(3):
+            h_list.append(await self._measure_humidity(20))
+        h_list = sorted(h_list)
+        self._humidity = h_list[1]
+        measured_temperature = await self._measure_temperature(20)
 
-            # Handle boot loop!
-            if not hasattr(self,"_temperature"): self._temperature = measured_temperature
+        # Handle boot loop!
+        if not hasattr(self,"_temperature"): self._temperature = measured_temperature
 
-            # Check the slope of the temperature for sudden changes
-            delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
-            t_slope = (self._conv_temp(measured_temperature) - self._conv_temp(self._temperature))/delta_t_update
+        # Check the slope of the temperature for sudden changes
+        delta_t_update = (datetime.datetime.now() - self.last_update).total_seconds()/60
+        t_slope = (self._conv_temp(measured_temperature) - self._conv_temp(self._temperature))/delta_t_update
 
-            # self.log.debug(f"Slospe measured to be {t_slope:.3f} C/min")
-            if abs(t_slope) > 1:
-                # Slope exceeded 1deg/minute!
-                # self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
-                # self.log.warning(f"This event was triggered from a temperature of {self._conv_temp(measured_temperature):.3f} C")
-                t_list = []
-                for i in range(5):
-                    self.reset()
-                    t_list.append(await self._measure_temperature(bus, 50))
-                t_list = sorted(t_list)
-                measured_temperature = t_list[2]
+        # self.log.debug(f"Slospe measured to be {t_slope:.3f} C/min")
+        if abs(t_slope) > 1:
+            # Slope exceeded 1deg/minute!
+            # self.log.warning(f"Saw excessive slope in temperature. Slope was {t_slope:.3f} C/min. Taking 5 measures and using the median.")
+            # self.log.warning(f"This event was triggered from a temperature of {self._conv_temp(measured_temperature):.3f} C")
+            t_list = []
+            for i in range(5):
+                self.reset()
+                t_list.append(await self._measure_temperature(50))
+            t_list = sorted(t_list)
+            measured_temperature = t_list[2]
 
-            self._temperature = measured_temperature
+        self._temperature = measured_temperature
 
         self.last_update = datetime.datetime.now()
         # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
