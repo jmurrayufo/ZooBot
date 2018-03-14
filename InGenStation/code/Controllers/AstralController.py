@@ -63,7 +63,7 @@ class AstralController(Controller):
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
             dusk = (sun['dusk'] + offset).replace(tzinfo=None) #+ datetime.timedelta(minutes=90)
 
-            if False and datetime.date.today() < datetime.date(2018,6,20):
+            if True and datetime.date.today() < datetime.date(2018,6,20):
                 # Overide for baby dragon
                 if self.report_times and datetime.date.today() != self.today:
                     self.log.info("New dragon overide protocall is in effect.")
@@ -73,15 +73,15 @@ class AstralController(Controller):
                 sunset = datetime.datetime.now().replace(hour=21, minute=18, second=15)
                 dusk = datetime.datetime.now().replace(hour=21, minute=48, second=9)
                 
-                dawn = datetime.datetime.now().replace(hour=0, minute=0, second=0)
-                sunrise = datetime.datetime.now().replace(hour=0, minute=25, second=0)
-                sunset = datetime.datetime.now().replace(hour=0, minute=35, second=0)
-                dusk = datetime.datetime.now().replace(hour=0, minute=59, second=59)
+                # dawn = datetime.datetime.now().replace(hour=0, minute=0, second=0)
+                # sunrise = datetime.datetime.now().replace(hour=0, minute=25, second=0)
+                # sunset = datetime.datetime.now().replace(hour=0, minute=35, second=0)
+                # dusk = datetime.datetime.now().replace(hour=0, minute=59, second=59)
 
-                dawn = dawn.replace(microsecond=0)
-                sunrise = sunrise.replace(microsecond=0)
-                sunset = sunset.replace(microsecond=0)
-                dusk = dusk.replace(microsecond=0)
+            dawn = dawn.replace(microsecond=0)
+            sunrise = sunrise.replace(microsecond=0)
+            sunset = sunset.replace(microsecond=0)
+            dusk = dusk.replace(microsecond=0)
 
             if self.report_times and datetime.date.today() != self.today:
                 self.log.info("Todays times are as follows!")
