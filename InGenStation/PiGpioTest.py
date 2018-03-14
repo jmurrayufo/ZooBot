@@ -18,7 +18,7 @@ RESET = 0xFE
 
 print(i2c.i2c_write_byte(h,MEASURE_HUMIDITY_HOLD))
 
-time.sleep(0.01)
+time.sleep(0.06)
 
 count, data = i2c.i2c_read_device(h, 3)
 print(count)
