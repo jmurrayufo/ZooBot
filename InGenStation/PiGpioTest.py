@@ -31,5 +31,4 @@ while 1:
     for i in data:
         print(i)
 
-    time.sleep(1)
     delay *= .99
