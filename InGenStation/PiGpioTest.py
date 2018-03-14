@@ -4,12 +4,21 @@ import pigpio
 
 i2c = pigpio.pi()
 
-tmp102 = i2c.i2c_open(1, 0x48)
+h = i2c.i2c_open(1, 0x40)
 
-print(i2c.i2c_write_byte(tmp102,0))
 
-data = i2c.i2c_read_device(tmp102, 2)
 
+MEASURE_HUMIDITY_HOLD = 0xE5
+MEASURE_HUMIDITY_NO_HOLD = 0xF5
+MEASURE_TEMPERATURE_HOLD = 0xE3
+MEASURE_TEMPERATURE_NO_HOLD = 0xF3
+READ_TEMPERATURE_FROM_RH = 0xE0
+RESET = 0xFE
+
+print(i2c.i2c_write_byte(h,MEASURE_HUMIDITY_HOLD))
+
+count, data = i2c.i2c_read_device(h, 2)
+print(count)
 print(data)
-for i in data[1]:
+for i in data:
     print(i)
