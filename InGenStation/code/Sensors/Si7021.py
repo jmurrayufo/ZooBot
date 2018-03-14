@@ -134,7 +134,7 @@ class Si7021:
             i2c.write_byte(self.MEASURE_HUMIDITY_HOLD)
             count, data = i2c.read_bytes(3)
             crc = self._CRC_calc(data)
-            if crc != data[3]:
+            if crc != data[2]:
                 self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
 
         return data[0] << 8 + data[1]
