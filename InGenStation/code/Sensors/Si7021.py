@@ -3,6 +3,7 @@ import smbus2
 import datetime
 import asyncio
 import time
+import pigpio
 
 from ..CustomLogging import Log
 from ..I2C import I2C
@@ -133,6 +134,8 @@ class Si7021:
         with I2C(address=self.address) as i2c:
             i2c.write_byte(self.MEASURE_HUMIDITY_HOLD)
             count, data = i2c.read_bytes(3)
+            if count < 0:
+                self.log.error(pigpio.error_text(count))
             self.log.debug(count)
             self.log.debug(data)
             crc = self._CRC_calc(data)
