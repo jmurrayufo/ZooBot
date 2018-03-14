@@ -147,7 +147,7 @@ class Si7021:
                 crc = self._CRC_calc(data)
                 if crc != data[2]:
                     self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
-                    time.sleep(0.01)
+                    time.sleep(0.02)
                     continue
 
             if count < 3:
@@ -158,7 +158,7 @@ class Si7021:
 
     async def _measure_temperature(self, max_loops):
         with I2C(address=self.address) as i2c:
-            
+
             try:
                 i2c.write_byte(self.MEASURE_TEMPERATURE_NO_HOLD)
             except pigpio.error:
