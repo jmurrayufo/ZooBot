@@ -26,7 +26,7 @@ class I2C:
         return self.i2c.i2c_read_device(self.handle, count)
 
 
-    def read_register_bytes(self, reg, count)
+    def read_register_bytes(self, reg, count):
         return self.i2c.i2c_read_i2c_block_data(self.handle, reg, count)
 
 
