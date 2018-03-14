@@ -130,61 +130,78 @@ class Si7021:
         # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
         # self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
 
+    async def _measure_humidity(self, max_loops):
+        with I2C(address=self.address) as i2c:
+            i2c.write_byte(self.MEASURE_HUMIDITY_HOLD)
+            count, data = i2c.read_bytes(3)
+            crc = self._CRC_calc(data)
+            if crc != data[3]:
+                self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
 
-    async def _measure_humidity(self, bus, max_loops):
-        loop = 0
-        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_NO_HOLD])
-        while loop < max_loops:
-            loop += 1
-            try:
-                bus.i2c_rdwr(write)
-                time.sleep(0.02)
-                break
-            except OSError:
-                continue
-
-        read = smbus2.i2c_msg.read(self.address, 3)
-        while loop < max_loops:
-            loop += 1
-            try:
-                bus.i2c_rdwr(read)
-                crc = self._CRC_calc(list(read))
-                if crc != list(read)[2]:
-                    self.log.warning(f"CRC Error. Values seen were {list(read)}, calculated crc was {crc}.")
-                    self.reset(bus)
-                    bus.i2c_rdwr(write)
-                    time.sleep(0.02)
-                    continue
-                break
-            except OSError:
-                continue
-
-        if loop >= max_loops:
-            raise IOError("Max loops exceeded attemping to read humidity")
-
-        return (list(read)[0] << 8) + list(read)[1]
+        return data[0] << 8 + data[1]
 
 
-    async def _measure_temperature(self, bus, max_loops):
-        loop = 0
-        write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
-        while loop < max_loops:
-            try:
-                bus.i2c_rdwr(write)
-                break
-            except OSError:
-                loop += 1
-                continue
+    async def _measure_temperature(self, max_loops):
+        with I2C(address=self.address) as i2c:
+            i2c.write_byte(self.MEASURE_TEMPERATURE_HOLD)
+            count, data = i2c.read_bytes(3)
+        return data[0] << 8 + data[1]
 
-        read = smbus2.i2c_msg.read(self.address, 2)
-        while loop < max_loops:
-            try:
-                bus.i2c_rdwr(read)
-                break
-            except OSError:
-                loop += 1
-                continue
-        return (list(read)[0] << 8) + list(read)[1]
+
+    # async def _measure_humidity(self, bus, max_loops):
+    #     loop = 0
+    #     write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_NO_HOLD])
+    #     while loop < max_loops:
+    #         loop += 1
+    #         try:
+    #             bus.i2c_rdwr(write)
+    #             time.sleep(0.02)
+    #             break
+    #         except OSError:
+    #             continue
+
+    #     read = smbus2.i2c_msg.read(self.address, 3)
+    #     while loop < max_loops:
+    #         loop += 1
+    #         try:
+    #             bus.i2c_rdwr(read)
+    #             crc = self._CRC_calc(list(read))
+    #             if crc != list(read)[2]:
+    #                 self.log.warning(f"CRC Error. Values seen were {list(read)}, calculated crc was {crc}.")
+    #                 self.reset(bus)
+    #                 bus.i2c_rdwr(write)
+    #                 time.sleep(0.02)
+    #                 continue
+    #             break
+    #         except OSError:
+    #             continue
+
+    #     if loop >= max_loops:
+    #         raise IOError("Max loops exceeded attemping to read humidity")
+
+    #     return (list(read)[0] << 8) + list(read)[1]
+
+
+    # async def _measure_temperature(self, bus, max_loops):
+    #     loop = 0
+    #     write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
+    #     while loop < max_loops:
+    #         try:
+    #             bus.i2c_rdwr(write)
+    #             break
+    #         except OSError:
+    #             loop += 1
+    #             continue
+
+    #     read = smbus2.i2c_msg.read(self.address, 2)
+    #     while loop < max_loops:
+    #         try:
+    #             bus.i2c_rdwr(read)
+    #             break
+    #         except OSError:
+    #             loop += 1
+    #             continue
+    #     return (list(read)[0] << 8) + list(read)[1]
 
 
     def _CRC_calc(self, data):
