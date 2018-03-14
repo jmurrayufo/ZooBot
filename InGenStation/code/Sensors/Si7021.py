@@ -131,24 +131,36 @@ class Si7021:
         with I2C(address=self.address) as i2c:
             i2c.write_byte(self.MEASURE_HUMIDITY_NO_HOLD)
             time.sleep(0.016)
-            count, data = i2c.read_bytes(3)
-            if count < 0:
-                self.log.error(pigpio.error_text(count))
-            crc = self._CRC_calc(data)
-            if crc != data[2]:
-                self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
+            loop = 0
+            while loop < max_loops:
+                loop += 1
+                count, data = i2c.read_bytes(3)
+                crc = self._CRC_calc(data)
+                if crc != data[2]:
+                    self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
+                    continue
 
+            if count < 3:
+                self.log.error(pigpio.error_text(count))
+                raise OSError("Couldn't get a good read after max loops")
         return data[0] << 8 + data[1]
 
 
     async def _measure_temperature(self, max_loops):
         with I2C(address=self.address) as i2c:
             i2c.write_byte(self.MEASURE_TEMPERATURE_NO_HOLD)
+            loop = 0
             time.sleep(0.006)
-            count, data = i2c.read_bytes(2)
-            self.log.debug(count)
-            self.log.debug(data)
-            self.log.debug(list(data))
+            while loop < max_loops:
+                loop += 1
+                count, data = i2c.read_bytes(2)
+                if count < 2:
+                    time.sleep(0.001)
+                    continue
+                break
+            if count < 2:
+                self.log.error(pigpio.error_text(count))
+                raise OSError("Couldn't get a good read after max loops")
         return data[0] << 8 + data[1]
 
 
