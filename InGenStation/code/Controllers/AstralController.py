@@ -89,6 +89,7 @@ class AstralController(Controller):
                 self.log.info(f"Sunrise: {sunrise}")
                 self.log.info(f"Sunset: {sunset}")
                 self.log.info(f"Dusk: {dusk}")
+                self.log.info(f"Total daylight time: {sunset-sunrise}")
                 self.today = datetime.date.today()
 
 
