@@ -136,7 +136,7 @@ class Si7021:
                 time.sleep(0.05)
                 i2c.write_byte(self.MEASURE_HUMIDITY_NO_HOLD)
 
-            time.sleep(0.016)
+            time.sleep(0.018)
             loop = 0
             while loop < max_loops:
                 loop += 1
