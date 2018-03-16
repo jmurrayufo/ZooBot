@@ -37,22 +37,39 @@ parser.add_argument('--webcam-base-location',
                     help='Location to scan')
 
 args = parser.parse_args()
-
+today = datetime.date.today()
+movie_process = None
 log = Log(args)
 
-next_scan = datetime.datetime.now()
+log.info("Started")
 
+next_scan = datetime.datetime.now()
 while 1:
     while datetime.datetime.now() < next_scan:
         time.sleep(0.1)
 
+    next_scan += datetime.timedelta(seconds=args.scan_rate)
     # Make sure we have a folder to write too!
 
-    glob = Path(args.inbox_location).glob('*.json')
+    glob = list(Path(args.inbox_location).glob('*.json'))
+    number_jsons = len(glob)
+
+    if number_jsons > 100:
+        log.warning(f"Excessive images found ({number_jsons:,d})")
+
     for json_file in glob:
+        if datetime.datetime.now() > next_scan:
+            log.warning("Didn't finish scan in time.")
+            break
         with open(json_file,'r') as fp:
             data = json.load(fp)
         image_file = Path(args.inbox_location,data['file_name'])
+
+        if not image_file.exists():
+            log.error(f"File {json_file} had no image file!")
+            shutuil.move(json_file, args.error_location)
+            continue
+
         image_hash = MDFive(image_file).checksum()
 
         # TODO: Handle errors here
@@ -79,5 +96,6 @@ while 1:
         os.remove(json_file)
         os.remove(image_file)
 
-    next_scan += datetime.timedelta(seconds=args.scan_rate)
-
+    if datetime.date.today() != today:
+        log.info("New day, process movie from previous days")
+        today = datetime.date.today()
