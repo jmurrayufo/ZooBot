@@ -18,4 +18,4 @@ while 1:
     print(list(data))
     count, data = i2c.dimmer_setting(0x3f, 0x81, 100%loop)
     print(list(data))
-    time.sleep(0.01)
+    time.sleep(0.1)
