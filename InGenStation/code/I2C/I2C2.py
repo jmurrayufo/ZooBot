@@ -20,10 +20,11 @@ class I2C2:
     ESCAPE = 1
     START = 2
     STOP = 3
-    ADDRESS = 4
+    ADDRESS = 4 # P Set I2C address to P
     FALGS = 5
-    READ = 6
-    WRITE = 7
+    READ = 6    # P Read P bytes of data
+    WRITE = 7   # P ... Write P bytes of data
+
 
     def __init__(self, address=0):
         self.address = address
@@ -57,4 +58,21 @@ class I2C2:
                 self.STOP,
                 self.END]
         return self.i2c.bb_i2c_zip(2,data)
+
+
+    def Si7021_temperature(self):
+        data = [
+                self.ADDRESS,
+                self.address,
+                self.START,
+                self.WRITE,
+                1,
+                0xE3, # 0xE3, Temp. Hold Master, 0xF3: Temp. No Hold Master
+                self.START,
+                self.READ,
+                3,
+                self.STOP,
+                self.END]
+        return self.i2c.bb_i2c_zip(2,data)
+
 
