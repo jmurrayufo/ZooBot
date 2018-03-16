@@ -30,12 +30,12 @@ class I2C2:
 
 
     def __enter__(self):
-        self.handle = self.i2c.bb_i2c_open(3, 5, 10000)
+        self.handle = self.i2c.bb_i2c_open(2, 3, 10000)
         return self
 
 
     def __exit__(self, exception_type, exception_value, traceback):
-        self.i2c.bb_i2c_close(3)
+        self.i2c.bb_i2c_close(2)
 
 
     def Si7021_humidity(self):
