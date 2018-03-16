@@ -39,15 +39,16 @@ class I2C2:
 
 
     def Si7021_humidity(self):
-        data = [self.START,
+        data = [
                 self.ADDRESS,
                 self.address,
+                self.START,
                 self.WRITE,
                 1,
                 0xE5, # 0xE5: RH Hold Master, 0xF5: RH No Hold Master
-                self.START,
                 self.ADDRESS,
                 self.address,
+                self.START,
                 self.READ,
                 3,
                 self.STOP]
