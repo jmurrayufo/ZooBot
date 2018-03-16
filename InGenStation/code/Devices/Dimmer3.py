@@ -7,6 +7,7 @@ import numpy as np
 import atexit
 
 from ..CustomLogging import Log
+from ..I2C import I2C2
 
 class Dimmer3:
 
@@ -22,6 +23,7 @@ class Dimmer3:
         self.log = Log()
         self.name = name
         self.args = args
+        self.i2c = I2C2()
 
         if address not in self.valid_addresses: 
             raise ValueError("Address not in value addresses")
@@ -133,8 +135,10 @@ class Dimmer3:
         # We must not attempt to write more than once every 10 ms, or the device will not accept the commands!
         if time.time() - self.last_write < 0.1:
             time.sleep(0.1)
-        with smbus2.SMBusWrapper(1) as bus:
-            bus.write_word_data(self.address, channel, value)
+
+        # Write values to I2C bus
+        self.i2c.dimmer_setting(self.address, channel, value)
+
         self.last_write = time.time()
 
 
@@ -144,7 +148,14 @@ class Dimmer3:
 
 def _exit_function(address):
     Log().info("Exiting, set power to 100 (full closed)")
-    with smbus2.SMBusWrapper(1) as bus:
-        for ch in [0x80, 0x81, 0x82, 0x83]:
-            msg = smbus2.i2c_msg.write(address, [ch, 100])
-            bus.i2c_rdwr(msg)
+
+    i2c = I2C2()
+
+    i2c.dimmer_setting(address, 0x80, 100)
+    Log().info("Channel 0x80 closed")
+    i2c.dimmer_setting(address, 0x81, 100)
+    Log().info("Channel 0x81 closed")
+    i2c.dimmer_setting(address, 0x82, 100)
+    Log().info("Channel 0x82 closed")
+    i2c.dimmer_setting(address, 0x83, 100)
+    Log().info("Channel 0x83 closed")
