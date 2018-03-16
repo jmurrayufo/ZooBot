@@ -5,7 +5,7 @@ import asyncio
 import time
 
 from ..CustomLogging import Log
-from ..I2C import I2C
+from ..I2C import I2C, I2C2
 
 class TMP102:
 
@@ -23,6 +23,7 @@ class TMP102:
         self.args = args
         assert address in self.valid_addresses
         self.address = address
+        self.i2c = I2C2()
         self.last_update = datetime.datetime.min
 
 
@@ -50,20 +51,10 @@ class TMP102:
 
     async def update(self):
 
-        with I2C(address=self.address) as i2c:
-            i2c.write_byte(0)
-            count, self._temperature = i2c.read_bytes(2)
-            self._temperature = (self._temperature[0] << 8) + self._temperature[1]
-            self._temperature >>= 4
+        self._temperature = self.i2c.TMP102_temperature(self.address)
+        self._temperature = (self._temperature[0] << 8) + self._temperature[1]
+        self._temperature >>= 4
 
-
-        # with smbus2.SMBusWrapper(1) as bus:
-        #     # This is really a config thing? Maybe?
-        #     bus.write_byte_data(self.address, 0, 0)
-
-        #     self._temperature = bus.read_i2c_block_data(self.address, 0, 2)
-        #     self._temperature = (self._temperature[0] << 8) + self._temperature[1]
-        #     self._temperature >>= 4
 
         self.last_update = datetime.datetime.now()
         # self.log.debug(f"Updated TMP102 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
