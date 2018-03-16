@@ -76,3 +76,31 @@ class I2C2:
         return self.i2c.bb_i2c_zip(2,data)
 
 
+    def TMP102_temperature(self):
+        data = [
+                self.ADDRESS,
+                self.address,
+                self.START,
+                self.WRITE,
+                1,
+                0x0, # 0x00 Temperature Register (RO)
+                self.START,
+                self.READ,
+                2,
+                self.STOP,
+                self.END]
+        return self.i2c.bb_i2c_zip(2,data)
+
+
+    def dimmer_setting(self, channel, value):
+        data = [
+                self.ADDRESS,
+                self.address,
+                self.START,
+                self.WRITE,
+                2,
+                channel,
+                value,
+                self.STOP,
+                self.END]
+        return self.i2c.bb_i2c_zip(2,data)
