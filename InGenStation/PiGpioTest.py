@@ -7,6 +7,7 @@ from code.I2C import I2C2
 
 while 1:
     time.sleep(0)
+    print()
     with I2C2(0x40) as i2c:
         count, data = i2c.Si7021_humidity()
         if count<0:
