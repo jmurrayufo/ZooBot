@@ -1,5 +1,8 @@
 
 import pigpio
+import signal
+
+from ..CustomLogging import Log
 
 class I2C2:
 
@@ -26,25 +29,20 @@ class I2C2:
     WRITE = 7   # P ... Write P bytes of data
 
 
-    def __init__(self, address=0):
-        self.address = address
+    def __init__(self):
+        pass
 
 
-    def __enter__(self):
-        try:
-            self.handle = self.i2c.bb_i2c_open(2, 3, 100000)
-        except pigpio.error:
+    def _bb(self, data):
+        with DelayedKeyboardInterrupt():
+            self.i2c.bb_i2c_open(2, 3, 100000)
+            ret = self.i2c.bb_i2c_zip(2,data)
             self.i2c.bb_i2c_close(2)
-            self.handle = self.i2c.bb_i2c_open(2, 3, 100000)
-            
-        return self
+        return ret
 
 
-    def __exit__(self, exception_type, exception_value, traceback):
-        self.i2c.bb_i2c_close(2)
-
-
-    def Si7021_humidity(self):
+    def Si7021_humidity(self, address):
+        self.address = address
         data = [
                 self.ADDRESS,
                 self.address,
@@ -57,10 +55,11 @@ class I2C2:
                 3,
                 self.STOP,
                 self.END]
-        return self.i2c.bb_i2c_zip(2,data)
+        return self._bb(data)
 
 
-    def Si7021_temperature(self):
+    def Si7021_temperature(self, address):
+        self.address = address
         data = [
                 self.ADDRESS,
                 self.address,
@@ -73,10 +72,11 @@ class I2C2:
                 3,
                 self.STOP,
                 self.END]
-        return self.i2c.bb_i2c_zip(2,data)
+        return self._bb(data)
 
 
-    def TMP102_temperature(self):
+    def TMP102_temperature(self, address):
+        self.address = address
         data = [
                 self.ADDRESS,
                 self.address,
@@ -89,10 +89,11 @@ class I2C2:
                 2,
                 self.STOP,
                 self.END]
-        return self.i2c.bb_i2c_zip(2,data)
+        return self._bb(data)
 
 
-    def dimmer_setting(self, channel, value):
+    def dimmer_setting(self, address, channel, value):
+        self.address = address
         data = [
                 self.ADDRESS,
                 self.address,
@@ -103,4 +104,27 @@ class I2C2:
                 value,
                 self.STOP,
                 self.END]
-        return self.i2c.bb_i2c_zip(2,data)
+        return self._bb(data)
+
+
+# def preexec_function():
+#     # Ignore the SIGINT signal by setting the handler to the standard
+#     # signal handler SIG_IGN.
+#     signal.signal(signal.SIGINT, signal.SIG_IGN)
+
+
+class DelayedKeyboardInterrupt(object):
+    def __enter__(self):
+        self.signal_received = False
+        self.old_handler = signal.signal(signal.SIGINT, self.handler)
+        self.log = Log()
+
+    def handler(self, sig, frame):
+        self.signal_received = (sig, frame)
+        self.log.critical('SIGINT received. Delaying KeyboardInterrupt.')
+
+    def __exit__(self, type, value, traceback):
+        signal.signal(signal.SIGINT, self.old_handler)
+        if self.signal_received:
+            self.log.critical("Now handling SIGINT")
+            self.old_handler(*self.signal_received)
