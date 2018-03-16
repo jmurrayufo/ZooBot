@@ -11,3 +11,6 @@ with I2C2(0x40) as i2c:
     print(data)
     if count<0:
         print(pigpio.error_text(count))
+    else:
+        for i in data:
+            print(i)
