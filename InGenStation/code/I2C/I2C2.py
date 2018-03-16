@@ -30,7 +30,7 @@ class I2C2:
 
 
     def __init__(self):
-        pass
+        self.log = Log()
 
 
     def _bb(self, data):
@@ -41,6 +41,9 @@ class I2C2:
                 self.i2c.bb_i2c_close(2)
                 self.i2c.bb_i2c_open(2, 3, 100000)
             ret = self.i2c.bb_i2c_zip(2,data)
+            if ret[0] < 0:
+                self.log.critical(f"I2C2 Failure: {pigpio.error_text(ret[0])}")
+                raise pigpio.error
             self.i2c.bb_i2c_close(2)
         return ret
 
@@ -59,7 +62,7 @@ class I2C2:
                 3,
                 self.STOP,
                 self.END]
-        return self._bb(data)
+        return list(self._bb(data)[1])
 
 
     def Si7021_temperature(self, address):
@@ -76,7 +79,7 @@ class I2C2:
                 3,
                 self.STOP,
                 self.END]
-        return self._bb(data)
+        return list(self._bb(data)[1])
 
 
     def TMP102_temperature(self, address):
@@ -93,7 +96,7 @@ class I2C2:
                 2,
                 self.STOP,
                 self.END]
-        return self._bb(data)
+        return list(self._bb(data)[1])
 
 
     def dimmer_setting(self, address, channel, value):
@@ -108,13 +111,8 @@ class I2C2:
                 value,
                 self.STOP,
                 self.END]
-        return self._bb(data)
+        return list(self._bb(data)[1])
 
-
-# def preexec_function():
-#     # Ignore the SIGINT signal by setting the handler to the standard
-#     # signal handler SIG_IGN.
-#     signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 
 class DelayedKeyboardInterrupt(object):

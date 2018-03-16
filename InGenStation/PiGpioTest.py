@@ -4,6 +4,9 @@ import pigpio
 import time
 
 from code.I2C import I2C2
+from code.CustomLogging import Log
+
+log = Log("PiGpioTest")
 
 loop = 0
 while 1:
