@@ -35,7 +35,11 @@ class I2C2:
 
     def _bb(self, data):
         with DelayedKeyboardInterrupt():
-            self.i2c.bb_i2c_open(2, 3, 100000)
+            try:
+                self.i2c.bb_i2c_open(2, 3, 100000)
+            except pigpio.error:
+                self.i2c.bb_i2c_close(2)
+                self.i2c.bb_i2c_open(2, 3, 100000)
             ret = self.i2c.bb_i2c_zip(2,data)
             self.i2c.bb_i2c_close(2)
         return ret
