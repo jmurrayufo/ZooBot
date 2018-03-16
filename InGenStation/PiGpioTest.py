@@ -10,6 +10,6 @@ ch = 0x81
 while 1:
     for i in range(101):
         print(i)
-        with I2C2(0x40) as i2c:
+        with I2C2(0x3F) as i2c:
             i2c.dimmer_setting(ch, i)
         time.sleep(0.5)
