@@ -30,8 +30,12 @@ class I2C2:
 
 
     def __enter__(self):
-        self.i2c.bb_i2c_close(2)
-        self.handle = self.i2c.bb_i2c_open(2, 3, 100000)
+        try:
+            self.handle = self.i2c.bb_i2c_open(2, 3, 100000)
+        except pigpio.error:
+            self.i2c.bb_i2c_close(2)
+            self.handle = self.i2c.bb_i2c_open(2, 3, 100000)
+            
         return self
 
 
