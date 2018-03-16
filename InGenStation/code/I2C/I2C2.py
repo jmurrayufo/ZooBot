@@ -51,8 +51,7 @@ class I2C2:
 
     def Si7021_humidity(self, address):
         self.address = address
-        data = [
-                self.ADDRESS,
+        data = [self.ADDRESS,
                 self.address,
                 self.START,
                 self.WRITE,
@@ -66,10 +65,22 @@ class I2C2:
         return list(self._bb(data)[1])
 
 
+    def Si7021_reset(self, address):
+        self.address = address
+        data = [self.ADDRESS,
+                self.address,
+                self.START,
+                self.WRITE,
+                1,
+                0xFE,
+                self.STOP,
+                self.END]
+        return list(self._bb(data)[1])
+
+
     def Si7021_temperature(self, address):
         self.address = address
-        data = [
-                self.ADDRESS,
+        data = [self.ADDRESS,
                 self.address,
                 self.START,
                 self.WRITE,
@@ -85,8 +96,7 @@ class I2C2:
 
     def TMP102_temperature(self, address):
         self.address = address
-        data = [
-                self.ADDRESS,
+        data = [self.ADDRESS,
                 self.address,
                 self.START,
                 self.WRITE,
@@ -102,8 +112,7 @@ class I2C2:
 
     def dimmer_setting(self, address, channel, value):
         self.address = address
-        data = [
-                self.ADDRESS,
+        data = [self.ADDRESS,
                 self.address,
                 self.START,
                 self.WRITE,

@@ -49,12 +49,7 @@ class Si7021:
 
     def reset(self, bus=None):
         time.sleep(0.015)
-        reset = smbus2.i2c_msg.write(self.address, [self.RESET])
-        if bus:
-            bus.i2c_rdwr(reset)
-        else:
-            with smbus2.SMBusWrapper(1) as bus:
-                bus.i2c_rdwr(reset)
+        self.i2c.Si7021_reset(self.address)
         time.sleep(0.015)
 
 
@@ -88,16 +83,6 @@ class Si7021:
     async def update(self):
         t_start = time.time()
         # self.log.debug(f"Updating Si7021 sensor 0x{self.address:02x}")
-
-        # Test case for demos
-        if self.args.purpose == 'test':
-            import random
-            self._temperature = random.randint(0,0xFFFF)
-            self._humidity = random.randint(0,0xFFFF)        
-            self.last_update = datetime.datetime.now()
-            # self.log.debug(f"Updated Si7021 sensor 0x{self.address:02x}, took {(time.time()-t_start)*1e3:.3f} ms")
-            # self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
-            return
         
         self._humidity = await self._measure_humidity(20)
 
@@ -137,7 +122,7 @@ class Si7021:
             crc = self._CRC_calc(data)
             if crc != data[2]:
                 self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
-                # self.reset()
+                self.reset()
                 time.sleep(0.02)
                 continue
             break
@@ -145,29 +130,14 @@ class Si7021:
 
 
     async def _measure_temperature(self, max_loops):
-        with I2C(address=self.address) as i2c:
-
-            try:
-                i2c.write_byte(self.MEASURE_TEMPERATURE_NO_HOLD)
-            except pigpio.error:
-                time.sleep(0.05)
-                i2c.write_byte(self.MEASURE_HUMIDITY_NO_HOLD)
-
-            loop = 0
-            time.sleep(0.006)
-            while loop < max_loops:
-                loop += 1
-                count, data = i2c.read_bytes(2)
-                if count < 2:
-                    time.sleep(0.001)
-                    continue
-                break
-            if count < 2:
-                self.log.error(pigpio.error_text(count))
-                raise OSError("Couldn't get a good read after max loops")
+        loop = 0
+        while loop < max_loops:
+            loop += 1
+            data = self.i2c.Si7021_temperature(self.address)
+            break
         return (data[0] << 8) + data[1]
 
-        
+
     def _CRC_calc(self, data):
         # TODO: This can just use the crcmod tool with this example: x = crcmod.Crc(0b100110001,initCrc=0, rev=False, xorOut=0)
 
