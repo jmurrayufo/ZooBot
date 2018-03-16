@@ -132,6 +132,7 @@ class Si7021:
 
         loop = 0
         while loop < max_loops:
+            loop += 1
             data = self.i2c.Si7021_humidity(self.address)
             crc = self._CRC_calc(data)
             if crc != data[2]:
@@ -139,6 +140,7 @@ class Si7021:
                 # self.reset()
                 time.sleep(0.02)
                 continue
+            break
         return (data[0] << 8) + data[1]
 
 
