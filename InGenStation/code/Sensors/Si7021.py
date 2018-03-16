@@ -167,63 +167,7 @@ class Si7021:
                 raise OSError("Couldn't get a good read after max loops")
         return (data[0] << 8) + data[1]
 
-
-    # async def _measure_humidity(self, bus, max_loops):
-    #     loop = 0
-    #     write = smbus2.i2c_msg.write(self.address, [self.MEASURE_HUMIDITY_NO_HOLD])
-    #     while loop < max_loops:
-    #         loop += 1
-    #         try:
-    #             bus.i2c_rdwr(write)
-    #             time.sleep(0.02)
-    #             break
-    #         except OSError:
-    #             continue
-
-    #     read = smbus2.i2c_msg.read(self.address, 3)
-    #     while loop < max_loops:
-    #         loop += 1
-    #         try:
-    #             bus.i2c_rdwr(read)
-    #             crc = self._CRC_calc(list(read))
-    #             if crc != list(read)[2]:
-    #                 self.log.warning(f"CRC Error. Values seen were {list(read)}, calculated crc was {crc}.")
-    #                 self.reset(bus)
-    #                 bus.i2c_rdwr(write)
-    #                 time.sleep(0.02)
-    #                 continue
-    #             break
-    #         except OSError:
-    #             continue
-
-    #     if loop >= max_loops:
-    #         raise IOError("Max loops exceeded attemping to read humidity")
-
-    #     return (list(read)[0] << 8) + list(read)[1]
-
-
-    # async def _measure_temperature(self, bus, max_loops):
-    #     loop = 0
-    #     write = smbus2.i2c_msg.write(self.address, [self.MEASURE_TEMPERATURE_HOLD])
-    #     while loop < max_loops:
-    #         try:
-    #             bus.i2c_rdwr(write)
-    #             break
-    #         except OSError:
-    #             loop += 1
-    #             continue
-
-    #     read = smbus2.i2c_msg.read(self.address, 2)
-    #     while loop < max_loops:
-    #         try:
-    #             bus.i2c_rdwr(read)
-    #             break
-    #         except OSError:
-    #             loop += 1
-    #             continue
-    #     return (list(read)[0] << 8) + list(read)[1]
-
-
+        
     def _CRC_calc(self, data):
         # TODO: This can just use the crcmod tool with this example: x = crcmod.Crc(0b100110001,initCrc=0, rev=False, xorOut=0)
 
