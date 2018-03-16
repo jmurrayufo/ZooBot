@@ -6,7 +6,7 @@ import time
 import pigpio
 
 from ..CustomLogging import Log
-from ..I2C import I2C
+from ..I2C import I2C, I2C2
 
 class Si7021:
 
@@ -39,6 +39,7 @@ class Si7021:
         if address not in self.valid_addresses: 
             raise ValueError("Address not in value addresses")
         self.address = address
+        self.i2c = I2C2()
         self.last_update = datetime.datetime.min
 
 
@@ -128,32 +129,16 @@ class Si7021:
         # self.log.debug(f"Temperature was {self.temperature:.1f} C (0x{self._temperature:04X}) and humidity was {self.humidity:.1f}% (0x{self._humidity:04X})")
 
     async def _measure_humidity(self, max_loops):
-        with I2C(address=self.address) as i2c:
 
-            try:
-                i2c.write_byte(self.MEASURE_HUMIDITY_NO_HOLD)
-            except pigpio.error:
-                time.sleep(0.05)
-                i2c.write_byte(self.MEASURE_HUMIDITY_NO_HOLD)
-
-            time.sleep(0.018)
-            loop = 0
-            while loop < max_loops:
-                loop += 1
-                count, data = i2c.read_bytes(3)
-                if count < 3:
-                    time.sleep(0.01)
-                    continue
-                crc = self._CRC_calc(data)
-                if crc != data[2]:
-                    self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
-                    self.reset()
-                    time.sleep(0.02)
-                    continue
-
-            if count < 3:
-                self.log.error(pigpio.error_text(count))
-                raise OSError("Couldn't get a good read after max loops")
+        loop = 0
+        while loop < max_loops:
+            data = self.i2c.Si7021_humidity(self.address)
+            crc = self._CRC_calc(data)
+            if crc != data[2]:
+                self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
+                # self.reset()
+                time.sleep(0.02)
+                continue
         return (data[0] << 8) + data[1]
 
 
