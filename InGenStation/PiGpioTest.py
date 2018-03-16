@@ -16,6 +16,6 @@ while 1:
     print(list(data))
     count, data = i2c.TMP102_temperature(0x48)
     print(list(data))
-    count, data = i2c.dimmer_setting(0x3f, 1, 100%loop)
+    count, data = i2c.dimmer_setting(0x3f, 0x81, 100%loop)
     print(list(data))
     time.sleep(0.01)
