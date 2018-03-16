@@ -29,17 +29,18 @@ class I2C2:
     WRITE = 7   # P ... Write P bytes of data
 
 
-    def __init__(self):
+    def __init__(self, baud=100000):
+        self.baud = int(baud)
         self.log = Log()
 
 
     def _bb(self, data):
         with DelayedKeyboardInterrupt():
             try:
-                self.i2c.bb_i2c_open(2, 3, 100000)
+                self.i2c.bb_i2c_open(2, 3, self.baud)
             except pigpio.error:
                 self.i2c.bb_i2c_close(2)
-                self.i2c.bb_i2c_open(2, 3, 100000)
+                self.i2c.bb_i2c_open(2, 3, self.baud)
             ret = self.i2c.bb_i2c_zip(2,data)
             if ret[0] < 0:
                 self.log.critical(f"I2C2 Failure: {pigpio.error_text(ret[0])}")

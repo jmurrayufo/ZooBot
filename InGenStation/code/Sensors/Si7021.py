@@ -39,7 +39,7 @@ class Si7021:
         if address not in self.valid_addresses: 
             raise ValueError("Address not in value addresses")
         self.address = address
-        self.i2c = I2C2()
+        self.i2c = I2C2(baud=50000)
         self.last_update = datetime.datetime.min
 
 
