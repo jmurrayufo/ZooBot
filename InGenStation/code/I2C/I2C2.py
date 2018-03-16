@@ -30,7 +30,7 @@ class I2C2:
 
 
     def __enter__(self):
-        self.handle = self.i2c.bb_i2c_open(2, 3, 10000)
+        self.handle = self.i2c.bb_i2c_open(2, 3, 100000)
         return self
 
 
