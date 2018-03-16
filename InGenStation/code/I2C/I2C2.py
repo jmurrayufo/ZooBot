@@ -40,18 +40,17 @@ class I2C2:
 
     def Si7021_humidity(self):
         data = [
-                self.START,
                 self.ADDRESS,
                 self.address,
+                self.START,
                 self.WRITE,
                 1,
                 0xE5, # 0xE5: RH Hold Master, 0xF5: RH No Hold Master
                 self.START,
-                self.ADDRESS,
-                self.address,
                 self.READ,
                 3,
-                self.STOP]
+                self.STOP,
+                self.END]
         print(f"Data to write: {data}")
         return self.i2c.bb_i2c_zip(3,data)
 
