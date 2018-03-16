@@ -54,5 +54,5 @@ class I2C2:
         print(f"Data to write:")
         for i in data:
             print(f"0x{i:02x}")
-        return self.i2c.bb_i2c_zip(3,data)
+        return self.i2c.bb_i2c_zip(2,data)
 
