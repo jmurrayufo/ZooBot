@@ -7,14 +7,16 @@ from . import VerboseLogstashFormatter
 
 class Log:
     __shared_state = {}
-    def __init__(self, args=None):
+    def __init__(self, name=None, args=None):
         self.__dict__ = self.__shared_state
 
         if args is None:
             return
         self.args = args
 
-        self.name = 'Webcam.py'
+        if name:
+            self.name = name
+            
         self._log = logging.getLogger(self.name)
         self._log.setLevel(logging.DEBUG)
 

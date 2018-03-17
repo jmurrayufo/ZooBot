@@ -39,7 +39,7 @@ parser.add_argument('--webcam-base-location',
 args = parser.parse_args()
 today = datetime.date.today()
 movie_process = None
-log = Log(args)
+log = Log("ImageProc.py",args)
 
 log.info("Started")
 

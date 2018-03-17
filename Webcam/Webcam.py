@@ -40,7 +40,7 @@ parser.add_argument('--remote-dropbox',
 
 args = parser.parse_args()
 
-log = Log(args)
+log = Log('Webcam.py', args)
 
 log.info("Booting Webcam.py")
 log.info(args)
