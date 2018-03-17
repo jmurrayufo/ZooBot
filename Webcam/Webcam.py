@@ -79,7 +79,7 @@ while 1:
     time.sleep(dt)
 
 
-    file_name = now.strftime(f"{args.mount_location}/Webcams/Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
+    file_name = now.strftime(f"{args.mount_location}/Webcams/Dragonhab/Cache/%Y/%m/%d/%H_%M_%S.jpeg")
 
     path = pathlib.Path(file_name)
 
