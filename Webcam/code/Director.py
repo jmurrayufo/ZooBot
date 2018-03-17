@@ -50,7 +50,7 @@ class Director:
 
             # Capture image
             now = datetime.datetime.now()
-            file_name = now.strftime(f"Dragonhab/%Y/%m/%d/%H_%M_%S.jpeg")
+            file_name = now.strftime(f"Dragonhab/Cache/%Y/%m/%d/%H_%M_%S.jpeg")
             path = pathlib.Path(file_name)
             image = self.camera.capture(path)
 
