@@ -22,11 +22,19 @@ class Video:
         self.process = None
         self.processed = False
         self.manifest_file = None
+        self.ready = False
 
 
     def __repr__(self):
         return f"Video({self.target_folder})"
 
+    def set_ready_flag(self):
+        self.ready = True
+        for image in self.target_folder.glob("*.jpeg"):
+            if time.time() - image.stat().st_mtime < 1*55*60:
+                self.log.info(f"Skipping, {image} is only {time.time() - image.stat().st_mtime}s old")
+                self.ready = False
+                return
 
     def load(self):
 
@@ -38,12 +46,15 @@ class Video:
                     self.target_folder = Path(self.target_folder)
                     self.output_file = Path(self.output_file)
                     self.manifest_file = Path(self.manifest_file)
+                    self.set_ready_flag()
                     return
             except json.decoder.JSONDecodeError:
                 self.log.exception("JSON was corrupted somehow, creating a new one")
 
 
         self.log.info("No manifest found, generate one now!")
+        
+        self.set_ready_flag()
 
         match_obj = re.search("(\d{4})/(\d{2})/(\d{2})", str(self.target_folder))
         year, month, day = match_obj.groups()
@@ -69,7 +80,7 @@ class Video:
         # Check to see if we are old enough (min 1 hours)
         # Loop through all JPEGs 
         for image in self.target_folder.glob("*.jpeg"):
-            if time.time() - image.stat().st_mtime < 1*60*60:
+            if time.time() - image.stat().st_mtime < 1*55*60:
                 self.log.info(f"Skipping, {image} is only {time.time() - image.stat().st_mtime} old")
                 return
 

@@ -21,7 +21,7 @@ parser.add_argument('--__version__', default=__version__,
 
 parser.add_argument('--scan-rate', 
                     type=float,
-                    default=60,
+                    default=10,
                     help='Delay between Inbox scans')
 
 parser.add_argument('--inbox-location',
@@ -54,7 +54,7 @@ while 1:
     glob = list(Path(args.inbox_location).glob('*.json'))
     number_jsons = len(glob)
 
-    if number_jsons > 100:
+    if number_jsons > 5:
         log.warning(f"Excessive images found ({number_jsons:,d})")
 
     for json_file in glob:
@@ -92,6 +92,10 @@ while 1:
             shutil.move(json_file, args.error_location)
             shutil.move(image_file, args.error_location)
             continue
+
+        # Softlink for web viewing
+        cmd = f"ln -fs {str(output)} /var/www/fanghur.jpeg"
+        subprocess.call(shlex.split(cmd))
 
         os.remove(json_file)
         os.remove(image_file)

@@ -58,11 +58,12 @@ while 1:
         dt = (next_scan-now).total_seconds()
         log.info(f"Sleep for {dt:,.0f} seconds until {next_scan}")
         time.sleep(dt)
+        log.info(f"Sleep completed.")
 
     next_scan = datetime.datetime.now()
     next_scan += datetime.timedelta(days=1)
     next_scan = next_scan.replace(hour=1, minute=0, second=0, microsecond=0)
-    log.info(f"Wakeup and begin process loop")
+    log.info(f"Begin process loop")
 
     glob = list(Path(args.images).glob('**'))
     number_folders = len(glob)
@@ -85,16 +86,19 @@ while 1:
     for video in targets:
         video.load()
 
+    targets = [x for x in targets if x.ready]
+
     ffmpeg_processes = []
     for video in targets:
         if video.processed:
             log.info(f"{video} is aleady finished processing! Delete?")
+            continue
         ffmpeg_processes.append(video)
 
-    log.info(f"Started videos, processing {len(ffmpeg_processes)}")
-    log.info("Wait until completed")
+    log.info("Begin processing loop")
 
     while len(ffmpeg_processes):
+        log.info(f"Processing more files {len(ffmpeg_processes)}")
 
         video = ffmpeg_processes[0]
         video.start()
