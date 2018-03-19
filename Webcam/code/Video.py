@@ -50,7 +50,7 @@ class Video:
                 self.output_file = Path(self.output_file)
                 self.manifest_file = Path(self.manifest_file)
 
-                elif self.delete_on:
+                if self.delete_on:
                     self.delete_on = datetime.datetime.fromtimestamp(self.delete_on)
 
                 self.set_ready_flag()
