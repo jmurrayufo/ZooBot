@@ -76,12 +76,12 @@ class Video:
         data = dict(self.__dict__)
         del data['log']
         del data['args']
-        data['target_folder'] = str(data['target_folder'])
-        data['output_file'] = str(data['output_file'])
-        data['manifest_file'] = str(data['manifest_file'])
+        # data['target_folder'] = str(data['target_folder'])
+        # data['output_file'] = str(data['output_file'])
+        # data['manifest_file'] = str(data['manifest_file'])
 
         with open(self.manifest_file,'w') as fp:
-            json.dump(data, fp, indent=2)
+            json.dump(data, fp, indent=2, cls=CustomEncoder)
 
 
     def delete(self):
@@ -128,18 +128,20 @@ class Video:
         data = dict(self.__dict__)
         del data['log']
         del data['args']
-        data['target_folder'] = str(data['target_folder'])
-        data['output_file'] = str(data['output_file'])
-        data['manifest_file'] = str(data['manifest_file'])
-        data['delete_on'] = data['delete_on'].strftime("%Y-%m-%dT%H:%M:%S")
+        # data['target_folder'] = str(data['target_folder'])
+        # data['output_file'] = str(data['output_file'])
+        # data['manifest_file'] = str(data['manifest_file'])
+        # data['delete_on'] = data['delete_on'].strftime("%Y-%m-%dT%H:%M:%S")
 
         with open(self.manifest_file,'w') as fp:
-            json.dump(data, fp, indent=2)
+            json.dump(data, fp, indent=2, cls=CustomEncoder)
 
 
-# class CustomEncoder(json.JSONEncoder):
-#     def default(self, obj):
-#         if isinstance(obj, PosixPath):
-#             return str(obj)
-#         # Let the base class default method raise the TypeError
-#         return json.JSONEncoder.default(self, obj)
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, PosixPath):
+            return str(obj)
+        if isinstance(obj, datetime.datetime):
+            return obj.strftime("%Y-%m-%dT%H:%M:%S")
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
