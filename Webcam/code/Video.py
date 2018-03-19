@@ -1,10 +1,11 @@
 
 from pathlib import Path
+import datetime
 import json
 import re
-import time
-import subprocess
 import shlex
+import subprocess
+import time
 
 from .CustomLogging import Log
 
@@ -23,6 +24,7 @@ class Video:
         self.processed = False
         self.manifest_file = None
         self.ready = False
+        self.delete_on = None
 
 
     def __repr__(self):
@@ -40,14 +42,19 @@ class Video:
 
         manifest_file = list(self.target_folder.glob("*manifest.json"))
         if manifest_file:
+            self.log.info("Manifest file found, attempt to load")
             try: 
                 with open(manifest_file[0],'r') as fp:
                     self.__dict__.update(json.load(fp))
-                    self.target_folder = Path(self.target_folder)
-                    self.output_file = Path(self.output_file)
-                    self.manifest_file = Path(self.manifest_file)
-                    self.set_ready_flag()
-                    return
+                self.target_folder = Path(self.target_folder)
+                self.output_file = Path(self.output_file)
+                self.manifest_file = Path(self.manifest_file)
+
+                elif self.delete_on:
+                    self.delete_on = datetime.datetime.fromtimestamp(self.delete_on)
+
+                self.set_ready_flag()
+                return
             except json.decoder.JSONDecodeError:
                 self.log.exception("JSON was corrupted somehow, creating a new one")
 
@@ -104,6 +111,7 @@ class Video:
 
         self.processed = True
         self.process = None
+        self.delete_on = datetime.datetime.now() + datetime.timedelta(days=7)
 
         data = dict(self.__dict__)
         del data['log']
@@ -111,6 +119,7 @@ class Video:
         data['target_folder'] = str(data['target_folder'])
         data['output_file'] = str(data['output_file'])
         data['manifest_file'] = str(data['manifest_file'])
+        data['delete_on'] = data['delete_on'].timestamp()
 
         with open(self.manifest_file,'w') as fp:
             json.dump(data, fp, indent=2)

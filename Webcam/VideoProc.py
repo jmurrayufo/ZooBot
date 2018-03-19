@@ -74,15 +74,16 @@ while 1:
         # Is there a JSON here?
         log.info(f"Scan: {folder}")
         if list(folder.glob("*manifest.json")):
-            log.debug("Found manifest file!")
+            log.info("Found manifest file!")
             targets.append(Video(folder, args))
             continue
 
         if list(folder.glob("*.jpeg")):
-            log.debug("Found jpeg without manifest file!")
+            log.info("Found jpeg without manifest file!")
             targets.append(Video(folder, args))
             continue
 
+    log.info("Load targets")
     for video in targets:
         video.load()
 
