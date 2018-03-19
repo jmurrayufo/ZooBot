@@ -36,9 +36,14 @@ parser.add_argument('--webcam-base-location',
                     default="/ZFS/Media/Webcams/",
                     help='Location to scan')
 
+parser.add_argument('--web-image-location',
+                    default="/ZFS/Media/Webcams/Dragonhab/fanghur.jpeg",
+                    help='Location to scan')
+
 args = parser.parse_args()
 today = datetime.date.today()
 movie_process = None
+args.web_image_location = Path(args.web_image_location)
 log = Log("ImageProc.py",args)
 
 log.info("Started")
@@ -93,9 +98,13 @@ while 1:
             shutil.move(image_file, args.error_location)
             continue
 
-        # Softlink for web viewing
-        cmd = f"ln -fs {str(output)} /var/www/fanghur.jpeg"
-        subprocess.call(shlex.split(cmd))
+        # Compress for softlink viewing
+        cmd = f"jpegoptim {image_file} -S 300 -d {str(args.web_image_location.parent)}"
+        subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, 
+            stderr=subprocess.PIPE).wait()
+
+        shutil.move(Path(args.web_image_location.parent, data['file_name']), Path(args.web_image_location.parent,"fanghur.jpeg"))
+
 
         os.remove(json_file)
         os.remove(image_file)
