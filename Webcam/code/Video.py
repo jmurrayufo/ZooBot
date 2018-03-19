@@ -24,7 +24,8 @@ class Video:
         self.processed = False
         self.manifest_file = None
         self.ready = False
-        self.delete_on = None
+        self.w = None
+        self.deleted = False
 
 
     def __repr__(self):
@@ -39,7 +40,6 @@ class Video:
                 return
 
     def load(self):
-
         manifest_file = list(self.target_folder.glob("*manifest.json"))
         if manifest_file:
             self.log.info("Manifest file found, attempt to load")
@@ -51,7 +51,12 @@ class Video:
                 self.manifest_file = Path(self.manifest_file)
 
                 if self.delete_on:
-                    self.delete_on = datetime.datetime.fromtimestamp(self.delete_on)
+                    if type(self.delete_on) in [int,float]:
+                        self.log.warning("Old time format detected!")
+                        self.delete_on = datetime.datetime.fromtimestamp(self.delete_on)
+                    else:
+                        self.delete_on = datetime.datetime.strptime(self.delete_on,"%Y-%m-%dT%H:%M:%S")
+                    self.log.info(f"{self} marked for deletion on {self.delete_on}")
 
                 self.set_ready_flag()
                 return
@@ -77,6 +82,13 @@ class Video:
 
         with open(self.manifest_file,'w') as fp:
             json.dump(data, fp, indent=2)
+
+
+    def delete(self):
+        self.log.info(f"Deleting {self}.")
+        # shutil.rmtree(self.target_folder)
+        # self.deleted = true
+
 
     def start(self):
         if self.process is not None:
@@ -111,7 +123,7 @@ class Video:
 
         self.processed = True
         self.process = None
-        self.delete_on = datetime.datetime.now() + datetime.timedelta(days=7)
+        self.delete_on = datetime.datetime.now() + datetime.timedelta(days=7) - datetime.timedelta(hours=2)
 
         data = dict(self.__dict__)
         del data['log']
@@ -119,7 +131,7 @@ class Video:
         data['target_folder'] = str(data['target_folder'])
         data['output_file'] = str(data['output_file'])
         data['manifest_file'] = str(data['manifest_file'])
-        data['delete_on'] = data['delete_on'].timestamp()
+        data['delete_on'] = data['delete_on'].strftime("%Y-%m-%dT%H:%M:%S")
 
         with open(self.manifest_file,'w') as fp:
             json.dump(data, fp, indent=2)

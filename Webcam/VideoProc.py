@@ -91,10 +91,15 @@ while 1:
 
     ffmpeg_processes = []
     for video in targets:
-        if video.processed:
+        if video.processed and video.delete_on < datetime.datetime.now():
             log.info(f"{video} is aleady finished processing! Delete?")
+            video.delete()
+            continue
+        elif video.processed:
+            log.info(f"{video} is aleady finished processing!")
             continue
         ffmpeg_processes.append(video)
+
 
     log.info("Begin processing loop")
 

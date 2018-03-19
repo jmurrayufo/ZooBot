@@ -25,7 +25,7 @@ class VerboseLogstashFormatter(logstash.formatter.LogstashFormatterBase):
             'process': record.process,
             'processName': record.processName,
             'relativeCreated': record.relativeCreated,
-            'thread': record.thread,
+            # 'thread': record.thread,
             'threadName': record.threadName,
             'filename': record.filename,
             'name': record.name,
