@@ -131,6 +131,7 @@ class Si7021:
 
     async def _measure_temperature(self, max_loops):
         loop = 0
+        time.sleep(0.02)
         while loop < max_loops:
             loop += 1
             data = self.i2c.Si7021_temperature(self.address)
