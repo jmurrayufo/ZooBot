@@ -58,10 +58,10 @@ class AstralController(Controller):
 
             sun = l.sun(date=datetime.date.today())
 
-            dawn = (sun['dawn'] + offset).replace(tzinfo=None) #- datetime.timedelta(minutes=75)
+            dawn = (sun['dawn'] + offset).replace(tzinfo=None)
             sunrise = (sun['sunrise'] + offset).replace(tzinfo=None)
             sunset = (sun['sunset'] + offset).replace(tzinfo=None)
-            dusk = (sun['dusk'] + offset).replace(tzinfo=None) #+ datetime.timedelta(minutes=90)
+            dusk = (sun['dusk'] + offset).replace(tzinfo=None)
 
             if True and datetime.date.today() < datetime.date(2018,6,20):
                 # Overide for baby dragon
@@ -78,10 +78,10 @@ class AstralController(Controller):
                 # sunset = datetime.datetime.now().replace(hour=0, minute=35, second=0)
                 # dusk = datetime.datetime.now().replace(hour=0, minute=59, second=59)
 
-            dawn = dawn.replace(microsecond=0)
+            dawn = dawn.replace(microsecond=0) #- datetime.timedelta(minutes=20)
             sunrise = sunrise.replace(microsecond=0)
             sunset = sunset.replace(microsecond=0)
-            dusk = dusk.replace(microsecond=0)
+            dusk = dusk.replace(microsecond=0) + datetime.timedelta(minutes=20)
 
             if self.report_times and datetime.date.today() != self.today:
                 self.log.info("Todays times are as follows!")
