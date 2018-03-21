@@ -29,8 +29,28 @@ class Director:
         cleanup_queue = []
         move_queue = []
         while 1:
+
+            dawn = datetime.time(hour=6, minute=16, second=0)
+            dusk = datetime.time(hour=21, minute=48, second=9)
+            now = datetime.datetime.now().time()
+            if now < dawn or now > dusk:
+                self.log.info(f"Night mode active until {dawn}")
+                while now < dawn or now > dusk:
+                    time.sleep(10)
+                    dawn = datetime.time(hour=6, minute=16, second=0)
+                    dusk = datetime.time(hour=21, minute=48, second=9)
+                    now = datetime.datetime.now().time()
+                self.log.info("Night mode completed, resuming pictures.")
+
+
+
             # Determine if we need to throttle back
             fill_percent = self.ramdisk.fill_percent()
+            if fill_percent > 0.95:
+                self.log.critical("Ramdisk is above 95%% full! Sleeping until this is fixed!")
+                while self.ramdisk.fill_percent() > 0.95:
+                    time.sleep(10)
+                self.log.critical(f"Ramdisk is now at {self.ramdisk.fill_percent():.1%} full, resuming")
             extra_delay = base_wait*np.exp(fill_percent*5) - 1.0
             if extra_delay > self.args.frame_delay:
                 self.log.warning(f"Ramdisk near capacity ({self.ramdisk.fill_percent():%}), delaying extra {extra_delay:.1f} seconds")
