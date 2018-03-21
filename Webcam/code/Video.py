@@ -1,5 +1,5 @@
 
-from pathlib import Path
+from pathlib import Path, PosixPath
 import datetime
 import json
 import re
