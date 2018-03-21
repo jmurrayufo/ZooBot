@@ -24,6 +24,7 @@ class Director:
 
 
     def run(self):
+        self.log.info("Run director")
         base_wait = 1
         copy_queue = []
         cleanup_queue = []
