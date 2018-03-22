@@ -43,8 +43,6 @@ class Director:
                     now = datetime.datetime.now().time()
                 self.log.info("Night mode completed, resuming pictures.")
 
-
-
             # Determine if we need to throttle back
             fill_percent = self.ramdisk.fill_percent()
             if fill_percent > 0.95:
@@ -67,7 +65,6 @@ class Director:
                 sleep_time = sleep_time.total_seconds()
                 # self.log.debug(f"Sleep for: {sleep_time}")
                 time.sleep(sleep_time)
-
 
             # Capture image
             now = datetime.datetime.now()
@@ -97,7 +94,3 @@ class Director:
             move_queue = [x for x in move_queue if x not in cleanup_queue]
 
             cleanup_queue = [x for x in cleanup_queue if not x.is_cleaned()]
-
-
-
-            # break # TODO: Remove this!
