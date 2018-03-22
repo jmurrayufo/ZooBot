@@ -20,11 +20,11 @@ class DragonHab:
         P = 22
         I = 0.008
         default_I = 30
-        Integrator_min = -10
+        Integrator_min = -50
 
         # Basking Lamp and UV Config
         basking_lamp_setting = 57
-        uv_trigger = basking_lamp_setting - 1
+        uv_trigger = basking_lamp_setting / 2
 
         # Ambient Temperatures
         ambient_day_temperature = 24.4444
