@@ -109,6 +109,3 @@ while 1:
         os.remove(json_file)
         os.remove(image_file)
 
-    if datetime.date.today() != today:
-        log.info("New day, process movie from previous days")
-        today = datetime.date.today()
