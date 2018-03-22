@@ -26,6 +26,7 @@ class Video:
         self.ready = False
         self.w = None
         self.deleted = False
+        self.delete_on = None
 
 
     def __repr__(self):
@@ -57,6 +58,9 @@ class Video:
                     else:
                         self.delete_on = datetime.datetime.strptime(self.delete_on,"%Y-%m-%dT%H:%M:%S")
                     self.log.info(f"{self} marked for deletion on {self.delete_on}")
+                else:
+                    self.log.warning(f"No delete_on in {manifest_file[0]}!")
+                    self.delete_on = datetime.datetime.now() + datetime.timedelta(days=7) - datetime.timedelta(hours=2)
 
                 self.set_ready_flag()
                 return
@@ -67,11 +71,13 @@ class Video:
         self.log.info("No manifest found, generate one now!")
         
         self.set_ready_flag()
+        
 
         match_obj = re.search("(\d{4})/(\d{2})/(\d{2})", str(self.target_folder))
         year, month, day = match_obj.groups()
         self.output_file = Path(self.args.videos, f"{year}_{month}_{day}.mp4")
         self.manifest_file = Path(self.target_folder, f"{year}_{month}_{day}_manifest.json")
+        self.delete_on = datetime.datetime.now() + datetime.timedelta(days=7) - datetime.timedelta(hours=2)
 
         data = dict(self.__dict__)
         del data['log']
@@ -123,7 +129,6 @@ class Video:
 
         self.processed = True
         self.process = None
-        self.delete_on = datetime.datetime.now() + datetime.timedelta(days=7) - datetime.timedelta(hours=2)
 
         data = dict(self.__dict__)
         del data['log']
