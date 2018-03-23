@@ -28,7 +28,7 @@ class RoachHab:
         # Check this in under the test group
         self.devices['dimmer0'] = Dimmer("dimmer0", 0x3f, args, (self.sensors['h1'], None, None, None)) 
 
-        self.last_metric_log = datetime.datetime.min
+        self.next_metric_log = datetime.datetime.now()
         addresses = set()
         for sensor in self.sensors:
             if self.sensors[sensor].address in addresses:
