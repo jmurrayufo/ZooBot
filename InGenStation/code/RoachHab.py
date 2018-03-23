@@ -87,7 +87,7 @@ class RoachHab:
                 await self.devices[element].update()
         
             if datetime.datetime.now() > self.next_metric_log:
-                self.log_sensors()
+                await self.log_sensors()
                 self.next_metric_log += datetime.timedelta(seconds=self.args.log_delay)
                 if datetime.datetime.now() > self.next_metric_log:
                     self.log.warning(f"Next metric log has already passed! {self.next_metric_log - datetime.datetime.now()} ago.")
