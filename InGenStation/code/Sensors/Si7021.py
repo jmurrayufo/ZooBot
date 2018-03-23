@@ -121,7 +121,7 @@ class Si7021:
             data = self.i2c.Si7021_humidity(self.address)
             crc = self._CRC_calc(data)
             if crc != data[2]:
-                self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
+                # self.log.warning(f"CRC Error. Values seen were {list(data)}, calculated crc was {crc}.")
                 self.reset()
                 time.sleep(0.02)
                 continue
