@@ -83,8 +83,7 @@ class Dimmer3:
     async def update(self):
         for i in range(1,4+1):
 
-            # Sleep for 10 ms between runs to allow I2C buss to reset?
-            time.sleep(0.01)
+
 
             if 'controller' not in self.channels[i]:
                 continue
@@ -112,6 +111,8 @@ class Dimmer3:
             # Prevent noisy lights at night!
             if i in [2,3] or val != self.channels[i]['setting'] or self.channels[i]['poke']:
                 self.channels[i]['setting'] = val
+                # Sleep for 20 ms between runs to allow I2C buss to reset?
+                time.sleep(0.02)
                 await self.setOutput(i,val)
                 self.channels[i]['poke'] = False
 

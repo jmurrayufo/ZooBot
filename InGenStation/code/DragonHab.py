@@ -20,7 +20,7 @@ class DragonHab:
         P = 22
         I = 0.008
         default_I = 30
-        Integrator_min = -50
+        Integrator_min = -30
 
         # Basking Lamp and UV Config
         basking_lamp_setting = 57
