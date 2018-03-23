@@ -119,8 +119,7 @@ class Dimmer3:
     async def setOutput(self, channel, value):
         now = datetime.datetime.now()
         lbe = self.channels[channel]['last_bounds_error']
-        if ((value > 100 or value < 0)
-                and now - lbe > datetime.timedelta(minutes=5)):
+        if ((value > 100) and now - lbe > datetime.timedelta(minutes=5)):
             self.channels[channel]['last_bounds_error'] = datetime.datetime.now()
             self.log.warning(f"{self} saw setOutput value of {value:.3f}, outside range [0,100]!")
 
