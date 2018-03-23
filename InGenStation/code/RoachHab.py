@@ -40,20 +40,24 @@ class RoachHab:
 
 
     async def run(self):
+        next_update = datetime.datetime.now()
+
         while True:
             try:
-                t = time.time()
 
                 await self.update()
 
-                if datetime.datetime.now() - self.last_metric_log > datetime.timedelta(seconds=self.args.log_delay):
-                    # self.log.debug("Log sensor data")
-                    await self.log_sensors()
-                    self.last_metric_log = datetime.datetime.now()
-
-                t_sleep = self.args.update_delay - (time.time() - t)
+                t_sleep = (next_update - datetime.datetime.now()).total_seconds()
                 t_sleep = max(0, t_sleep)
-                # self.log.debug(f"Sleep for {t_sleep:.3f} s")
+                next_update += datetime.timedelta(seconds = self.args.update_delay)
+
+                loops = 0
+                while datetime.datetime.now() > next_update:
+                    loops += 1
+                    next_update += datetime.timedelta(seconds = self.args.update_delay)
+                if loops > 0:
+                    self.log.warning(f"Main loop catching up. Added {loops}x{self.args.update_delay}={loops * self.args.update_delay}s")
+
                 await asyncio.sleep(t_sleep)
             except KeyboardInterrupt:
                 raise
@@ -79,6 +83,13 @@ class RoachHab:
             for element in self.devices:
                 time.sleep(0.05)
                 await self.devices[element].update()
+        
+        if datetime.datetime.now() > self.next_metric_log:
+            self.log_sensors()self.next_metric_log += datetime.timedelta(seconds=self.args.log_delay)
+            if datetime.datetime.now() > self.next_metric_log:
+                self.log.warning(f"Next metric log has already passed! {self.next_metric_log - datetime.datetime.now()} ago.")
+
+            
         finally:
             self.update_in_progress = False
             # self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
