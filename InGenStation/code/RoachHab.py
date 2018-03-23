@@ -72,9 +72,11 @@ class RoachHab:
     async def update(self):
         # self.log.debug("Update sensors")
         t = time.time()
+
         if self.update_in_progress:
             self.log.warning("Cannot start an update when we are already doing one.")
             return
+
         try:
             self.update_in_progress = True   
             for sensor in self.sensors:
@@ -85,11 +87,11 @@ class RoachHab:
                 await self.devices[element].update()
         
             if datetime.datetime.now() > self.next_metric_log:
-                self.log_sensors()self.next_metric_log += datetime.timedelta(seconds=self.args.log_delay)
+                self.log_sensors()
+                self.next_metric_log += datetime.timedelta(seconds=self.args.log_delay)
                 if datetime.datetime.now() > self.next_metric_log:
                     self.log.warning(f"Next metric log has already passed! {self.next_metric_log - datetime.datetime.now()} ago.")
 
-            
         finally:
             self.update_in_progress = False
             # self.log.info(f"Sensor update completed, took {(time.time()-t)*1e3:.3f} ms")
