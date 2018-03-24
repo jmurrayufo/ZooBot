@@ -23,7 +23,7 @@ class DragonHab:
         Integrator_min = -30
 
         # Basking Lamp and UV Config
-        basking_lamp_setting = 50
+        basking_lamp_setting = 54
         uv_trigger = basking_lamp_setting - 1
 
         # Ambient Temperatures
