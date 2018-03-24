@@ -24,7 +24,7 @@ class DragonHab:
 
         # Basking Lamp and UV Config
         basking_lamp_setting = 50
-        uv_trigger = basking_lamp_setting / 2
+        uv_trigger = basking_lamp_setting - 1
 
         # Ambient Temperatures
         ambient_day_temperature = 24.4444
