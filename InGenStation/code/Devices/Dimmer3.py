@@ -110,10 +110,10 @@ class Dimmer3:
 
             # Prevent noisy lights at night!
             if i in [2,3] or val != self.channels[i]['setting'] or self.channels[i]['poke']:
-                self.channels[i]['setting'] = val
                 # Sleep for 20 ms between runs to allow I2C buss to reset?
                 time.sleep(0.02)
                 await self.setOutput(i,val)
+                self.channels[i]['setting'] = val
                 self.channels[i]['poke'] = False
 
 
