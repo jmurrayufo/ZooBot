@@ -44,7 +44,7 @@ class I2C2:
             ret = self.i2c.bb_i2c_zip(2,data)
             if ret[0] < 0:
                 self.log.critical(f"I2C2 Failure: {pigpio.error_text(ret[0])}")
-                raise pigpio.error
+                raise pigpio.error("I2C Failure")
             self.i2c.bb_i2c_close(2)
         return ret
 
