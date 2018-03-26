@@ -113,6 +113,8 @@ class DragonHab:
             await self.devices['dimmer0'].update()
 
             for sensor in self.sensors:
+                # Delay 50 ms between sensor polls
+                await asyncio.sleep(0.05)
                 await self.sensors[sensor].update()
 
 
