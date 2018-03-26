@@ -83,8 +83,6 @@ class Dimmer3:
     async def update(self):
         for i in range(1,4+1):
 
-
-
             if 'controller' not in self.channels[i]:
                 continue
 
@@ -131,7 +129,7 @@ class Dimmer3:
         if channel not in [self.CH_1, self.CH_2, self.CH_3, self.CH_4]:
             self.log.critical(f"Attempted to write to channel 0x{channel:0X}, which is invalid!")
             raise IndexError(f"Channel 0x{channel:0X} is not a valid channel.")
-        # We must not attempt to write more than once every 10 ms, or the device will not accept the commands!
+        # We must not attempt to write more than once every 100 ms, or the device will not accept the commands!
         if time.time() - self.last_write < 0.1:
             time.sleep(0.1)
 

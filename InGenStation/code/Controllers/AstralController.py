@@ -73,8 +73,9 @@ class AstralController(Controller):
                 sunset = datetime.datetime.now().replace(hour=21, minute=18, second=15)
                 dusk = datetime.datetime.now().replace(hour=21, minute=48, second=9)
                 
-                # dawn = datetime.datetime.now().replace(hour=0, minute=0, second=0)
-                # sunrise = datetime.datetime.now().replace(hour=0, minute=25, second=0)
+                # Debug UV enable
+                dawn = datetime.datetime.now().replace(hour=9, minute=30, second=0)
+                sunrise = datetime.datetime.now().replace(hour=9, minute=50, second=0)
                 # sunset = datetime.datetime.now().replace(hour=0, minute=35, second=0)
                 # dusk = datetime.datetime.now().replace(hour=0, minute=59, second=59)
 
