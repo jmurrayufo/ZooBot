@@ -56,6 +56,7 @@ class Video:
                         self.log.warning("Old time format detected!")
                         self.delete_on = datetime.datetime.fromtimestamp(self.delete_on)
                     else:
+                        self.log.info(f"Up to date time format detected.")
                         self.delete_on = datetime.datetime.strptime(self.delete_on,"%Y-%m-%dT%H:%M:%S")
                     self.log.info(f"{self} marked for deletion on {self.delete_on}")
                 else:
