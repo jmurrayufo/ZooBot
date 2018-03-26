@@ -110,6 +110,7 @@ class DragonHab:
             self.log.warning("Cannot start an update when we are already doing one.")
             return
         try:
+            await asyncio.sleep(0.05)
             await self.devices['dimmer0'].update()
 
             for sensor in self.sensors:
