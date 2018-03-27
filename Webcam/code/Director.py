@@ -42,6 +42,7 @@ class Director:
                     dusk = datetime.time(hour=21, minute=48, second=9)
                     now = datetime.datetime.now().time()
                 self.log.info("Night mode completed, resuming pictures.")
+                self.next_capture = datetime.datetime.now()
 
             # Determine if we need to throttle back
             fill_percent = self.ramdisk.fill_percent()
