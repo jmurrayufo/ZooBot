@@ -4,6 +4,7 @@ import datetime
 import json
 import re
 import shlex
+import shutil
 import subprocess
 import time
 
@@ -92,9 +93,9 @@ class Video:
 
 
     def delete(self):
-        self.log.info(f"Deleting {self}.")
-        # shutil.rmtree(self.target_folder)
-        # self.deleted = true
+        self.log.info(f"Deleting {self.target_folder}.")
+        shutil.rmtree(self.target_folder)
+        self.deleted = True
 
 
     def start(self):

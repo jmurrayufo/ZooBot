@@ -47,7 +47,7 @@ if args.now:
 else:
     log.info("Processing will start at the next 1AM")
     next_scan += datetime.timedelta(days=1)
-    next_scan = next_scan.replace(hour=1, minute=0, second=0, microsecond=0)
+    next_scan = next_scan.replace(hour=23, minute=0, second=0, microsecond=0)
 
 
 while 1:
@@ -62,7 +62,7 @@ while 1:
 
     next_scan = datetime.datetime.now()
     next_scan += datetime.timedelta(days=1)
-    next_scan = next_scan.replace(hour=1, minute=0, second=0, microsecond=0)
+    next_scan = next_scan.replace(hour=23, minute=0, second=0, microsecond=0)
     log.info(f"Begin process loop")
 
     glob = list(Path(args.images).glob('**'))
@@ -89,6 +89,8 @@ while 1:
 
     targets = [x for x in targets if x.ready]
 
+    log.debug(f"Files before delete: {len(targets)}")
+
     ffmpeg_processes = []
     for video in targets:
         if video.processed and video.delete_on < datetime.datetime.now():
@@ -100,6 +102,9 @@ while 1:
             continue
         ffmpeg_processes.append(video)
 
+    ffmpeg_processes = [x for x in ffmpeg_processes if not x.deleted]
+
+    log.debug(f"Files after delete: {len(ffmpeg_processes)}")
 
     log.info("Begin processing loop")
 
