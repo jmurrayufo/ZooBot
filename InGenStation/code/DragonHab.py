@@ -53,7 +53,7 @@ class DragonHab:
         # Commented out until we get proper venting of the vivarium
         self.devices['dimmer0'].bind(tmp_controller, 4, override=uv_trigger)
 
-        tmp_controller = AstralController(args, 'astrPID', "35°18'N", "105°06'W",  
+        tmp_controller = AstralController(args, 'astrPID', "33°51'N", "105°06'W",  
             elivation=0, day_value=ambient_day_temperature, night_value=ambient_night_temperature)
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=P, I=I, Integrator=default_I/I, 
