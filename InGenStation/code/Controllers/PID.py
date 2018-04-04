@@ -81,6 +81,7 @@ class PID(Controller):
                 d_error = current_value - self.d_buffer[-1][1]
 
                 self.D_value = self.Kd * d_error / (datetime.datetime.now()-self.d_buffer[-1][0]).total_seconds()
+                print(self.D_value,len(self.d_buffer))
             self.Integrator = self.Integrator + self.error * dt
 
         self.P_value = self.Kp * self.error
