@@ -59,7 +59,8 @@ class DragonHab:
         tmp_controller = PID(args, 'PID-ch2', self.sensors['t0'], 
             'temperature', P=P, I=I, D=D, Integrator=default_I/I, 
             Integrator_min=Integrator_min,
-            astral_adjuster=tmp_controller, buffer_derivative=True)
+            astral_adjuster=tmp_controller, 
+            buffer_derivative=True, buffer_time=datetime.timedelta(minutes=15))
 
         # tmp_controller.set_point= 26.6667
         self.devices['dimmer0'].bind(tmp_controller, 2)

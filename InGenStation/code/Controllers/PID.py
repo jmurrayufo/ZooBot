@@ -14,7 +14,7 @@ class PID(Controller):
         P=1.0, I=0.0, D=0.0, 
         Derivator=0, 
         Integrator=0, Integrator_max=100, Integrator_min=-100,
-        astral_adjuster=None, buffer_derivative=False):
+        astral_adjuster=None, buffer_derivative=False, buffer_time=None):
 
         self.log = Log()
         self.P_value = 0
@@ -35,6 +35,7 @@ class PID(Controller):
         self.buffer_derivative = buffer_derivative
         if buffer_derivative:
             self.d_buffer = []
+            self.buffer_time = buffer_time
 
         self.set_point = 0.0
         self.error = 0.0
@@ -76,11 +77,11 @@ class PID(Controller):
                 self.d_buffer.append((datetime.datetime.now(),current_value))
 
                 # Only save the last 15 minutes
-                self.d_buffer = [x for x in self.d_buffer if datetime.datetime.now()-x[0] < datetime.timedelta(minutes=15)]
+                self.d_buffer = [x for x in self.d_buffer if datetime.datetime.now()-x[0] < self.buffer_time]
 
-                d_error = current_value - self.d_buffer[0][1]
+                d_error = self.d_buffer[0][1] - current_value
 
-                self.D_value = self.Kd * d_error / (datetime.datetime.now()-self.d_buffer[0][0]).total_seconds()
+                self.D_value = self.Kd * d_error / self.buffer_time.total_seconds()
                 if len(self.d_buffer) > 1e3:
                     self.log.warning(f"d_buffer is exceeding limits! currently {len(self.d_buffer)} long!")
                 # print(self.D_value,len(self.d_buffer))
