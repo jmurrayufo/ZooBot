@@ -14,7 +14,7 @@ class PID(Controller):
         P=1.0, I=0.0, D=0.0, 
         Derivator=0, 
         Integrator=0, Integrator_max=100, Integrator_min=-100,
-        astral_adjuster=None):
+        astral_adjuster=None, buffer_derivative=False):
 
         self.log = Log()
         self.P_value = 0
@@ -32,6 +32,9 @@ class PID(Controller):
         self.Integrator_min = Integrator_min
         self.last_update = None
         self.astral_adjuster = astral_adjuster
+        self.buffer_derivative = buffer_derivative
+        if buffer_derivative:
+            self.d_buffer = []
 
         self.set_point = 0.0
         self.error = 0.0
@@ -52,6 +55,7 @@ class PID(Controller):
 
         self.error = self.set_point - current_value
         # print(f"Error: {self.set_point:.3f} - {current_value:.3f} = {self.error:.3f}")
+
         if self.last_update is None:
             self.last_update = datetime.datetime.now()
             self.D_value = 0
@@ -64,8 +68,19 @@ class PID(Controller):
 
             self.last_update = datetime.datetime.now()
 
-            self.D_value = self.Kd * (self.error - self.Derivator)/dt
-            self.Derivator = self.error
+            if not self.buffer_derivative:
+                self.D_value = self.Kd * (self.error - self.Derivator)/dt
+                self.Derivator = self.error
+            else:
+                #Append current error to the array
+                self.d_buffer.append((datetime.datetime.now(),current_value))
+
+                # Only save the last 15 minutes
+                self.d_buffer = [x for x in self.d_buffer if datetime.datetime.now()-x[0] < datetime.timedelta(minutes=15)]
+
+                d_error = current_value - self.d_buffer[-1]
+
+                self.D_value = self.Kd * d_error / (datetime.datetime.now()-self.d_buffer[-1][0]).total_seconds()
             self.Integrator = self.Integrator + self.error * dt
 
         self.P_value = self.Kp * self.error
