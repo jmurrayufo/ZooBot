@@ -19,9 +19,10 @@ class DragonHab:
         # Heater Lamp Config
         P = 22
         I = 0.008
-        D = 900
+        D = 10 # This value is divided by buffer_time seconds in use!
         default_I = 30
         Integrator_min = -30
+        buffer_time = datetime.timedelta(minutes=15)
 
         # Basking Lamp and UV Config
         basking_lamp_setting = 59
@@ -60,7 +61,7 @@ class DragonHab:
             'temperature', P=P, I=I, D=D, Integrator=default_I/I, 
             Integrator_min=Integrator_min,
             astral_adjuster=tmp_controller, 
-            buffer_derivative=True, buffer_time=datetime.timedelta(minutes=15))
+            buffer_derivative=True, buffer_time=buffer_time)
 
         # tmp_controller.set_point= 26.6667
         self.devices['dimmer0'].bind(tmp_controller, 2)

@@ -81,7 +81,8 @@ class PID(Controller):
 
                 d_error = self.d_buffer[0][1] - current_value
 
-                self.D_value = self.Kd * d_error / self.buffer_time.total_seconds()
+                # dt is not used here to keep D terms consistant
+                self.D_value = self.Kd * d_error # / self.buffer_time.total_seconds()
                 if len(self.d_buffer) > 1e3:
                     self.log.warning(f"d_buffer is exceeding limits! currently {len(self.d_buffer)} long!")
                 # print(self.D_value,len(self.d_buffer))
