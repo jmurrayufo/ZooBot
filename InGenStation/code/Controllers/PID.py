@@ -78,7 +78,7 @@ class PID(Controller):
                 # Only save the last 15 minutes
                 self.d_buffer = [x for x in self.d_buffer if datetime.datetime.now()-x[0] < datetime.timedelta(minutes=15)]
 
-                d_error = current_value - self.d_buffer[-1]
+                d_error = current_value - self.d_buffer[-1][1]
 
                 self.D_value = self.Kd * d_error / (datetime.datetime.now()-self.d_buffer[-1][0]).total_seconds()
             self.Integrator = self.Integrator + self.error * dt
