@@ -19,7 +19,7 @@ class DragonHab:
         # Heater Lamp Config
         P = 22
         I = 0.008
-        D = 0.0001
+        D = 1
         default_I = 30
         Integrator_min = -30
 
