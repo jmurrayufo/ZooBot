@@ -74,12 +74,12 @@ class PID(Controller):
                 self.Derivator = self.error
             else:
                 #Append current error to the array
-                self.d_buffer.append((datetime.datetime.now(),current_value))
+                self.d_buffer.append((datetime.datetime.now(),self.error))
 
                 # Only save the last 15 minutes
                 self.d_buffer = [x for x in self.d_buffer if datetime.datetime.now() - x[0] < self.buffer_time]
 
-                d_error =  self.d_buffer[0][1] - current_value
+                d_error =  self.d_buffer[0][1] - self.error
 
                 # dt is not used here to keep D terms consistant
                 self.D_value = self.Kd * d_error # / self.buffer_time.total_seconds()
