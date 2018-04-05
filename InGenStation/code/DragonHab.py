@@ -19,7 +19,7 @@ class DragonHab:
         # Heater Lamp Config
         P = 22
         I = 0.008
-        D = 10 # This value is divided by buffer_time seconds in use!
+        D = 20 # This value is divided by buffer_time seconds in use!
         default_I = 30
         Integrator_min = -30
         buffer_time = datetime.timedelta(minutes=5)
