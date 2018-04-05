@@ -132,5 +132,6 @@ class PID(Controller):
             self.log.warning(f"A value is being set for this object that didn't exist before now! Setting '{setting}' being set to value '{value}'")
         setattr(self, setting, value)
 
+    @staticmethod
     def gaussian(x):
         return self.a * np.exp(-( (x-self.b)**2 / (2*self.c**2) ))
