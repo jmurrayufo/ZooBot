@@ -79,7 +79,7 @@ class PID(Controller):
                 # Only save the last 15 minutes
                 self.d_buffer = [x for x in self.d_buffer if datetime.datetime.now() - x[0] < self.buffer_time]
 
-                d_error =  self.d_buffer[0][1] - self.error
+                d_error =  self.error - self.d_buffer[0][1]
 
                 # dt is not used here to keep D terms consistant
                 self.D_value = self.Kd * d_error # / self.buffer_time.total_seconds()
@@ -102,7 +102,7 @@ class PID(Controller):
         self.I_value = self.Integrator * self.Ki
 
         # PID = self.P_value + self.I_value + self.D_value
-        print(f"C: {current_value:8.3f} P: {self.P_value:8.3f} I: {self.I_value:8.3f} D: {self.D_value:8.3f}")
+        # print(f"C: {current_value:8.3f} P: {self.P_value:8.3f} I: {self.I_value:8.3f} D: {self.D_value:8.3f}")
         # print(f"PID: {self.P_value + self.I_value + self.D_value:8.3f}")
         self.output = self.P_value + self.I_value + self.D_value
         # self.log.debug(f"C: {current_value} S: {self.set_point} P: {self.P_value} I: {self.I_value} D:{self.D_value}")
