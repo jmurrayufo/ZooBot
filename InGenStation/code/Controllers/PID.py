@@ -1,6 +1,7 @@
 
 import datetime
 import time
+import numpy as np
 
 from ..CustomLogging import Log
 from .Controller import Controller
@@ -14,7 +15,8 @@ class PID(Controller):
         P=1.0, I=0.0, D=0.0, 
         Derivator=0, 
         Integrator=0, Integrator_max=100, Integrator_min=-100,
-        astral_adjuster=None, buffer_derivative=False, buffer_time=None):
+        astral_adjuster=None, buffer_derivative=False, buffer_time=None,
+        jitter_reduction=False, a=0, b=0, c=0):
 
         self.log = Log()
         self.P_value = 0
@@ -36,6 +38,11 @@ class PID(Controller):
         if buffer_derivative:
             self.d_buffer = []
             self.buffer_time = buffer_time
+        self.jitter_reduction = jitter_reduction
+        self.a = a
+        self.b = b
+        self.c = c
+
 
         self.set_point = 0.0
         self.error = 0.0
@@ -88,6 +95,9 @@ class PID(Controller):
                 # print(self.D_value,len(self.d_buffer))
             self.Integrator = self.Integrator + self.error * dt
 
+        if self.jitter_reduction:
+            self.D_value = self.D_value / (self.gaussian(self.D_value)+1)
+
         self.P_value = self.Kp * self.error
 
         self.I_value = self.Integrator * self.Ki
@@ -121,3 +131,6 @@ class PID(Controller):
         except AttributeError:
             self.log.warning(f"A value is being set for this object that didn't exist before now! Setting '{setting}' being set to value '{value}'")
         setattr(self, setting, value)
+
+    def gaussian(x):
+        return self.a * np.exp(-( (x-self.b)**2 / (2*self.c**2) ))
