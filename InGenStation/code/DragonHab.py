@@ -62,7 +62,7 @@ class DragonHab:
             Integrator_min=Integrator_min,
             astral_adjuster=tmp_controller, 
             buffer_derivative=True, buffer_time=buffer_time,
-            jitter_reduction=True, a=9, b=0, c=2.4)
+            jitter_reduction=True, a=9, b=0, c=1)
 
         # tmp_controller.set_point= 26.6667
         self.devices['dimmer0'].bind(tmp_controller, 2)
