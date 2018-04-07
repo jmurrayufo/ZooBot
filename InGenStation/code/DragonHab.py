@@ -22,7 +22,7 @@ class DragonHab:
         D = 20 # This value is divided by buffer_time seconds in use!
         default_I = 30
         Integrator_min = -30
-        buffer_time = datetime.timedelta(minutes=1)
+        buffer_time = datetime.timedelta(minutes=3)
 
         # Basking Lamp and UV Config
         basking_lamp_setting = 59
