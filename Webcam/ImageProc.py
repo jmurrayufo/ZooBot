@@ -72,7 +72,7 @@ while 1:
 
         if not image_file.exists():
             log.error(f"File {json_file} had no image file!")
-            shutuil.move(json_file, args.error_location)
+            shutil.move(json_file, args.error_location)
             continue
 
         image_hash = MDFive(image_file).checksum()
