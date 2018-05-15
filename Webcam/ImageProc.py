@@ -109,3 +109,13 @@ while 1:
         os.remove(json_file)
         os.remove(image_file)
 
+
+"""
+
+2018-04-23 10:04:33,979 ERROR ImageProc.py:74 File /ZFS/Media/Webcams/Dropbox/Inbox/10_04_19.json had no image file!
+Traceback (most recent call last):
+      File "./ImageProc.py", line 75, in <module>
+          shutuil.move(json_file, args.error_location)
+          NameError: name 'shutuil' is not defined
+          You have new mail in /var/mail/jmurray
+"""
