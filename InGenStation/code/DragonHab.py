@@ -25,7 +25,7 @@ class DragonHab:
         buffer_time = datetime.timedelta(minutes=3)
 
         # Basking Lamp and UV Config
-        basking_lamp_setting = 52
+        basking_lamp_setting = 55
         uv_trigger = basking_lamp_setting - 1
 
         # Ambient Temperatures

@@ -45,9 +45,10 @@ next_scan = datetime.datetime.now()
 if args.now:
     log.info("Processing queue right away")
 else:
-    log.info("Processing will start at the next 1AM")
-    next_scan += datetime.timedelta(days=1)
+    log.info("Processing will start at the next 11PM")
     next_scan = next_scan.replace(hour=23, minute=0, second=0, microsecond=0)
+    if datetime.datetime.now() > next_scan:
+        next_scan += datetime.timedelta(days=1)
 
 
 while 1:
