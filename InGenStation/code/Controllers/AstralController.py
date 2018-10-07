@@ -54,7 +54,7 @@ class AstralController(Controller):
             l.longitude = self.lon
             l.timezone = 'America/Denver'
             l.elevation = 0
-            offset = datetime.timedelta(hours=1) # Offset to handle work better
+            offset = datetime.timedelta(hours=4) # Offset to handle work better
 
             sun = l.sun(date=datetime.date.today())
 
@@ -94,7 +94,7 @@ class AstralController(Controller):
                 self.today = datetime.date.today()
 
 
-            now = datetime.datetime.now() + datetime.timedelta(hours=-4) # Adjust west 4 hours
+            now = datetime.datetime.now() 
 
             if now <= dawn: 
                 setting = 0
