@@ -31,18 +31,18 @@ class Director:
         move_queue = []
         while 1:
 
-            dawn = datetime.time(hour=6, minute=16, second=0)
-            dusk = datetime.time(hour=21, minute=48, second=9)
-            now = datetime.datetime.now().time()
-            if now < dawn or now > dusk:
-                self.log.info(f"Night mode active until {dawn}")
-                while now < dawn or now > dusk:
-                    time.sleep(10)
-                    dawn = datetime.time(hour=6, minute=16, second=0)
-                    dusk = datetime.time(hour=21, minute=48, second=9)
-                    now = datetime.datetime.now().time()
-                self.log.info("Night mode completed, resuming pictures.")
-                self.next_capture = datetime.datetime.now()
+            # dawn = datetime.time(hour=6+4, minute=16, second=0)
+            # dusk = datetime.time(hour=0, minute=, second=9)
+            # now = datetime.datetime.now().time()
+            # if now < dawn or now > dusk:
+            #     self.log.info(f"Night mode active until {dawn}")
+            #     while now < dawn or now > dusk:
+            #         time.sleep(10)
+            #         dawn = datetime.time(hour=6, minute=16, second=0)
+            #         dusk = datetime.time(hour=21, minute=48, second=9)
+            #         now = datetime.datetime.now().time()
+            #     self.log.info("Night mode completed, resuming pictures.")
+            #     self.next_capture = datetime.datetime.now()
 
             # Determine if we need to throttle back
             fill_percent = self.ramdisk.fill_percent()
