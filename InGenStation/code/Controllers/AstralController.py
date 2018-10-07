@@ -94,7 +94,7 @@ class AstralController(Controller):
                 self.today = datetime.date.today()
 
 
-            now = datetime.datetime.now()
+            now = datetime.datetime.now() + datetime.timedelta(hours=-4) # Adjust west 4 hours
 
             if now <= dawn: 
                 setting = 0
